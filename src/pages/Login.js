@@ -13,7 +13,7 @@ const Login = () => {
         let newData = new FormData()
         newData.append('username', userName)
         newData.append('password', pass)
-        newData.append('scope', "snapshot:read camera:write camera:read admin:read admin:write")
+        newData.append('scope', "snapshot:read camera:write camera:read admin:read admin:write line_crossing_analytics:write")
         axios.post(API_PATH + "token/",  newData)
             .then(res =>{
                 localStorage.setItem("token", res.data.access_token)

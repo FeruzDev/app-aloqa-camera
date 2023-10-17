@@ -25,68 +25,63 @@ const DetectCamera2 = () => {
             [248, 203]
         ]])
     const params = useParams()
-    const getItem = () => {
-        axios.get(API_PATH + "camera/" + params.id, CONFIG)
-            .then(res => {
-                setMyItem(res.data)
-            })
-    }
+    var color_choices = [
+        // "#FF00FF",
+        // "#8622FF",
+        "#00FF47",
+        // "#00FFCE",
+        // "#FF8000",
+        // "#00B7EB",
+        // "#FFFF00",
+        // "#0E7AFE",
+        // "#FFABAB",
+        // "#0000FF",
+        // "#CCCCCC",
+    ];
+
+    var img = new Image();
+    var rgb_color = color_choices[Math.floor(Math.random() * color_choices.length)]
+    var opaque_color = 'rgba(0, 255, 71, 0.22)';
+
+    var scaleFactor = 1;
+    var scaleSpeed = 0.01;
+
+    var points = [];
+    var regions = [];
+    var masterPoints = [];
+    var masterColors = [];
+
+    var showNormalized = false;
+    var drawMode = "polygon";
+
+    var modeMessage = document.querySelector('#mode');
+    var coords = document.querySelector('#coords');
+
+
     useEffect(() => {
-         test[0][0][0] = 1111
-        console.log(test[0][0][0])
-        // let myWindow
-        // myWindow?.resizeTo(300, 300)
-        getItem()
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
         axios.get(API_PATH + "camera/" + params.id, CONFIG)
             .then(res => {
                 setMyItem(res.data)
-                var color_choices = [
-                    // "#FF00FF",
-                    // "#8622FF",
-                    "#00FF47",
-                    // "#00FFCE",
-                    // "#FF8000",
-                    // "#00B7EB",
-                    // "#FFFF00",
-                    // "#0E7AFE",
-                    // "#FFABAB",
-                    // "#0000FF",
-                    // "#CCCCCC",
-                ];
 
-                var canvas = document.getElementById('canvas');
-                var ctx = canvas.getContext('2d');
-                var img = new Image();
-                var rgb_color = color_choices[Math.floor(Math.random() * color_choices.length)]
-                var opaque_color = 'rgba(0, 255, 71, 0.22)';
-
-                var scaleFactor = 1;
-                var scaleSpeed = 0.01;
-
-                var points = [];
-                var regions = [];
-                var masterPoints = [];
-                var masterColors = [];
-
-                var showNormalized = false;
-                var drawMode = "polygon";
-
-                var modeMessage = document.querySelector('#mode');
-                var coords = document.querySelector('#coords');
 
                 // if user presses L key, change draw mode to line and change cursor to cross hair
                 document.addEventListener('keydown', function (e) {
                     if (e.key == 'l') {
                         drawMode = "line";
+                        setLineType(true)
                         canvas.style.cursor = 'crosshair';
                         // modeMessage.innerHTML = "Draw Mode: Line (press <kbd>p</kbd> to change to polygon drawing)";
                     }
                     if (e.key == 'p') {
                         drawMode = "polygon";
+                        setLineType(false)
                         canvas.style.cursor = 'crosshair';
                         // modeMessage.innerHTML = 'Draw Mode: Polygon (press <kbd>l</kbd> to change to line drawing)';
                     }
                 });
+
 
                 function clipboard(selector) {
                     var copyText = document.querySelector(selector).innerText;
@@ -309,11 +304,9 @@ const DetectCamera2 = () => {
                     var remaining_choices = color_choices.filter(function (x) {
                         return !masterColors.includes(x);
                     });
-
                     if (remaining_choices.length == 0) {
                         remaining_choices = color_choices;
                     }
-
                     rgb_color = remaining_choices[Math.floor(Math.random() * remaining_choices.length)];
 
                     masterColors.push(rgb_color);
@@ -321,40 +314,40 @@ const DetectCamera2 = () => {
                     // }
                 });
 
-                canvas.addEventListener('drop', function (e) {
-                    e.preventDefault();
-                    var file = e.dataTransfer.files[0];
-                    var reader = new FileReader();
-
-                    reader.onload = function (event) {
-                        // only allow image files
-                        img.src = event.target.result;
-                    };
-                    reader.readAsDataURL(file);
-
-                    var mime_type = file.type;
-
-                    if (
-                        mime_type != 'image/png' &&
-                        mime_type != 'image/jpeg' &&
-                        mime_type != 'image/jpg'
-                    ) {
-                        alert('Only PNG, JPEG, and JPG files are allowed.');
-                        return;
-                    }
-
-                    img.onload = function () {
-                        scaleFactor = 0.3;
-                        canvas.style.width = img.width * scaleFactor + 'px';
-                        canvas.style.height = img.height * scaleFactor + 'px';
-                        canvas.width = img.width;
-                        canvas.height = img.height;
-                        canvas.style.borderRadius = '10px';
-                        ctx.drawImage(img, 0, 0);
-                    };
-                    // show coords
-                    document.getElementById('coords').style.display = 'inline-block';
-                });
+                // canvas.addEventListener('drop', function (e) {
+                //     e.preventDefault();
+                //     var file = e.dataTransfer.files[0];
+                //     var reader = new FileReader();
+                //
+                //     reader.onload = function (event) {
+                //         // only allow image files
+                //         img.src = event.target.result;
+                //     };
+                //     reader.readAsDataURL(file);
+                //
+                //     var mime_type = file.type;
+                //
+                //     if (
+                //         mime_type != 'image/png' &&
+                //         mime_type != 'image/jpeg' &&
+                //         mime_type != 'image/jpg'
+                //     ) {
+                //         alert('Only PNG, JPEG, and JPG files are allowed.');
+                //         return;
+                //     }
+                //
+                //     img.onload = function () {
+                //         scaleFactor = 0.3;
+                //         canvas.style.width = img.width * scaleFactor + 'px';
+                //         canvas.style.height = img.height * scaleFactor + 'px';
+                //         canvas.width = img.width;
+                //         canvas.height = img.height;
+                //         canvas.style.borderRadius = '10px';
+                //         ctx.drawImage(img, 0, 0);
+                //     };
+                //     // show coords
+                //     document.getElementById('coords').style.display = 'inline-block';
+                // });
 
                 function writePoints(parentPoints) {
                     var normalized = [];
@@ -399,9 +392,9 @@ ${parentPoints.map(function (points) {
                     var json_template = `
 {
             ${parentPoints.map(function (points) {
-                                    return `[
+                        return `[
             ${points.map(function (point) {
-                                        return `{"x": ${point[0]}, "y": ${point[1]}}`;
+                            return `{"x": ${point[0]}, "y": ${point[1]}}`;
                         }).join(',')}
 ]`;
                     }).join(',')}
@@ -464,52 +457,102 @@ ${parentPoints.map(function (points) {
     }, [])
 
     const sendDots = () => {
-        // let arr = myArr[0].map((item, index) => {
-        //     return {
-        //         ["x" + (index + 1)]: item[0],
-        //         ["y" + (index + 1)]: item[1]
-        //     }
-        // })
-        console.log(myArr)
-        let arr1 = myArr[0].reduce((acc, item, index) => {
-            return {...acc, ["x" + (index + 1)]: item[0], ["y" + (index + 1)]: item[1]}
-        }, {})
-        axios.post(API_PATH + "roi_analytics/create", {...arr1, camera_id: params.id, name: myItem?.name}, CONFIG)
-            .then(res => {
-                toast.success("SUCCEESS")
-            })
 
-        console.log(arr1)
+
+        if (selectType){
+            // let arr1 = myArr?.map((item2, index2)=>{
+            //  return   item2.reduce((acc, item, index) => {
+            //         return {...acc, ["x" + (index + 1)]: item[0], ["y" + (index + 1)]: item[1]}
+            //     }, {})
+            // })
+         console.log(myArr[0][0][0])
+            axios.post(API_PATH + "line_crossing_analytics/create",
+                {
+                    x1d: myArr[0][0][0],
+                    y1d: myArr[0][0][1],
+                    x2d: myArr[0][1][0],
+                    y2d: myArr[0][1][1],
+                    // x1c: myArr[1][0][0],
+                    // y1c: myArr[1][0][1],
+                    x1c: (myArr[0][0][0] + myArr[0][1][0]) / 2,
+                    y1c: (myArr[0][0][1] + myArr[0][1][1]) / 2,
+                    x2c: myArr[1][1][0],
+                    y2c: myArr[1][1][1],
+                    camera_id: Number(params.id),
+                    name: myItem?.name},
+                CONFIG)
+                .then(res => {
+                    toast.success("SUCCEESS")
+                })
+        } else {
+            let arr1 = myArr[0].reduce((acc, item, index) => {
+                return {...acc, ["x" + (index + 1)]: item[0], ["y" + (index + 1)]: item[1]}
+            }, {})
+            axios.post(API_PATH + "roi_analytics/create", {...arr1, camera_id: params.id, name: myItem?.name}, CONFIG)
+                .then(res => {
+                    toast.success("SUCCEESS")
+                })
+
+        }
     }
-    const changeDots= (e, index) => {
-        let newArr = myArr[0][index][0]  = e.target.value
-        console.log(newArr)
+    const changeDots = (e, index) => {
+        let newArr = myArr[0][index][0] = e.target.value
+
+
+    }
+    const selectType = (bool, type) => {
+
+        if (bool) {
+            drawMode = "line";
+            // modeMessage.innerHTML = "Draw Mode: Line (press <kbd>p</kbd> to change to polygon drawing)";
+        }
+        if (!bool) {
+            drawMode = "polygon";
+            // modeMessage.innerHTML = 'Draw Mode: Polygon (press <kbd>l</kbd> to change to line drawing)';
+        }
+
     }
     return (
         <div>
             <div className="camera-get-dots-header">
                 <div className="left-item">
-                    <button onClick={() => setLineType(false)} className={lineType ? "" : "active-type"}>Region of
+                    <button onClick={() =>
+                        selectType(false, 'polygon')
+                    } className={lineType ? "" : "active-type"}>Region of
                         interest analytics
                     </button>
-                    <button onClick={() => setLineType(true)} className={lineType ? "active-type" : ""}>Line crossing
+                    <button onClick={() => {
+                        selectType(true, 'line')
+                    }} className={lineType ? "active-type" : ""}>Line crossing
                         analytics
                     </button>
                 </div>
                 <div className="center-item">
                     <div className="values-list">
+                        {/*{*/}
+                        {/*    myArr[0]?.map((item, index) => (*/}
+                        {/*        <div className="values">*/}
+                        {/*            <p> x{index + 1}: <span>{item[0]} </span>*/}
+                        {/*                /!*<input type="text"*!/*/}
+                        {/*                /!*       key={index       }*!/*/}
+                        {/*                /!*       // value={myArr[0][index][0]}*!/*/}
+                        {/*                /!*       onChange={(e) => changeDots(e, index)}/>*!/*/}
+                        {/*            </p>*/}
+                        {/*            <p> y{index + 1}: <span>{item[1]}</span></p>*/}
+                        {/*        </div>*/}
+                        {/*    ))*/}
+                        {/*}*/}
+
+
                         {
-                            myArr[0]?.map((item, index) => (
-                                <div className="values">
-                                    <p> x{index + 1}: <span>{item[0]} </span>
-                                        <input type="text"
-                                               key={index       }
-                                               // value={myArr[0][index][0]}
-                                               onChange={(e) => changeDots(e, index)}/>
-                                    </p>
-                                    <p> y{index + 1}: <span>{item[1]}</span></p>
-                                </div>
-                            ))
+                            myArr?.map((item0, index0) => {
+                               return item0?.map((item, index) => (
+                                    <div className="values">
+                                        <p> x{index + 1}: <span>{item[0]} </span></p>
+                                        <p> y{index + 1}: <span>{item[1]}</span></p>
+                                    </div>
+                                ))
+                            })
                         }
                     </div>
 
