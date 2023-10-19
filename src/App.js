@@ -1,5 +1,5 @@
 import React from "react";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import Login from "./pages/Login";
 import MainLayoutVisitor from "./layouts/MainLayoutVisitor";
 import DetectCamera from "./pages/Camera/DetectCamera";
@@ -12,6 +12,8 @@ function App() {
       <>
 
           <Switch>
+              <Redirect  exact from="/" to="/main" />
+
               {/*<Route path="/" component={MainLayoutVisitor} />*/}
               {/*<Route path="/" component={MainLayoutVisitor} />*/}
               <Route path="/main" component={MainLayoutVisitor} />

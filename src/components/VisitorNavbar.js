@@ -1,20 +1,31 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 const VisitorNavbar = () => {
+    const [date, setDate] = useState("")
+    const [time, setTime] = useState(new Date());
+
+    const [viewCreated] = React.useState(Date.now())
+    const month = ["Январь ","Февраль ","Март ","Апрель ","Май ","Июнь ","Июль ","Август ","Сентябрь ","Октябрь ","Ноябрь ","Декабрь ",]
+
+    useEffect(() => {
+        setInterval(( () =>
+        setTime(new Date())
+        ), 1000  )
+    }, []);
     return (
         <div className="main-navbar">
             <div className="nac-fix-fc">
                 <div className="left-nav">
                     <div className="cal-time">
                         <img src="/icon/calendar.svg" alt="calendar"/>
-                        <span>5 октября</span>
+                        <span>{time.toLocaleDateString().slice(0, 2) + " " + month[time.toLocaleDateString().slice(3, 5) - 1]} </span>
                     </div>
                     <div className="cal-time">
                         <img src="/icon/timeclock.svg" alt="timeclock"/>
-                        <span>9:45</span>
+                        <span>{time.toLocaleTimeString().slice(0, 5)}</span>
                     </div>
                 </div>
                 <div className="right-nav">

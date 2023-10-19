@@ -229,6 +229,21 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
   width: 240px;
   height: 100%;
 
+  .arrow-up-down-size{
+    width: 12px;
+  }
+  .css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root{
+    padding: 0 20px 0 0;
+  }
+  .MuiList-padding{
+    padding: 0;
+  }
+  .css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root:hover{
+    background: #FFFFFF;
+  }
+  .css-behmn9-MuiButtonBase-root-MuiListItemButton-root:hover{
+    background: #FFFFFF;
+  }
   .my-side-fix {
     width: 100%;
     border-right: 1px solid #E9ECEF;
@@ -790,6 +805,22 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
     margin-right: 8px;
   }
 }
+.add-btn-video {
+  border-radius: 6px;
+  background: #1A99FF;
+  height: 40px;
+  font-weight: 450;
+  padding-left: 16px;
+  padding-right: 16px;
+  font-size: 14px;
+  box-shadow: 0  1px 2px 0  rgba(27, 36, 44, 0.12);
+  border: 1px solid #1A99FF;
+  color: #213453;
+  background: rgba(255, 255, 255, 0.16);
+  img {
+    margin-right: 8px;
+  }
+}
 
 
 .css-6hp17o-MuiList-root-MuiMenu-list {
@@ -1193,7 +1224,6 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
 
     .my-slider {
       max-width: 500px;
-
     }
 
     .slick-prev {
@@ -1522,8 +1552,24 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
     }
   }
 }
+.password-eye {
+  position: relative;
+  input {
+    padding-right: 40px !important;
+  }
 
-
+  button {
+    border: none;
+    background: transparent;
+    position: absolute;
+    top: 6px;
+    right: 10px;
+  }
+}
+.star-img{
+  margin-top: -7px;
+  margin-left: -2px;
+}
 .left-fl-big-audit {
   padding: 32px;
   border-radius: 6px;
@@ -1538,6 +1584,7 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
 
     .inputs-box {
       margin-bottom: 16px;
+
 
       input, select {
         font-size: 14px;
@@ -1675,7 +1722,6 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
 }
 
 .users {
-
   .employees-header {
     padding: 16px 24px;
     border: 1px solid #E9ECEF;
@@ -1937,6 +1983,10 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
   padding: 16px 34px;
   border-radius: 6px;
   background: #FBFCFD;
+  .modules-title{
+    font-size: 18px;
+    color: #272e35;
+  }
   .row{
     .col-md-4{
       .cam-title{
@@ -2024,6 +2074,9 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
 .cam-add-modal{
   padding-bottom: 20px;
   padding-top: 5px;
+  .modal-title-modal{
+    font-size: 16px;
+  }
   .inputs-box {
     margin-top: 16px;
     input {
@@ -2155,4 +2208,48 @@ canvas {
       padding: 10px 20px;
     }
   }
+}
+
+
+.visitor-box{
+  padding: 12px 24px;
+
+  //width: 100%;
+  width: 100%;
+
+  canvas{
+    border: none;
+    width: 100%;
+  }
+  .visitor-title{
+    h1{
+      display: flex;
+      margin-bottom: 40px;
+      justify-content: space-between;
+      span{
+        font-size: 18px;
+        color: #272e35;
+      }
+    }
+  }
+  .chart-box{
+    width: 100%;
+    border-radius: 6px;
+    padding: 24px;
+    box-sizing: border-box;
+    background: #FBFCFD;
+  }
+}
+.services{
+  padding: 20px 24px;
+  .services-box{
+    padding: 16px 24px;
+    border-radius: 6px;
+    background: #FBFCFD;    
+    .services-title{
+      font-size: 18px;
+      color: #272e35;
+    }
+  }
+
 }

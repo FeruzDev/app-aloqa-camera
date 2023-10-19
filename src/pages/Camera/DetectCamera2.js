@@ -3,40 +3,14 @@ import axios from "axios";
 import {API_PATH, CONFIG} from "../../components/const";
 import {toast} from "react-toastify";
 import {useParams} from "react-router-dom";
-// import "./styles.css"
 const DetectCamera2 = () => {
     const [myArr, setMyArr] = useState([])
     const [myItem, setMyItem] = useState([])
     const [lineType, setLineType] = useState(false)
-    const [test, setTest] = useState([[
-        [241, 250],
-        [2105, 237],
-        [1808, 830],
-        [578, 837],
-        [248, 259],
-        [248, 203]
-    ],
-        [
-            [241, 250],
-            [2105, 237],
-            [1808, 830],
-            [578, 837],
-            [248, 259],
-            [248, 203]
-        ]])
+    const mock = [[581, 358], [1718, 418],  [998, 731], [485, 481],[431, 318], [431, 318]]
     const params = useParams()
     var color_choices = [
-        // "#FF00FF",
-        // "#8622FF",
         "#00FF47",
-        // "#00FFCE",
-        // "#FF8000",
-        // "#00B7EB",
-        // "#FFFF00",
-        // "#0E7AFE",
-        // "#FFABAB",
-        // "#0000FF",
-        // "#CCCCCC",
     ];
 
     var img = new Image();
@@ -57,7 +31,6 @@ const DetectCamera2 = () => {
     var modeMessage = document.querySelector('#mode');
     var coords = document.querySelector('#coords');
 
-
     useEffect(() => {
         var canvas = document.getElementById('canvas');
         var ctx = canvas.getContext('2d');
@@ -65,22 +38,30 @@ const DetectCamera2 = () => {
             .then(res => {
                 setMyItem(res.data)
 
-
                 // if user presses L key, change draw mode to line and change cursor to cross hair
-                document.addEventListener('keydown', function (e) {
-                    if (e.key == 'l') {
-                        drawMode = "line";
+                document.getElementById('lineType').addEventListener('click', function (e) {
                         setLineType(true)
+                        drawMode = "line";
                         canvas.style.cursor = 'crosshair';
-                        // modeMessage.innerHTML = "Draw Mode: Line (press <kbd>p</kbd> to change to polygon drawing)";
-                    }
-                    if (e.key == 'p') {
-                        drawMode = "polygon";
-                        setLineType(false)
-                        canvas.style.cursor = 'crosshair';
-                        // modeMessage.innerHTML = 'Draw Mode: Polygon (press <kbd>l</kbd> to change to line drawing)';
-                    }
                 });
+                document.getElementById('polygonType').addEventListener('click', function (e) {
+                        setLineType(false)
+                        drawMode = "polygon";
+                        canvas.style.cursor = 'crosshair';
+                });
+                // if user presses L key, change draw mode to line and change cursor to cross hair
+                // document.getElementById('lineType').addEventListener('keydown', function (e) {
+                //     if (e.key == 'l') {
+                //         setLineType(true)
+                //         drawMode = "line";
+                //         canvas.style.cursor = 'crosshair';
+                //     }
+                //     if (e.key == 'p') {
+                //         setLineType(false)
+                //         drawMode = "polygon";
+                //         canvas.style.cursor = 'crosshair';
+                //     }
+                // });
 
 
                 function clipboard(selector) {
@@ -104,7 +85,7 @@ const DetectCamera2 = () => {
 
 // placeholder image
 //         img.src = 'https://assets.website-files.com/5f6bc60e665f54545a1e52a5/63d3f236a6f0dae14cdf0063_drag-image-here.png';
-                img.src = res.data?.screenshot;
+                img.src = res?.data?.screenshot;
                 img.onload = function () {
                     // scaleFactor = 0.5;
                     // canvas.style.width = '100%';
@@ -172,8 +153,6 @@ const DetectCamera2 = () => {
                     ctx.drawImage(img, 0, 0);
                     points = [];
                     masterPoints = [];
-                    // document.querySelector('#json').innerHTML = '';
-                    // document.querySelector('#python').innerHTML = '';
                 }
 
                 document.querySelector('#clear').addEventListener('click', function (e) {
@@ -181,32 +160,11 @@ const DetectCamera2 = () => {
                     clearall();
                 });
 
-                // document.querySelector('#clipboard').addEventListener('click', function (e) {
-                //     e.preventDefault();
-                //     clipboard("#clipboard");
-                // });
-
-                // document.querySelector('#clipboardJSON').addEventListener('click', function (e) {
-                //     e.preventDefault();
-                //     clipboard("#clipboardJSON");
-                // });
 
                 canvas.addEventListener('dragover', function (e) {
                     e.preventDefault();
                 });
 
-// canvas.addEventListener('wheel', function(e) {
-//     var delta = Math.sign(e.deltaY);
-//     zoom(delta);
-// });
-
-                // document.querySelector('#saveImage').addEventListener('click', function (e) {
-                //     e.preventDefault();
-                //     var link = document.createElement('a');
-                //     link.download = 'image.png';
-                //     link.href = canvas.toDataURL();
-                //     link.click();
-                // });
 
 // on canvas hover, if cursor is crosshair, draw line from last point to cursor
                 canvas.addEventListener('mousemove', function (e) {
@@ -273,10 +231,8 @@ const DetectCamera2 = () => {
 
                 canvas.addEventListener('dblclick', function (e) {
                     // if (e.key === 'Enter') {
+                    console.log(points)
                     canvas.style.cursor = 'default';
-                    // remove line drawn by mouseover
-                    // ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    // join the dots
                     drawLine(points[0][0], points[0][1], points[points?.length - 1][0], points[points?.length - 1][1]);
                     // fill polygon with color
                     if (drawMode == 'polygon') {
@@ -314,41 +270,6 @@ const DetectCamera2 = () => {
                     // }
                 });
 
-                // canvas.addEventListener('drop', function (e) {
-                //     e.preventDefault();
-                //     var file = e.dataTransfer.files[0];
-                //     var reader = new FileReader();
-                //
-                //     reader.onload = function (event) {
-                //         // only allow image files
-                //         img.src = event.target.result;
-                //     };
-                //     reader.readAsDataURL(file);
-                //
-                //     var mime_type = file.type;
-                //
-                //     if (
-                //         mime_type != 'image/png' &&
-                //         mime_type != 'image/jpeg' &&
-                //         mime_type != 'image/jpg'
-                //     ) {
-                //         alert('Only PNG, JPEG, and JPG files are allowed.');
-                //         return;
-                //     }
-                //
-                //     img.onload = function () {
-                //         scaleFactor = 0.3;
-                //         canvas.style.width = img.width * scaleFactor + 'px';
-                //         canvas.style.height = img.height * scaleFactor + 'px';
-                //         canvas.width = img.width;
-                //         canvas.height = img.height;
-                //         canvas.style.borderRadius = '10px';
-                //         ctx.drawImage(img, 0, 0);
-                //     };
-                //     // show coords
-                //     document.getElementById('coords').style.display = 'inline-block';
-                // });
-
                 function writePoints(parentPoints) {
                     var normalized = [];
 
@@ -369,10 +290,6 @@ const DetectCamera2 = () => {
                         parentPoints = normalized;
                     }
 
-                    // create np.array list
-
-                    // setMyArr(parentPoints)
-                    // console.log(parentPoints)
 
                     var code_template = `
 [
@@ -405,6 +322,8 @@ ${parentPoints.map(function (points) {
 
                 canvas.addEventListener('click', function (e) {
                     // set cursor to crosshair
+
+
                     canvas.style.cursor = 'crosshair';
                     // if line mode and two points have been drawn, add to masterPoints
                     if (drawMode == 'line' && points.length == 2) {
@@ -435,6 +354,7 @@ ${parentPoints.map(function (points) {
                     // add "points"
                     parentPoints.push(points);
 
+                    // writePoints(parentPoints);
                     writePoints(parentPoints);
                 });
 
@@ -459,7 +379,7 @@ ${parentPoints.map(function (points) {
     const sendDots = () => {
 
 
-        if (selectType){
+        if (lineType === true){
             // let arr1 = myArr?.map((item2, index2)=>{
             //  return   item2.reduce((acc, item, index) => {
             //         return {...acc, ["x" + (index + 1)]: item[0], ["y" + (index + 1)]: item[1]}
@@ -482,10 +402,22 @@ ${parentPoints.map(function (points) {
                     name: myItem?.name},
                 CONFIG)
                 .then(res => {
-                    toast.success("SUCCEESS")
+                    toast.success("SUCCEESS LINE")
                 })
-        } else {
-            let arr1 = myArr[0].reduce((acc, item, index) => {
+        } else if (lineType === false) {
+
+            let bigArr = []
+            myArr?.map((item, index)=> {
+                  item?.map(item2 => {
+                     return  bigArr.push(item2)
+                  })
+            })
+            // setMyArr(myArr.filter((item10, index10) => {
+            //     return index === 0 ? item.filter((item11, index11) => {
+            //         return index11 === index ? [e.target.value, item11[1]]: item11
+            //     }) : item
+            // }))
+            let arr1 = bigArr.reduce((acc, item, index) => {
                 return {...acc, ["x" + (index + 1)]: item[0], ["y" + (index + 1)]: item[1]}
             }, {})
             axios.post(API_PATH + "roi_analytics/create", {...arr1, camera_id: params.id, name: myItem?.name}, CONFIG)
@@ -501,9 +433,16 @@ ${parentPoints.map(function (points) {
 
     }
     const selectType = (bool, type) => {
+        var canvas = document.getElementById('canvas');
+
+        drawMode = "line";
+        setLineType(true)
+        drawMode = "line";
+        canvas.style.cursor = 'crosshair';
 
         if (bool) {
             drawMode = "line";
+
             // modeMessage.innerHTML = "Draw Mode: Line (press <kbd>p</kbd> to change to polygon drawing)";
         }
         if (!bool) {
@@ -516,34 +455,15 @@ ${parentPoints.map(function (points) {
         <div>
             <div className="camera-get-dots-header">
                 <div className="left-item">
-                    <button onClick={() =>
-                        selectType(false, 'polygon')
-                    } className={lineType ? "" : "active-type"}>Region of
+                    <button id="polygonType"  className={lineType ? "" : "active-type"}>Region of
                         interest analytics
                     </button>
-                    <button onClick={() => {
-                        selectType(true, 'line')
-                    }} className={lineType ? "active-type" : ""}>Line crossing
+                    <button id="lineType"  className={lineType ? "active-type" : ""}>Line crossing
                         analytics
                     </button>
                 </div>
                 <div className="center-item">
                     <div className="values-list">
-                        {/*{*/}
-                        {/*    myArr[0]?.map((item, index) => (*/}
-                        {/*        <div className="values">*/}
-                        {/*            <p> x{index + 1}: <span>{item[0]} </span>*/}
-                        {/*                /!*<input type="text"*!/*/}
-                        {/*                /!*       key={index       }*!/*/}
-                        {/*                /!*       // value={myArr[0][index][0]}*!/*/}
-                        {/*                /!*       onChange={(e) => changeDots(e, index)}/>*!/*/}
-                        {/*            </p>*/}
-                        {/*            <p> y{index + 1}: <span>{item[1]}</span></p>*/}
-                        {/*        </div>*/}
-                        {/*    ))*/}
-                        {/*}*/}
-
-
                         {
                             myArr?.map((item0, index0) => {
                                return item0?.map((item, index) => (
@@ -566,45 +486,21 @@ ${parentPoints.map(function (points) {
 
                 <div className="flex">
                     <div className="left">
+                        <div style={{marginTop: "20px", marginLeft: "20px"}}>
+                            <a href="" id="clear" className="widgetButton text-decoration-none">Clear Draws</a>
+
+                        </div>
                         <div className="canvas-control">
                             <canvas id="canvas"></canvas>
                         </div>
-                        <div style={{marginTop: "20px"}}>
-                            <a href="" id="clear" className="widgetButton">Clear Polygons</a>
-                            {/*<a href="" id="saveImage" className="widgetButton">Save Image</a>*/}
-                            {/*<br/>*/}
-                            {/*<p id="mode">Mode: Polygon (Press <kbd>L</kbd> to switch to Line drawing mode)</p>*/}
-                        </div>
+
                     </div>
                     <div className="right">
-                        {/*<h2>NumPy Points</h2>*/}
-                        {/*<p>Copy the points below into your Python code.</p>*/}
-                        {/*<a href="" id="clipboard" className="widgetButton">Copy Python to Clipboard</a>*/}
-                        {/*<pre id="python">*/}
-                        {/*<code>*/}
-                        {/*</code>*/}
-                        {/*</pre>*/}
-                        {/*    <p className="show_normalized" id="coords" style={{display: "none"}}>x: */}
-                        {/*        <span id="x"></span> |*/}
-                        {/*        y: <span id="y"></span></p>*/}
-                        {/*    <p id="mode">Mode: Polygon (Press <kbd>L</kbd> to switch to Line drawing mode)</p>*/}
+
 
                         <span style={{opacity: "0"}} id="x"></span>
                         <span style={{opacity: "0"}} id="y"></span>
-                        {/*<div className="show_normalized" style={{marginTop: "25px"}}>*/}
-                        {/*<label htmlFor="normalize_checkbox">Show Normalized Points from 0-1</label>*/}
-                        {/*<input type="checkbox" id="normalize_checkbox" name="normalize_checkbox"*/}
-                        {/*       value="normalize_checkbox"/>*/}
-                        {/*</div>*/}
-                        {/*<details>*/}
-                        {/*<summary>View JSON Points</summary>*/}
-                        {/*<h2>JSON Points</h2>*/}
-                        {/*<a href="" id="clipboardJSON" className="widgetButton">Copy JSON to Clipboard</a>*/}
-                        {/*    <pre id="json">*/}
-                        {/*    <code>*/}
-                        {/*    </code>*/}
-                        {/*</pre>*/}
-                        {/*</details>*/}
+
                     </div>
                 </div>
             </main>

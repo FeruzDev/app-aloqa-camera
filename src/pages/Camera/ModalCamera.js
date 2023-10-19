@@ -3,6 +3,7 @@ import {Button, Modal} from "antd";
 import axios from "axios";
 import {API_PATH, CONFIG} from "../../components/const";
 import {toast} from "react-toastify";
+import {useParams} from "react-router-dom";
 
 const ModalCamera = (props) => {
     const [sendData, setSendData] = useState({
@@ -15,6 +16,7 @@ const ModalCamera = (props) => {
         stream_quality: 0,
         room_id: null,
     })
+    const params = useParams()
     const sendAll = () => {
         console.log(props.selectRooms)
         axios.post(API_PATH + "camera/create",
@@ -26,7 +28,7 @@ const ModalCamera = (props) => {
                 real_time_stream: "",
                 camera_number: 0,
                 stream_quality: 0,
-                room_id: props.selectRooms
+                room_id: params.room_id
             } , CONFIG)
             .then(res => {
                 toast.success("Добавлено успешно")

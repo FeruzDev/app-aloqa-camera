@@ -5,9 +5,9 @@ import {API_PATH, CONFIG} from "../../components/const";
 import ModalRoom from "./ModalRoom";
 import {toast} from "react-toastify";
 import ModalCamera from "./ModalCamera";
-import {useHistory} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 
-const Camera = () => {
+const Rooms = () => {
 
     const [isModalOffice, setIsModalOffice] = useState(false);
     const [isModalRoom, setIsModalRoom] = useState(false);
@@ -19,6 +19,7 @@ const Camera = () => {
 
     const [selectOffices, setSelectOffices] = useState(0)
     const [selectRooms, setSelectRooms] = useState(0)
+    const params = useParams()
 
     const history = useHistory()
     const getBuilding = () => {
@@ -29,16 +30,13 @@ const Camera = () => {
             .catch(err => {
                 toast.error("Ошибка")
             })
-
     }
     const getRooms = (id) => {
         window.scrollTo(0, 0);
         console.log(selectRooms);
         setSelectOffices(id)
-
-        history.push("building/"+ id)
         // setSelectRooms(id)
-        axios.get(API_PATH + "room/" + id + "/all", CONFIG)
+        axios.get(API_PATH + "room/" + params.room_id + "/all", CONFIG)
             .then(res => {
                 setRooms(res.data)
             })
@@ -47,7 +45,7 @@ const Camera = () => {
             })
     }
     const getCameras = (id) => {
-
+        history.push(""+ params.room_id + "/camera-list/" + id)
         setSelectRooms(id)
         axios.get(API_PATH + "camera/" + id + "/all", CONFIG)
             .then(res => {
@@ -64,7 +62,8 @@ const Camera = () => {
     }
     useEffect(() => {
         getBuilding()
-    }, []);
+        getRooms()
+    }, [params.room_id]);
     return (<div className="add-camera">
         <div className="row ">
             <div className="col-md-4">
@@ -79,7 +78,7 @@ const Camera = () => {
                             className={selectOffices !== 0 && selectOffices === item?.id ? "office-box office-box-active" : "office-box"}
                             onClick={() => {
                                 // setSelectOffices(item.id)
-                                getRooms(item.id)
+                                history.push("/main/building/"+ item.id)
                             }}>
                             <button className="hor-dot">
                                 <img src="/icon/more_vert.svg" alt=""/>
@@ -134,6 +133,54 @@ const Camera = () => {
                     Привязанные комнаты
                     <img src="/icon/rightArrow.png" alt=""/>
                 </h3>
+                {
+                    rooms?.map((item, index) => (
+                        <div key={index}
+                             className={(selectRooms !== 0 && selectRooms === item?.id) ? "office-box office-box-active" : "office-box"}
+                             onClick={() => {
+                                 // setSelectOffices(item.id)
+                                 getCameras(item.id)
+                             }}>
+                            <button className="hor-dot">
+                                <img src="/icon/more_vert.svg" alt=""/>
+                            </button>
+                            <h6 className="office-box-title-child font-family-regular">
+                                <img src="/icon/cam.svg"
+                                     alt="cam"
+                                     className="mr-8"/>{item?.name}</h6>
+                            <div className="row">
+                            </div>
+                            <div className="row">
+                                <div className="col-md-9  ">
+                                    <div className="office-box-item">
+                                     <span className="office-box-item-title font-family-regular">
+                                    <img src="/icon/cam.svg" alt="."/>
+                                    Количество камер:
+                                </span>
+                                        <span className="office-box-item-count font-family-bold">
+                                    3
+                                </span>
+                                    </div>
+                                </div>
+                                <div className="col-md-3 p-0">
+                                    <div className="office-box-item">
+                                    <span className="office-box-item-title font-family-regular">
+                                    <img src="/icon/wireless.svg" alt="."/>
+                                </span>
+                                        <span className="office-box-item-count-danger font-family-bold">
+                                    3
+                                </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                }
+                        <button className="add-btn mt-20 font-family-medium" onClick={() => setIsModalRoom(true)}><img
+                            src="/icon/plus.svg"/>
+                            Добавить комната
+                        </button>
 
             </div>
             <div className="col-md-4">
@@ -200,4 +247,4 @@ const Camera = () => {
     </div>);
 };
 
-export default Camera;
+export default Rooms;
