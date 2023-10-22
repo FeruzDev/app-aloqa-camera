@@ -805,6 +805,22 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
     margin-right: 8px;
   }
 }
+
+.add-btn-green {
+  border-radius: 6px;
+  background: rgba(19, 171, 62, 0.20);
+  border: none;
+  height: 40px;
+  font-weight: 450;
+  padding-left: 16px;
+  padding-right: 16px;
+  color: #13AB3E;
+  box-shadow: 0  1px 2px 0  rgba(27, 36, 44, 0.12);
+
+  img {
+    margin-right: 8px;
+  }
+}
 .add-btn-video {
   border-radius: 6px;
   background: #1A99FF;
@@ -822,7 +838,16 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
   }
 }
 
-
+.cancel-btn{
+  border-radius: 6px;
+  border: 1px solid #CFD6DD;
+  background:  #FFF;
+  height: 40px;
+  font-size: 14px;
+  padding-left: 26px;
+  padding-right: 26px;
+  box-shadow: 0px 1px 2px 0px rgba(27, 36, 44, 0.12);
+}
 .css-6hp17o-MuiList-root-MuiMenu-list {
   padding: 0 !important;
 }
@@ -1988,7 +2013,7 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
     color: #272e35;
   }
   .row{
-    .col-md-4{
+    .col-md-4, .col-md-6{
       .cam-title{
         display: flex;
         justify-content: space-between;
@@ -2097,6 +2122,61 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
       margin-bottom: 8px;
       color: #272E35;
     }
+  }
+}
+.cam-add-modal-deploy{
+  .check-list-main{
+    .ant-radio-wrapper{
+      display: flex;
+      align-items: center;
+      width: 100%  !important;
+    }
+    .css-dev-only-do-not-override-amq5gd{
+      width: 100%;
+    }
+    //.ant-space-item, .css-dev-only-do-not-override-amq5gd{
+    //  width: 100% !important;
+    //  span:nth-child(1){
+    //    width: 24px;
+    //    height: 28px;
+    //  }
+    //  span:nth-child(2){
+    //    //width: 100%;
+    //  }
+    //}
+    .check-list-main-item{
+      display: flex;
+      margin-top: 10px;
+      align-items: center;
+      input{
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        margin-right: 10px;
+      }
+      .check-list-main-item-span{
+        border-radius: 6px;
+        background:  #F2F2F2;
+        width: 100%;
+        text-align: center;
+        border: 1px solid transparent;
+        height: 40px;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+  .cam-add-modal-deploy-title{
+    font-size: 12px;
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 8px;
+    padding: 12px;
+    border-radius: 6px;
+    background:  #F2F2F2;
+  }
+  .img-box-deploy{
+
   }
 }
 canvas {
@@ -2245,11 +2325,33 @@ canvas {
   .services-box{
     padding: 16px 24px;
     border-radius: 6px;
-    background: #FBFCFD;    
+    background: #FBFCFD;
     .services-title{
       font-size: 18px;
       color: #272e35;
     }
   }
 
+}
+.modules-title{
+  display: flex;
+align-items: center;
+}
+.link-stepper{
+  margin-left: 24px;
+  margin-top: 24px;
+  .arrow-items-link{
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+  .first-item{
+    font-size: 14px;
+    font-weight: 450;
+    color: #272e35;
+  }
+  .second-item{
+    color: #4A545E;
+    font-size: 14px;
+
+  }
 }

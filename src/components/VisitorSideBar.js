@@ -9,7 +9,6 @@ import Collapse from '@mui/material/Collapse';
 
 const VisitorSideBar = () => {
     const [open, setOpen] = React.useState(false);
-
     const handleClick = () => {
         setOpen(!open);
     };
@@ -26,15 +25,12 @@ const VisitorSideBar = () => {
                             sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
                             component="nav"
                             aria-labelledby="nested-list-subheader"
-
                         >
                             <ListItemButton onClick={handleClick}>
-
                                 <div  className="link-item-style ">
                                     <img src="/icon/analys.svg" alt=""/>
                                     <span>Аналитика посетителей</span>
                                 </div>
-
                                 {open ? <img src="/icon/arrowup.png" className="arrow-up-down-size" /> : <img src="/icon/arrowdown.png"  className="arrow-up-down-size"  />}
                             </ListItemButton>
                             <Collapse in={open} timeout="auto" unmountOnExit>
@@ -55,11 +51,10 @@ const VisitorSideBar = () => {
                                 </List>
                             </Collapse>
                         </List>
-                        <Link to="/home-visitor" className="link-item-style ">
-                            <img src="/icon/back.svg" alt=""/>
-                            <span>Back side</span>
-                        </Link>
-
+                        {/*<Link to="/home-visitor" className="link-item-style ">*/}
+                        {/*    <img src="/icon/back.svg" alt=""/>*/}
+                        {/*    <span>Back side</span>*/}
+                        {/*</Link>*/}
                         <Link to="/main/building" className="link-item-style ">
                             <img src="/icon/camera2.svg" alt=""/>
                             <span>Cameras</span>
@@ -72,7 +67,7 @@ const VisitorSideBar = () => {
                             <img src="/icon/services.svg" alt=""/>
                             <span>Services</span>
                         </Link>
-                        <Link to="/main/visitor-camera" className="link-item-style ">
+                        <Link to="/main/deployments" className="link-item-style ">
                             <img src="/icon/deployment.svg" alt=""/>
                             <span>Deployment</span>
                         </Link>

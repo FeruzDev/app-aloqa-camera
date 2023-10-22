@@ -3,11 +3,12 @@ import axios from "axios";
 import {API_PATH, CONFIG} from "../../components/const";
 import {toast} from "react-toastify";
 import {useParams} from "react-router-dom";
-const DetectCamera2 = () => {
+
+const DepMainModal = () => {
     const [myArr, setMyArr] = useState([])
     const [myItem, setMyItem] = useState([])
     const [lineType, setLineType] = useState(false)
-    const mock = [[581, 358], [1718, 418],  [998, 731], [485, 481],[431, 318], [431, 318]]
+    const mock = [[581, 358], [1718, 418], [998, 731], [485, 481], [431, 318], [431, 318]]
     const params = useParams()
     var color_choices = [
         "#00FF47",
@@ -40,14 +41,14 @@ const DetectCamera2 = () => {
 
                 // if user presses L key, change draw mode to line and change cursor to cross hair
                 document.getElementById('lineType').addEventListener('click', function (e) {
-                        setLineType(true)
-                        drawMode = "line";
-                        canvas.style.cursor = 'crosshair';
+                    setLineType(true)
+                    drawMode = "line";
+                    canvas.style.cursor = 'crosshair';
                 });
                 document.getElementById('polygonType').addEventListener('click', function (e) {
-                        setLineType(false)
-                        drawMode = "polygon";
-                        canvas.style.cursor = 'crosshair';
+                    setLineType(false)
+                    drawMode = "polygon";
+                    canvas.style.cursor = 'crosshair';
                 });
                 // if user presses L key, change draw mode to line and change cursor to cross hair
                 // document.getElementById('lineType').addEventListener('keydown', function (e) {
@@ -159,11 +160,15 @@ const DetectCamera2 = () => {
                     e.preventDefault();
                     clearall();
                 });
+
+
                 canvas.addEventListener('dragover', function (e) {
                     e.preventDefault();
                 });
+
+
 // on canvas hover, if cursor is crosshair, draw line from last point to cursor
-                canvas.addEventListener('mousemove', function (e) {
+                canvas.addEventListener('click', function (e) {
                     var x = getScaledCoords(e)[0];
                     var y = getScaledCoords(e)[1];
                     // round
@@ -315,41 +320,85 @@ ${parentPoints.map(function (points) {
     `;
                     // document.querySelector('#json').innerHTML = json_template;
                 }
+                //
+                // canvas.addEventListener('click', function (e) {
+                //     // set cursor to crosshair
+                //     console.log("WwwwwW")
+                //     masterPoints.push(mock);
+                //
+                //     canvas.style.cursor = 'crosshair';
+                //     // if line mode and two points have been drawn, add to masterPoints
+                //     if (drawMode == 'line' && points.length == 2) {
+                //         masterPoints.push(points);
+                //         points = [];
+                //     }
+                //     var x = getScaledCoords(e)[0];
+                //     var y = getScaledCoords(e)[1];
+                //     x = Math.round(x);
+                //     y = Math.round(y);
+                //
+                //     points.push([x, y]);
+                //     ctx.beginPath();
+                //     ctx.strokeStyle = rgb_color;
+                //     // add rgb_color to masterColors
+                //
+                //     if (masterColors.length == 0) {
+                //         masterColors.push(rgb_color);
+                //     }
+                //
+                //     ctx.arc(x, y, 155, 0, 2 * Math.PI);
+                //     // concat all points into one array
+                //     var parentPoints = [];
+                //
+                //     for (var i = 0; i < masterPoints.length; i++) {
+                //         parentPoints.push(masterPoints[i]);
+                //     }
+                //     // add "points"
+                //     parentPoints.push(points);
+                //
+                //     writePoints(parentPoints);
+                // });
+                //
+
 
                 canvas.addEventListener('click', function (e) {
                     // set cursor to crosshair
+                    console.log("WwwwwW")
+                    masterPoints.push(mock);
+
                     canvas.style.cursor = 'crosshair';
                     // if line mode and two points have been drawn, add to masterPoints
-                    if (drawMode == 'line' && points.length == 2) {
-                        masterPoints.push(points);
-                        points = [];
-                    }
-                    var x = getScaledCoords(e)[0];
-                    var y = getScaledCoords(e)[1];
-                    x = Math.round(x);
-                    y = Math.round(y);
-
-                    points.push([x, y]);
-                    ctx.beginPath();
+                    // if (drawMode == 'line' && points.length == 2) {
+                    //     masterPoints.push(points);
+                    //     points = [];
+                    // }
+                    // var x = getScaledCoords(e)[0];
+                    // var y = getScaledCoords(e)[1];
+                    // x = Math.round(x);
+                    // y = Math.round(y);
+                    //
+                    // points.push([x, y]);
+                    // ctx.beginPath();
                     ctx.strokeStyle = rgb_color;
-                    // add rgb_color to masterColors
-
+                    // // add rgb_color to masterColors
+                    //
                     if (masterColors.length == 0) {
                         masterColors.push(rgb_color);
                     }
-
-                    ctx.arc(x, y, 155, 0, 2 * Math.PI);
-                    // concat all points into one array
+                    //
+                    // ctx.arc(x, y, 155, 0, 2 * Math.PI);
+                    // // concat all points into one array
                     var parentPoints = [];
-
-                    for (var i = 0; i < masterPoints.length; i++) {
-                        parentPoints.push(masterPoints[i]);
-                    }
-                    // add "points"
+                    //
+                    // for (var i = 0; i < masterPoints.length; i++) {
+                    //     parentPoints.push(masterPoints[i]);
+                    // }
+                    // // add "points"
                     parentPoints.push(points);
 
                     writePoints(parentPoints);
                 });
+
 
                 // document.querySelector('#normalize_checkbox').addEventListener('change', function (e) {
                 //     showNormalized = e.target.checked;
@@ -365,19 +414,26 @@ ${parentPoints.map(function (points) {
                 //     writePoints(parentPoints);
                 // });
             })
-        // return () => document.body.style.zoom = "100%"; 
+            .finally(() => {
+                document.getElementById('canvas').click()
+            })
+        // return () => document.body.style.zoom = "100%";
+
+        // setTimeout(() => {
+        //     document.getElementById('canvas').click()
+        // }, 5000)
     }, [])
 
     const sendDots = () => {
 
 
-        if (lineType === true){
+        if (lineType === true) {
             // let arr1 = myArr?.map((item2, index2)=>{
             //  return   item2.reduce((acc, item, index) => {
             //         return {...acc, ["x" + (index + 1)]: item[0], ["y" + (index + 1)]: item[1]}
             //     }, {})
             // })
-         console.log(myArr[0][0][0])
+            console.log(myArr[0][0][0])
             axios.post(API_PATH + "line_crossing_analytics/create",
                 {
                     x1d: myArr[0][0][0],
@@ -391,7 +447,8 @@ ${parentPoints.map(function (points) {
                     x2c: myArr[1][1][0],
                     y2c: myArr[1][1][1],
                     camera_id: Number(params.id),
-                    name: myItem?.name},
+                    name: myItem?.name
+                },
                 CONFIG)
                 .then(res => {
                     toast.success("SUCCEESS LINE")
@@ -399,10 +456,10 @@ ${parentPoints.map(function (points) {
         } else if (lineType === false) {
 
             let bigArr = []
-            myArr?.map((item, index)=> {
-                  item?.map(item2 => {
-                     return  bigArr.push(item2)
-                  })
+            myArr?.map((item, index) => {
+                item?.map(item2 => {
+                    return bigArr.push(item2)
+                })
             })
             // setMyArr(myArr.filter((item10, index10) => {
             //     return index === 0 ? item.filter((item11, index11) => {
@@ -442,10 +499,10 @@ ${parentPoints.map(function (points) {
         <div>
             <div className="camera-get-dots-header">
                 <div className="left-item">
-                    <button id="polygonType"  className={lineType ? "" : "active-type"}>Region of
+                    <button id="polygonType" className={lineType ? "" : "active-type"}>Region of
                         interest analytics
                     </button>
-                    <button id="lineType"  className={lineType ? "active-type" : ""}>Line crossing
+                    <button id="lineType" className={lineType ? "active-type" : ""}>Line crossing
                         analytics
                     </button>
                 </div>
@@ -453,7 +510,7 @@ ${parentPoints.map(function (points) {
                     <div className="values-list">
                         {
                             myArr?.map((item0, index0) => {
-                               return item0?.map((item, index) => (
+                                return item0?.map((item, index) => (
                                     <div className="values">
                                         <p> x{index + 1}: <span>{item[0]} </span></p>
                                         <p> y{index + 1}: <span>{item[1]}</span></p>
@@ -474,11 +531,12 @@ ${parentPoints.map(function (points) {
                     <div className="left">
                         <div style={{marginTop: "20px", marginLeft: "20px"}}>
                             <a href="" id="clear" className="widgetButton text-decoration-none">Clear Draws</a>
-
+                            <button onClick={() => document.getElementById("canvas").click()} type="button">nimadir</button>
                         </div>
                         <div className="canvas-control">
                             <canvas id="canvas"></canvas>
                         </div>
+
                     </div>
                     <div className="right">
                         <span style={{opacity: "0"}} id="x"></span>
@@ -490,4 +548,4 @@ ${parentPoints.map(function (points) {
     );
 };
 
-export default DetectCamera2;
+export default DepMainModal;

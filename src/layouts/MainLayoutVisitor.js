@@ -10,6 +10,8 @@ import Servers from "../pages/Servers";
 import Services from "../pages/Services";
 import Rooms from "../pages/Camera/Rooms";
 import CameraList from "../pages/Camera/CameraList";
+import Deployments from "../pages/Deployments";
+import DeploymentsDetail from "../pages/Deployments/DeploymentsDetail";
 
 const MainLayoutVisitor = () => {
     return (
@@ -28,6 +30,8 @@ const MainLayoutVisitor = () => {
                     <Route path="/main/visitor-comparasion" exact component={VisitorComparasion} />
                     <Route path="/main/my-modules" exact component={Servers} />
                     <Route path="/main/services" exact component={Services} />
+                    <Route path="/main/deployments" exact component={Deployments} />
+                    <Route path="/main/deployments/:id" exact component={DeploymentsDetail} />
                     {/*<Route path="/main/detect-camera/:id" exact component={DetectCamera2} />*/}
                     {/*<Route path="/visitor-home/detect-camera" exact component={DetectCamera} />*/}
 

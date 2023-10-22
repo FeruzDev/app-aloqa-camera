@@ -1,13 +1,40 @@
 import React, {useEffect, useState} from 'react';
+import {Button, Checkbox, Modal,} from "antd";
+import {Radio, Space} from 'antd';
+import {useParams} from "react-router-dom";
 import axios from "axios";
 import {API_PATH, CONFIG} from "../../components/const";
 import {toast} from "react-toastify";
-import {useParams} from "react-router-dom";
-const DetectCamera2 = () => {
+
+const DeploymentsDetailModal = (props) => {
+    const [sendData, setSendData] = useState({
+        name: "",
+        country: "",
+        city: "",
+        state: "",
+        zip_code: "",
+        address: "",
+        latitude: 0,
+        longitude: 0
+    })
+    const sendAll = () => {
+        // axios.post(API_PATH + "building/create", sendData, CONFIG)
+        //     .then(res => {
+        //         toast.success("Добавлено успешно")
+        //         props.getBuilding()
+        //         props.setIsAddCameraModal(false)
+        //     })
+        //     .catch(err => {
+        //         toast.error("Ошибка")
+        //     })
+    }
     const [myArr, setMyArr] = useState([])
     const [myItem, setMyItem] = useState([])
+    const [needData, setNeedData] = useState([])
     const [lineType, setLineType] = useState(false)
-    const mock = [[581, 358], [1718, 418],  [998, 731], [485, 481],[431, 318], [431, 318]]
+    const [mock, setMock] = useState([[581, 358], [1718, 418], [998, 731], [485, 481], [431, 318], [431, 318]])
+    const mock2 = [[781, 658], [1218, 118], [598, 331], [385, 281], [431, 318], [631, 918]]
+    const [masterPoints, setMasterPoints] = useState([]);
     const params = useParams()
     var color_choices = [
         "#00FF47",
@@ -16,53 +43,24 @@ const DetectCamera2 = () => {
     var img = new Image();
     var rgb_color = color_choices[Math.floor(Math.random() * color_choices.length)]
     var opaque_color = 'rgba(0, 255, 71, 0.22)';
-
     var scaleFactor = 1;
     var scaleSpeed = 0.01;
-
     var points = [];
     var regions = [];
-    var masterPoints = [];
-    var masterColors = [];
 
+    var masterColors = [];
     var showNormalized = false;
     var drawMode = "polygon";
-
     var modeMessage = document.querySelector('#mode');
     var coords = document.querySelector('#coords');
 
-    useEffect(() => {
+    function mainFc(mainMock) {
+        console.log("WWW")
         var canvas = document.getElementById('canvas');
         var ctx = canvas.getContext('2d');
-        axios.get(API_PATH + "camera/" + params.id, CONFIG)
+        axios.get(API_PATH + "camera/" + "1", CONFIG)
             .then(res => {
                 setMyItem(res.data)
-
-                // if user presses L key, change draw mode to line and change cursor to cross hair
-                document.getElementById('lineType').addEventListener('click', function (e) {
-                        setLineType(true)
-                        drawMode = "line";
-                        canvas.style.cursor = 'crosshair';
-                });
-                document.getElementById('polygonType').addEventListener('click', function (e) {
-                        setLineType(false)
-                        drawMode = "polygon";
-                        canvas.style.cursor = 'crosshair';
-                });
-                // if user presses L key, change draw mode to line and change cursor to cross hair
-                // document.getElementById('lineType').addEventListener('keydown', function (e) {
-                //     if (e.key == 'l') {
-                //         setLineType(true)
-                //         drawMode = "line";
-                //         canvas.style.cursor = 'crosshair';
-                //     }
-                //     if (e.key == 'p') {
-                //         setLineType(false)
-                //         drawMode = "polygon";
-                //         canvas.style.cursor = 'crosshair';
-                //     }
-                // });
-
 
                 function clipboard(selector) {
                     var copyText = document.querySelector(selector).innerText;
@@ -163,13 +161,12 @@ const DetectCamera2 = () => {
                     e.preventDefault();
                 });
 // on canvas hover, if cursor is crosshair, draw line from last point to cursor
-                canvas.addEventListener('mousemove', function (e) {
+                canvas.addEventListener('click', function (e) {
                     var x = getScaledCoords(e)[0];
                     var y = getScaledCoords(e)[1];
                     // round
                     x = Math.round(x);
                     y = Math.round(y);
-
                     // update x y coords
                     var xcoord = document.querySelector('#x');
                     var ycoord = document.querySelector('#y');
@@ -224,8 +221,7 @@ const DetectCamera2 = () => {
                         drawAllPolygons();
                     }
                 });
-
-                canvas.addEventListener('dblclick', function (e) {
+                canvas.addEventListener('dblclickw', function (e) {
                     // if (e.key === 'Enter') {
                     console.log(points)
                     canvas.style.cursor = 'default';
@@ -268,7 +264,6 @@ const DetectCamera2 = () => {
 
                 function writePoints(parentPoints) {
                     var normalized = [];
-
                     // if normalized is true, normalize all points
                     var imgHeight = img.height;
                     var imgWidth = img.width;
@@ -285,11 +280,8 @@ const DetectCamera2 = () => {
                         }
                         parentPoints = normalized;
                     }
-
-
                     var code_template = `
 [
-
 ${parentPoints.map(function (points) {
                         return `np.array([
                                 ${points.map(function (point) {
@@ -299,8 +291,6 @@ ${parentPoints.map(function (points) {
                     }).join(',')}
 ]
     `;
-                    // document.querySelector('#python').innerHTML = code_template;
-
                     setMyArr(parentPoints)
                     var json_template = `
 {
@@ -313,181 +303,118 @@ ${parentPoints.map(function (points) {
                     }).join(',')}
 }
     `;
-                    // document.querySelector('#json').innerHTML = json_template;
                 }
 
-                canvas.addEventListener('click', function (e) {
-                    // set cursor to crosshair
+                canvas.addEventListener('click' , function (e) {
+                    // masterPoints.push(mock);
+                    masterPoints.push(mainMock)
                     canvas.style.cursor = 'crosshair';
-                    // if line mode and two points have been drawn, add to masterPoints
-                    if (drawMode == 'line' && points.length == 2) {
-                        masterPoints.push(points);
-                        points = [];
-                    }
-                    var x = getScaledCoords(e)[0];
-                    var y = getScaledCoords(e)[1];
-                    x = Math.round(x);
-                    y = Math.round(y);
-
-                    points.push([x, y]);
-                    ctx.beginPath();
                     ctx.strokeStyle = rgb_color;
-                    // add rgb_color to masterColors
-
                     if (masterColors.length == 0) {
                         masterColors.push(rgb_color);
                     }
-
-                    ctx.arc(x, y, 155, 0, 2 * Math.PI);
-                    // concat all points into one array
                     var parentPoints = [];
-
-                    for (var i = 0; i < masterPoints.length; i++) {
-                        parentPoints.push(masterPoints[i]);
-                    }
-                    // add "points"
                     parentPoints.push(points);
-
                     writePoints(parentPoints);
                 });
-
-                // document.querySelector('#normalize_checkbox').addEventListener('change', function (e) {
-                //     showNormalized = e.target.checked;
-                //     // normalize all
-                //     var parentPoints = [];
-                //
-                //     for (var i = 0; i < masterPoints.length; i++) {
-                //         parentPoints.push(masterPoints[i]);
-                //     }
-                //
-                //     parentPoints.push(points);
-                //
-                //     writePoints(parentPoints);
-                // });
             })
-        // return () => document.body.style.zoom = "100%"; 
+            .finally(() => {
+                document.getElementById('canvas').click()
+            })
+    }
+
+    function getImg() {
+
+    }
+    useEffect(() => {
+        // mainFc(mock)
+
+        // return () => document.body.style.zoom = "100%";
+        // setTimeout(() => {
+        //     document.getElementById('canvas').click()
+        // }, 5000)
     }, [])
 
-    const sendDots = () => {
-
-
-        if (lineType === true){
-            // let arr1 = myArr?.map((item2, index2)=>{
-            //  return   item2.reduce((acc, item, index) => {
-            //         return {...acc, ["x" + (index + 1)]: item[0], ["y" + (index + 1)]: item[1]}
-            //     }, {})
-            // })
-         console.log(myArr[0][0][0])
-            axios.post(API_PATH + "line_crossing_analytics/create",
-                {
-                    x1d: myArr[0][0][0],
-                    y1d: myArr[0][0][1],
-                    x2d: myArr[0][1][0],
-                    y2d: myArr[0][1][1],
-                    // x1c: myArr[1][0][0],
-                    // y1c: myArr[1][0][1],
-                    x1c: (myArr[0][0][0] + myArr[0][1][0]) / 2,
-                    y1c: (myArr[0][0][1] + myArr[0][1][1]) / 2,
-                    x2c: myArr[1][1][0],
-                    y2c: myArr[1][1][1],
-                    camera_id: Number(params.id),
-                    name: myItem?.name},
-                CONFIG)
-                .then(res => {
-                    toast.success("SUCCEESS LINE")
-                })
-        } else if (lineType === false) {
-
-            let bigArr = []
-            myArr?.map((item, index)=> {
-                  item?.map(item2 => {
-                     return  bigArr.push(item2)
-                  })
-            })
-            // setMyArr(myArr.filter((item10, index10) => {
-            //     return index === 0 ? item.filter((item11, index11) => {
-            //         return index11 === index ? [e.target.value, item11[1]]: item11
-            //     }) : item
-            // }))
-            let arr1 = bigArr.reduce((acc, item, index) => {
-                return {...acc, ["x" + (index + 1)]: item[0], ["y" + (index + 1)]: item[1]}
-            }, {})
-            axios.post(API_PATH + "roi_analytics/create", {...arr1, camera_id: params.id, name: myItem?.name}, CONFIG)
-                .then(res => {
-                    toast.success("SUCCEESS")
-                })
-
-        }
-    }
-    const changeDots = (e, index) => {
-        let newArr = myArr[0][index][0] = e.target.value
-    }
-    const selectType = (bool, type) => {
-        var canvas = document.getElementById('canvas');
-        drawMode = "line";
-        setLineType(true)
-        drawMode = "line";
-        canvas.style.cursor = 'crosshair';
-        if (bool) {
-            drawMode = "line";
-
-            // modeMessage.innerHTML = "Draw Mode: Line (press <kbd>p</kbd> to change to polygon drawing)";
-        }
-        if (!bool) {
-            drawMode = "polygon";
-            // modeMessage.innerHTML = 'Draw Mode: Polygon (press <kbd>l</kbd> to change to line drawing)';
-        }
-    }
     return (
-        <div>
-            <div className="camera-get-dots-header">
-                <div className="left-item">
-                    <button id="polygonType"  className={lineType ? "" : "active-type"}>Region of
-                        interest analytics
-                    </button>
-                    <button id="lineType"  className={lineType ? "active-type" : ""}>Line crossing
-                        analytics
-                    </button>
-                </div>
-                <div className="center-item">
-                    <div className="values-list">
-                        {
-                            myArr?.map((item0, index0) => {
-                               return item0?.map((item, index) => (
-                                    <div className="values">
-                                        <p> x{index + 1}: <span>{item[0]} </span></p>
-                                        <p> y{index + 1}: <span>{item[1]}</span></p>
+        <Modal title="Добавить конфиг"
+               open={props.isDeployDetailModal}
+               onCancel={() => props.setIsDeployDetailModal(false)}
+               width={1090}
+               footer={[
+                   <Button key="submit" type="default" onClick={() => props.setIsDeployDetailModal(false)}>
+                       Отменить
+                   </Button>,
+                   <Button key="submit" type="primary" onClick={sendAll}>
+                       Добавить
+                   </Button>
+               ]}
+        >
+            <div>
+                <main>
+                    <div className="flex">
+                        <div className="left row cam-add-modal-deploy">
+                            <div className="col-md-3">
+                                <p className="cam-add-modal-deploy-title">
+                                    Building A
+                                </p>
+                                <p className="cam-add-modal-deploy-title">
+                                    Room 001
+                                </p>
+                                <p className="cam-add-modal-deploy-title">
+                                    Камера над дверю
+                                </p>
+                                <div className="check-list-main mt-4">
+                                    <div className="check-list-main-item">
+                                        <input type="checkbox"/>
+                                        <button className="check-list-main-item-span"
+                                                onClick={() => {
+                                                    mainFc(mock)
+                                                    document.getElementById("canvas").click()
+                                                }}
+                                                type="submit"
+                                        >
+                                            Option A
+                                        </button>
                                     </div>
-                                ))
-                            })
-                        }
-                    </div>
-                </div>
-                <div className="right-item">
+                                    <div className="check-list-main-item">
+                                        <input type="checkbox"/>
+                                        <button className="check-list-main-item-span"
+                                                onClick={() => {
+                                                    mainFc(mock2)
+                                                    document.getElementById("canvas").click()
+                                                    // setTimeout(() => {
+                                                    //     document.getElementById("canvas").click()
+                                                    // }, 100)
+                                                }}
+                                                type="submit"
+                                        >
+                                            Option A
+                                        </button>
+                                    </div>
 
-                    <button type="button" disabled={myArr.length ? false : true} onClick={sendDots}>Сохранить</button>
-                </div>
+                                </div>
+                            </div>
+                            <div className="col-md-9">
+                                <canvas id="canvas"></canvas>
+                            </div>
+                            <div style={{marginTop: "20px", marginLeft: "20px"}}>
+                                <a href="" id="clear" className="widgetButton text-decoration-none">Clear Draws</a>
+                                <button onClick={() => document.getElementById("canvas").click()}
+                                        type="button">nimadir
+                                </button>
+                            </div>
+                            <div className="canvas-control">
+                            </div>
+                        </div>
+                        <div className="right">
+                            <span style={{opacity: "0"}} id="x"></span>
+                            <span style={{opacity: "0"}} id="y"></span>
+                        </div>
+                    </div>
+                </main>
             </div>
-            <main>
-
-                <div className="flex">
-                    <div className="left">
-                        <div style={{marginTop: "20px", marginLeft: "20px"}}>
-                            <a href="" id="clear" className="widgetButton text-decoration-none">Clear Draws</a>
-
-                        </div>
-                        <div className="canvas-control">
-                            <canvas id="canvas"></canvas>
-                        </div>
-                    </div>
-                    <div className="right">
-                        <span style={{opacity: "0"}} id="x"></span>
-                        <span style={{opacity: "0"}} id="y"></span>
-                    </div>
-                </div>
-            </main>
-        </div>
+        </Modal>
     );
 };
 
-export default DetectCamera2;
+export default DeploymentsDetailModal;

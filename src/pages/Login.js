@@ -13,17 +13,17 @@ const Login = () => {
         let newData = new FormData()
         newData.append('username', userName)
         newData.append('password', pass)
-        newData.append('scope', "snapshot:read camera:write camera:read admin:read admin:write line_crossing_analytics:write")
-        axios.post(API_PATH + "token/",  newData)
-            .then(res =>{
+        newData.append('scope', "snapshot:read camera:write camera:read admin:read admin:write line_crossing_analytics:write module:read module:write fleet:read fleet:write config:read config:write line_crossing_analytics:read line_crossing_analytics:write")
+        axios.post(API_PATH + "token/", newData)
+            .then(res => {
                 localStorage.setItem("token", res.data.access_token)
                 history.push("/main/visitor-home")
             })
-            .catch(err =>{
+            .catch(err => {
                 toast.error("Ошибка")
             })
     }
-    useEffect(()=>{
+    useEffect(() => {
 
     }, [])
     return (
@@ -34,16 +34,18 @@ const Login = () => {
             </div>
             <div className="login-box">
                 <div className="login-inputs">
-                    <h3 >Авторизоваться</h3>
+                    <h3>Авторизоваться</h3>
                     <div className="inputs-box">
-                        <label  className="font-family-medium" htmlFor="mainLogin">Login</label>
-                        <input type="text" id="mainLogin" onChange={(e) => setUserName(e.target.value)} placeholder="Ваш номер телефона или логин"/>
+                        <label className="font-family-medium" htmlFor="mainLogin">Login</label>
+                        <input type="text" id="mainLogin" onChange={(e) => setUserName(e.target.value)}
+                               placeholder="Ваш номер телефона или логин"/>
                         <p>Вы можете получить логин в отделе кадров
                             0/0</p>
                     </div>
                     <div className="inputs-box">
-                        <label  className="font-family-medium" htmlFor="mainPassword">Пароль </label>
-                        <input type="text" id="mainPassword" onChange={(e) => setPass(e.target.value)} placeholder="Ваш пароль"/>
+                        <label className="font-family-medium" htmlFor="mainPassword">Пароль </label>
+                        <input type="text" id="mainPassword" onChange={(e) => setPass(e.target.value)}
+                               placeholder="Ваш пароль"/>
                     </div>
                     <button onClick={loginFc} className="login-btn">Вход</button>
                 </div>
