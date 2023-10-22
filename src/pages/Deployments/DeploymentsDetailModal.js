@@ -58,30 +58,30 @@ const DeploymentsDetailModal = (props) => {
 
     function mainFc(mainMock, id) {
         console.log(mainMock)
-        axios.get(API_PATH + "camera/" + id, CONFIG)
-            .then(res => {
-                document.getElementById("canvas").click()
-                setMyItem(res.data)
-                // var canvas = document.getElementById('canvas');
-                // var ctx = canvas?.getContext('2d');
-                // function clipboard(selector) {
-                //     var copyText = document.querySelector(selector).innerText;
-                //     navigator.clipboard.writeText(copyText);
-                //
-                // }
+        // axios.get(API_PATH + "camera/" + id, CONFIG)
+        //     .then(res => {
+        document.getElementById("canvas").click()
+        // setMyItem(res.data)
+        // var canvas = document.getElementById('canvas');
+        // var ctx = canvas?.getContext('2d');
+        // function clipboard(selector) {
+        //     var copyText = document.querySelector(selector).innerText;
+        //     navigator.clipboard.writeText(copyText);
+        //
+        // }
 
-                // function zoom(clicks) {
-                //     // if w > 60em, stop
-                //     if ((scaleFactor + clicks * scaleSpeed) * img.width > 40 * 16) {
-                //         return;
-                //     }
-                //     scaleFactor += clicks * scaleSpeed;
-                //     scaleFactor = Math.max(0.1, Math.min(scaleFactor, 0.8));
-                //     var w = img.width * scaleFactor;
-                //     var h = img.height * scaleFactor;
-                //     canvas.style.width = w + 'px';
-                //     canvas.style.height = h + 'px';
-                // }
+        // function zoom(clicks) {
+        //     // if w > 60em, stop
+        //     if ((scaleFactor + clicks * scaleSpeed) * img.width > 40 * 16) {
+        //         return;
+        //     }
+        //     scaleFactor += clicks * scaleSpeed;
+        //     scaleFactor = Math.max(0.1, Math.min(scaleFactor, 0.8));
+        //     var w = img.width * scaleFactor;
+        //     var h = img.height * scaleFactor;
+        //     canvas.style.width = w + 'px';
+        //     canvas.style.height = h + 'px';
+        // }
 
 // placeholder image
 //         img.src = 'https://assets.website-files.com/5f6bc60e665f54545a1e52a5/63d3f236a6f0dae14cdf0063_drag-image-here.png';
@@ -99,231 +99,234 @@ const DeploymentsDetailModal = (props) => {
 //                     ctx.drawImage(img, 0, 0);
 //                 };
 
-                function drawLine(x1, y1, x2, y2) {
+        function drawLine(x1, y1, x2, y2) {
+            ctx.beginPath();
+            // set widht
+            ctx.lineWidth = 10;
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+        }
+
+        function getScaledCoords(e) {
+            var rect = canvas.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var y = e.clientY - rect.top;
+            return [x / scaleFactor, y / scaleFactor];
+        }
+
+        function drawAllPolygons() {
+            // draw all points for previous regions
+            for (var i = 0; i < masterPoints.length; i++) {
+                var newpoints = masterPoints[i];
+                // set color
+                ctx.strokeStyle = masterColors[i];
+                for (var j = 1; j < newpoints.length; j++) {
+                    // draw all lines
+                    drawLine(newpoints[j - 1][0], newpoints[j - 1][1], newpoints[j][0], newpoints[j][1]);
+                }
+                drawLine(newpoints[newpoints.length - 1][0], newpoints[newpoints.length - 1][1], newpoints[0][0], newpoints[0][1]);
+                // draw arc around each point
+                for (var j = 0; j < newpoints.length; j++) {
                     ctx.beginPath();
-                    // set widht
-                    ctx.lineWidth = 10;
-                    ctx.moveTo(x1, y1);
-                    ctx.lineTo(x2, y2);
-                    ctx.stroke();
-                }
-
-                function getScaledCoords(e) {
-                    var rect = canvas.getBoundingClientRect();
-                    var x = e.clientX - rect.left;
-                    var y = e.clientY - rect.top;
-                    return [x / scaleFactor, y / scaleFactor];
-                }
-
-                function drawAllPolygons() {
-                    // draw all points for previous regions
-                    for (var i = 0; i < masterPoints.length; i++) {
-                        var newpoints = masterPoints[i];
-                        // set color
-                        ctx.strokeStyle = masterColors[i];
-                        for (var j = 1; j < newpoints.length; j++) {
-                            // draw all lines
-                            drawLine(newpoints[j - 1][0], newpoints[j - 1][1], newpoints[j][0], newpoints[j][1]);
-                        }
-                        drawLine(newpoints[newpoints.length - 1][0], newpoints[newpoints.length - 1][1], newpoints[0][0], newpoints[0][1]);
-                        // draw arc around each point
-                        for (var j = 0; j < newpoints.length; j++) {
-                            ctx.beginPath();
-                            ctx.strokeStyle = masterColors[i];
-                            ctx.arc(newpoints[j][0], newpoints[j][1], 5, 0, 2 * Math.PI);
-                            // fill with white
-                            ctx.fillStyle = 'white';
-                            ctx.fill();
-                            ctx.stroke();
-                        }
-                        // fill
-                        ctx.beginPath();
-                        ctx.fillStyle = opaque_color;
-                        ctx.moveTo(newpoints[0][0], newpoints[0][1]);
-                        for (var j = 1; j < newpoints.length; j++) {
-                            ctx.lineTo(newpoints[j][0], newpoints[j][1]);
-                        }
-                        ctx.closePath();
-                        ctx.fill();
-                    }
-                }
-
-                // function clearall() {
-                //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-                //     ctx.drawImage(img, 0, 0);
-                //     points = [];
-                //     setMasterPoints([])
-                // }
-
-                // document.querySelector('#clear').addEventListener('click', function (e) {
-                //     e.preventDefault();
-                //     clearall();
-                // });
-                // canvas.addEventListener('dragover', function (e) {
-                //     e.preventDefault();
-                // });
-// on canvas hover, if cursor is crosshair, draw line from last point to cursor
-                document.getElementById('canvas').addEventListener('click', function (e) {
-                    var x = getScaledCoords(e)[0];
-                    var y = getScaledCoords(e)[1];
-                    // round
-                    x = Math.round(x);
-                    y = Math.round(y);
-                    // update x y coords
-                    var xcoord = document.querySelector('#x');
-                    var ycoord = document.querySelector('#y');
-                    xcoord.innerHTML = x;
-                    ycoord.innerHTML = y;
-
-                    if (canvas.style.cursor == 'crosshair') {
-                        //ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        ctx.drawImage(img, 0, 0);
-                        for (var i = 0; i < points.length - 1; i++) {
-                            // draw arc around each point
-                            ctx.beginPath();
-                            ctx.strokeStyle = rgb_color;
-                            ctx.arc(points[i][0], points[i][1], 5, 0, 2 * Math.PI);
-                            // fill with white
-                            ctx.fillStyle = 'white';
-                            ctx.fill();
-                            ctx.stroke();
-                            drawLine(points[i][0], points[i][1], points[i + 1][0], points[i + 1][1]);
-                        }
-                        if ((points.length > 0 && drawMode == "polygon") || (points.length > 0 && points.length < 2 && drawMode == "line")) {
-                            ctx.beginPath();
-                            ctx.strokeStyle = rgb_color;
-                            ctx.arc(points[i][0], points[i][1], 5, 0, 2 * Math.PI);
-                            // fill with white
-                            ctx.fillStyle = 'white';
-                            ctx.fill();
-                            ctx.stroke();
-                            drawLine(points[points.length - 1][0], points[points.length - 1][1], x, y);
-
-                            if (points.length == 2 && drawMode == "line") {
-                                console.log("line");
-                                // draw arc around each point
-                                ctx.beginPath();
-                                ctx.strokeStyle = rgb_color;
-                                ctx.arc(points[0][0], points[0][1], 5, 0, 2 * Math.PI);
-                                // fill with white
-                                ctx.fillStyle = 'white';
-                                ctx.fill();
-                                ctx.stroke();
-                                masterPoints.push(points);
-                                points = [];
-                            }
-                        }
-                        var parentPoints = [];
-
-                        for (var i = 0; i < masterPoints.length; i++) {
-                            parentPoints.push(masterPoints[i]);
-                        }
-                        parentPoints.push(points);
-
-                        drawAllPolygons();
-                    }
-                });
-                document.getElementById('canvas').addEventListener('dblclickw', function (e) {
-                    // if (e.key === 'Enter') {
-                    console.log(points)
-                    canvas.style.cursor = 'default';
-                    drawLine(points[0][0], points[0][1], points[points?.length - 1][0], points[points?.length - 1][1]);
-                    // fill polygon with color
-                    if (drawMode == 'polygon') {
-                        ctx.beginPath();
-                        ctx.moveTo(points[0][0], points[0][1]);
-                        ctx.fillStyle = opaque_color;
-                        for (var i = 1; i < points.length; i++) {
-                            ctx.lineTo(points[i][0], points[i][1]);
-                        }
-                        ctx.closePath();
-                        ctx.fill();
-                        // draw line connecting last two points
-                    }
-                    masterPoints.push(points);
-                    // draw arc around last point
-                    ctx.beginPath();
-                    ctx.strokeStyle = rgb_color;
-                    ctx.arc(points[points.length - 1][0], points[points.length - 1][1], 5, 0, 2 * Math.PI);
+                    ctx.strokeStyle = masterColors[i];
+                    ctx.arc(newpoints[j][0], newpoints[j][1], 5, 0, 2 * Math.PI);
                     // fill with white
                     ctx.fillStyle = 'white';
                     ctx.fill();
                     ctx.stroke();
-                    points = [];
-                    // dont choose a color that has already been chosen
-                    var remaining_choices = color_choices.filter(function (x) {
-                        return !masterColors.includes(x);
-                    });
-                    if (remaining_choices.length == 0) {
-                        remaining_choices = color_choices;
-                    }
-                    rgb_color = remaining_choices[Math.floor(Math.random() * remaining_choices.length)];
+                }
+                // fill
+                ctx.beginPath();
+                ctx.fillStyle = opaque_color;
+                ctx.moveTo(newpoints[0][0], newpoints[0][1]);
+                for (var j = 1; j < newpoints.length; j++) {
+                    ctx.lineTo(newpoints[j][0], newpoints[j][1]);
+                }
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
 
-                    masterColors.push(rgb_color);
-                    // setMyArr(masterPoints)
-                    // }
-                });
 
-                function writePoints(parentPoints) {
-                    var normalized = [];
-                    // if normalized is true, normalize all points
-                    var imgHeight = img.height;
-                    var imgWidth = img.width;
-                    if (showNormalized) {
-                        for (var i = 0; i < parentPoints.length; i++) {
-                            var normalizedPoints = [];
-                            for (var j = 0; j < parentPoints[i].length; j++) {
-                                normalizedPoints.push([
-                                    Math.round(parentPoints[i][j][0] / imgWidth * 100) / 100,
-                                    Math.round(parentPoints[i][j][1] / imgHeight * 100) / 100
-                                ]);
-                            }
-                            normalized.push(normalizedPoints);
-                        }
-                        parentPoints = normalized;
+        // document.querySelector('#clear').addEventListener('click', function (e) {
+        //     e.preventDefault();
+        //     clearall();
+        // });
+        // canvas.addEventListener('dragover', function (e) {
+        //     e.preventDefault();
+        // });
+// on canvas hover, if cursor is crosshair, draw line from last point to cursor
+        document.getElementById('canvas').addEventListener('click', function (e) {
+            var x = getScaledCoords(e)[0];
+            var y = getScaledCoords(e)[1];
+            // round
+            x = Math.round(x);
+            y = Math.round(y);
+            // update x y coords
+            var xcoord = document.querySelector('#x');
+            var ycoord = document.querySelector('#y');
+            xcoord.innerHTML = x;
+            ycoord.innerHTML = y;
+
+            if (canvas.style.cursor == 'crosshair') {
+                //ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+                for (var i = 0; i < points.length - 1; i++) {
+                    // draw arc around each point
+                    ctx.beginPath();
+                    ctx.strokeStyle = rgb_color;
+                    ctx.arc(points[i][0], points[i][1], 5, 0, 2 * Math.PI);
+                    // fill with white
+                    ctx.fillStyle = 'white';
+                    ctx.fill();
+                    ctx.stroke();
+                    drawLine(points[i][0], points[i][1], points[i + 1][0], points[i + 1][1]);
+                }
+                if ((points.length > 0 && drawMode == "polygon") || (points.length > 0 && points.length < 2 && drawMode == "line")) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = rgb_color;
+                    ctx.arc(points[i][0], points[i][1], 5, 0, 2 * Math.PI);
+                    // fill with white
+                    ctx.fillStyle = 'white';
+                    ctx.fill();
+                    ctx.stroke();
+                    drawLine(points[points.length - 1][0], points[points.length - 1][1], x, y);
+
+                    if (points.length == 2 && drawMode == "line") {
+                        console.log("line");
+                        // draw arc around each point
+                        ctx.beginPath();
+                        ctx.strokeStyle = rgb_color;
+                        ctx.arc(points[0][0], points[0][1], 5, 0, 2 * Math.PI);
+                        // fill with white
+                        ctx.fillStyle = 'white';
+                        ctx.fill();
+                        ctx.stroke();
+                        masterPoints.push(points);
+                        points = [];
                     }
-                    var code_template = `
+                }
+                var parentPoints = [];
+
+                for (var i = 0; i < masterPoints.length; i++) {
+                    parentPoints.push(masterPoints[i]);
+                }
+                parentPoints.push(points);
+
+                drawAllPolygons();
+            }
+        });
+        document.getElementById('canvas').addEventListener('dblclickw', function (e) {
+            // if (e.key === 'Enter') {
+            console.log(points)
+            canvas.style.cursor = 'default';
+            drawLine(points[0][0], points[0][1], points[points?.length - 1][0], points[points?.length - 1][1]);
+            // fill polygon with color
+            if (drawMode == 'polygon') {
+                ctx.beginPath();
+                ctx.moveTo(points[0][0], points[0][1]);
+                ctx.fillStyle = opaque_color;
+                for (var i = 1; i < points.length; i++) {
+                    ctx.lineTo(points[i][0], points[i][1]);
+                }
+                ctx.closePath();
+                ctx.fill();
+                // draw line connecting last two points
+            }
+            masterPoints.push(points);
+            // draw arc around last point
+            ctx.beginPath();
+            ctx.strokeStyle = rgb_color;
+            ctx.arc(points[points.length - 1][0], points[points.length - 1][1], 5, 0, 2 * Math.PI);
+            // fill with white
+            ctx.fillStyle = 'white';
+            ctx.fill();
+            ctx.stroke();
+            points = [];
+            // dont choose a color that has already been chosen
+            var remaining_choices = color_choices.filter(function (x) {
+                return !masterColors.includes(x);
+            });
+            if (remaining_choices.length == 0) {
+                remaining_choices = color_choices;
+            }
+            rgb_color = remaining_choices[Math.floor(Math.random() * remaining_choices.length)];
+
+            masterColors.push(rgb_color);
+            // setMyArr(masterPoints)
+            // }
+        });
+
+        function writePoints(parentPoints) {
+            var normalized = [];
+            // if normalized is true, normalize all points
+            var imgHeight = img.height;
+            var imgWidth = img.width;
+            if (showNormalized) {
+                for (var i = 0; i < parentPoints.length; i++) {
+                    var normalizedPoints = [];
+                    for (var j = 0; j < parentPoints[i].length; j++) {
+                        normalizedPoints.push([
+                            Math.round(parentPoints[i][j][0] / imgWidth * 100) / 100,
+                            Math.round(parentPoints[i][j][1] / imgHeight * 100) / 100
+                        ]);
+                    }
+                    normalized.push(normalizedPoints);
+                }
+                parentPoints = normalized;
+            }
+            var code_template = `
 [
 ${parentPoints.map(function (points) {
-                        return `np.array([
+                return `np.array([
                                 ${points.map(function (point) {
-                            return `[${point[0]}, ${point[1]}]`;
-                        }).join(',')}
+                    return `[${point[0]}, ${point[1]}]`;
+                }).join(',')}
                                     ])`;
-                    }).join(',')}
+            }).join(',')}
 ]
     `;
-                    setMyArr(parentPoints)
-                    var json_template = `
+            setMyArr(parentPoints)
+            var json_template = `
 {
             ${parentPoints.map(function (points) {
-                        return `[
+                return `[
             ${points.map(function (point) {
-                            return `{"x": ${point[0]}, "y": ${point[1]}}`;
-                        }).join(',')}
+                    return `{"x": ${point[0]}, "y": ${point[1]}}`;
+                }).join(',')}
 ]`;
-                    }).join(',')}
+            }).join(',')}
 }
     `;
-                }
+        }
+        function clearall() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+            points = [];
+            setMasterPoints([])
+        }
 
-                document.getElementById('canvas').addEventListener('click' , function (e) {
-                    // masterPoints.push(mock);
-                    console.log("2")
-                    masterPoints.push(mainMock)
-                    canvas.style.cursor = 'crosshair';
-                    ctx.strokeStyle = rgb_color;
-                    if (masterColors.length == 0) {
-                        masterColors.push(rgb_color);
-                    }
-                    var parentPoints = [];
-                    parentPoints.push(points);
-                    writePoints(mainMock);
-                });
-            })
-            // .finally(() => {
-            //     document.getElementById('canvas').click()
-            // })
+        document.getElementById('canvas').addEventListener('click', function (e) {
+            // masterPoints.push(mock);
+            // clearall()
+            console.log("2")
+            masterPoints.push(mainMock)
+            canvas.style.cursor = 'crosshair';
+            ctx.strokeStyle = rgb_color;
+            if (masterColors.length == 0) {
+                masterColors.push(rgb_color);
+            }
+            var parentPoints = [];
+            parentPoints.push(points);
+            writePoints(mainMock.slice(0, 2));
+
+
+        });
+        // })
+        // .finally(() => {
+        //     document.getElementById('canvas').click()
+        // })
     }
 
 
@@ -336,13 +339,13 @@ ${parentPoints.map(function (points) {
                     // scaleFactor = 0.5;
                     // canvas.style.width = '100%';
                     // canvas.style.height = '100%';
-                        let scaleFactor = 0.3;
-                        document.getElementById('canvas').style.width = img.width * scaleFactor + 'px';
-                        document.getElementById('canvas').style.height = img.height * scaleFactor + 'px';
-                        document.getElementById('canvas').width = img.width;
-                        document.getElementById('canvas').height = img.height;
-                        document.getElementById('canvas').style.borderRadius = '0px';
-                        document.getElementById('canvas').getContext('2d').drawImage(img, 0, 0);
+                    let scaleFactor = 0.3;
+                    document.getElementById('canvas').style.width = img.width * scaleFactor + 'px';
+                    document.getElementById('canvas').style.height = img.height * scaleFactor + 'px';
+                    document.getElementById('canvas').width = img.width;
+                    document.getElementById('canvas').height = img.height;
+                    document.getElementById('canvas').style.borderRadius = '0px';
+                    document.getElementById('canvas').getContext('2d').drawImage(img, 0, 0);
 
                 };
             })
@@ -385,19 +388,20 @@ ${parentPoints.map(function (points) {
                                 </p>
                                 <div className="check-list-main mt-4">
                                     {
-                                        props.configs?.map((item, index) =>(
+                                        props.configs?.map((item, index) => (
                                             <div className="check-list-main-item" key={index}>
                                                 <input type="checkbox"/>
                                                 <button className="check-list-main-item-span"
                                                         onClick={() => {
                                                             console.log("1")
                                                             document.getElementById("canvas").click()
-                                                            mainFc(([[item?.x1c, item?.x1d], [item?.y1c, item?.y1d]], [[item?.x2c, item?.x2d], [item?.y2c, item?.y2d]]), item?.camera_id)
+                                                            mainFc([[item?.x1c, item?.x1d], [item?.y1c, item?.y1d]], item?.camera_id)
+                                                            mainFc([ [item?.x2c, item?.x2d], [item?.y2c, item?.y2d]], item?.camera_id)
                                                             // document.getElementById("canvas").click()
                                                             setTimeout(() => {
                                                                 document.getElementById("canvas").click()
                                                                 document.getElementById("canvas").click()
-                                                           }, 1000)
+                                                            }, 300)
                                                             console.log("6")
 
                                                         }}
@@ -435,7 +439,6 @@ ${parentPoints.map(function (points) {
                             </div>
                             <div className="canvas-control">
                             </div>
-
                         </div>
                         <div className="right">
                             <span style={{opacity: "0"}} id="x"></span>
