@@ -6,50 +6,101 @@ import DepMainModal from "./DepMainModal";
 import {API_PATH, CONFIG} from "../../components/const";
 import axios from "axios";
 import {useParams} from "react-router-dom";
+import {toast} from "react-toastify";
 
 const DeploymentsDetail = () => {
         const [isDeployDetailModal, setIsDeployDetailModal] = useState(false)
-        const [isDeployDetailModalId, setIsDeployDetailModalId] = useState(1)
+        const [isDeployDetailModalId, setIsDeployDetailModalId] = useState(null)
         const [selectId, setSelectId] = useState(null)
         const [configsCam, setConfigsCam] = useState([])
         const [configs, setConfigs] = useState([])
+        const [configsList, setConfigList] = useState([])
+        let img = new Image();
 
         let params = useParams()
         const [data, setData] = useState([])
 
-        const getAll = () => {
-            axios.get(API_PATH + "camera/module/" + params.id + "/all", CONFIG)
+        // const getAll = () => {
+        //     axios.get(API_PATH + "camera/module/" + params.id + "/all", CONFIG)
+        //         .then(res => {
+        //             setData(res?.data)
+        //         })
+        //         .catch(err => {
+        //             setData([])
+        //         })
+        // }
+
+        const getDep = () => {
+            axios.get(API_PATH + "deployment/" + params.id, CONFIG)
                 .then(res => {
-                    setData(res?.data)
-                })
-                .catch(err =>{
-                    setData([])
+                    console.log(res.data)
+
+                    axios.get(API_PATH + "camera/module/" + res.data?.module?.id + "/all", CONFIG)
+                        .then(res => {
+                            setData(res?.data)
+                        })
+                        .catch(err => {
+                            setData([])
+                        })
                 })
         }
+        const deploy = () => {
 
+            axios.post(API_PATH + "deploy/deploy_analytics_service", {deployment_id: params.id}, CONFIG)
+                .then(res => {
+                    toast.success("SUCCESS")
+                })
+
+        }
         const sendData = (id) => {
             getConfig(id)
-            getConfigCam(id)
             setSelectId(id)
+            getConfigCam(id)
+            getImg(id)
+
             setIsDeployDetailModal(true)
 
         }
-    const getConfig = (id) => {
-        axios.get(API_PATH + "line_crossing_analytics/" + id + "/all", CONFIG)
-            .then(res => {
-                setConfigs(res?.data)
-            })
 
-    }
-    const getConfigCam = (id) => {
-        axios.get(API_PATH + "config/" + params.id + "/"  + id, CONFIG)
-            .then(res => {
-                setConfigsCam(res?.data)
-            })
-    }
+        function getImg(imgId) {
+            axios.get(API_PATH + "camera/" + imgId, CONFIG)
+                .then(res => {
+                    img.src = res?.data?.screenshot;
+                    img.onload = function () {
+                        let scaleFactor = 0.3;
+                        document.getElementById('canvas').style.width = img.width * scaleFactor + 'px';
+                        document.getElementById('canvas').style.height = img.height * scaleFactor + 'px';
+                        document.getElementById('canvas').width = img.width;
+                        document.getElementById('canvas').height = img.height;
+                        document.getElementById('canvas').style.borderRadius = '0px';
+                        document.getElementById('canvas').getContext('2d').drawImage(img, 0, 0);
+                    };
+                })
+        }
+
+        const getConfig = (id) => {
+            axios.get(API_PATH + "line_crossing_analytics/" + id + "/all", CONFIG)
+                .then(res => {
+                    setConfigs(res?.data)
+                })
+        }
+        const getConfigCam = (id) => {
+            axios.get(API_PATH + "config/deployment/camera/" + params.id + "/" + id, CONFIG)
+                .then(res => {
+                    // setConfigsCam(res?.data?.line_crossing_analytics?.map((item, index) => {
+                    //     return item?.id
+                    // }))
+                    setIsDeployDetailModalId(res.data?.id)
+
+                    axios.get(API_PATH + "line_crossing_analytics/" + id + "/all/" +  res.data?.id, CONFIG)
+                        .then(res => {
+                            setConfigs(res?.data)
+                            setConfigList(res?.data.filter(item => item.is_true).map(item => item.id))
+                        })
+                })
+        }
         useEffect(() => {
-            getAll()
-
+            getDep()
         }, [])
         return (
             <div className="box-with-url">
@@ -65,7 +116,6 @@ const DeploymentsDetail = () => {
                 </span>
                 </div>
                 <div className="my-modules add-camera">
-
                     <h2 className="modules-title font-family-medium">
                         Cameras
                     </h2>
@@ -81,7 +131,7 @@ const DeploymentsDetail = () => {
                                                 </button>
                                                 <h6 className="office-box-title font-family-regular d-flex align-items-center">
                                                     <img
-                                                        src="/icon/cam.svg" className="mr-16" alt="cpu"/>Камера над дверю
+                                                        src="/icon/cam.svg" className="mr-16" alt="cpu"/>{item?.name}
                                                 </h6>
                                                 <div className="row">
                                                     <div className="col-md-12  ">
@@ -109,7 +159,7 @@ const DeploymentsDetail = () => {
                                 }
                             </div>
                             <div className="mt-20">
-                                <button className="add-btn">
+                                <button className="add-btn" onClick={deploy}>
                                     <img src="/icon/depo.svg" alt="..."/>
                                     Деплой
                                 </button>
@@ -120,11 +170,11 @@ const DeploymentsDetail = () => {
                         </div>
                         <div className="col-md-4">
 
-                            <button className="add-btn-video mt-20 d-flex align-items-center font-family-medium"
-                                    onClick={() => setIsDeployDetailModal(true)}
-                            >
-                                Добавить сервис
-                            </button>
+                            {/*<button className="add-btn-video mt-20 d-flex align-items-center font-family-medium"*/}
+                            {/*        onClick={() => setIsDeployDetailModal(true)}*/}
+                            {/*>*/}
+                            {/*    Добавить сервис*/}
+                            {/*</button>*/}
                         </div>
                     </div>
                     {
@@ -135,6 +185,13 @@ const DeploymentsDetail = () => {
                                 setIsDeployDetailModal={setIsDeployDetailModal}
                                 getConfig={getConfig}
                                 configs={configs}
+                                configsCam={configsCam}
+                                getConfigCam={getConfigCam}
+                                getImg={getImg}
+                                selectId={selectId}
+                                isDeployDetailModalId={isDeployDetailModalId}
+                                configsList={configsList}
+                                setConfigList={setConfigList}
                             />
                             :
                             ""

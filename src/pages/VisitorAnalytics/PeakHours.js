@@ -1,53 +1,40 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {DatePicker} from "antd";
 import {Line} from "@ant-design/plots";
+import {API_PATH, CONFIG} from "../../components/const";
 
 const PeakHours = () => {
-    const dateSelect = () => {
+    const [time, setTime] = useState(new Date());
+    const [month, setMonth] = useState(time.getMonth());
+    const [year, setYear] = useState(time.getFullYear());
+    const [data, setData] = useState([]);
 
+    function onChange(date, dateString) {
+        console.log(dateString);
+        if (dateString.length > 0){
+            fetch(API_PATH + "analitics/hourly?date_str=" + dateString, CONFIG)
+                .then((response) => response.json())
+                .then((json) => setData(json))
+                .catch((error) => {
+                    console.log('fetch data failed', error);
+                });
+        }
+        else (
+            asyncFetch()
+        )
     }
+    const asyncFetch = () => {
+        fetch(API_PATH + "analitics/hourly?date_str=" + time?.getFullYear() + "-" + Number(time?.getMonth() + 1) + "-" +  Number(time?.getDate()) , CONFIG)
+            .then((response) => response.json())
+            .then((json) => setData(json))
+            .catch((error) => {
+                console.log('fetch data failed', error);
+            });
+    };
 
-    const data = [
-        {
-            year: '1991',
-            value: 3,
-        },
-        {
-            year: '1992',
-            value: 4,
-        },
-        {
-            year: '1993',
-            value: 3.5,
-        },
-        {
-            year: '1994',
-            value: 5,
-        },
-        {
-            year: '1995',
-            value: 4.9,
-        },
-        {
-            year: '1996',
-            value: 6,
-        },
-        {
-            year: '1997',
-            value: 7,
-        },
-        {
-            year: '1998',
-            value: 9,
-        },
-        {
-            year: '1999',
-            value: 13,
-        },
-    ];
     const config = {
         data,
-        xField: 'year',
+        xField: 'date',
         yField: 'value',
         label: {},
         point: {
@@ -77,7 +64,12 @@ const PeakHours = () => {
             },
         ],
     };
-
+    useEffect(() => {
+        asyncFetch();
+        console.log(time.getFullYear())
+        console.log(time.getMonth())
+        console.log(time.getDate())
+    }, []);
     return (
         <div className="visitor visitor-box">
             <div className="chart-box">
@@ -87,7 +79,7 @@ const PeakHours = () => {
                     Visitor
                 </span>
 
-                     <DatePicker onChange={dateSelect} />
+                     <DatePicker onChange={onChange} />
 
 
                 </h1>

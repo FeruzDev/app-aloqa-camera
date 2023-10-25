@@ -8,28 +8,24 @@ const AnaluzCustomComparasion = () => {
     }
     const data = [
         {
-            type: '分类一',
+            type: 'Very negative',
             value: 27,
         },
         {
-            type: '分类二',
+            type: 'Negative',
             value: 25,
         },
         {
-            type: '分类三',
+            type: 'Neutral',
             value: 18,
         },
         {
-            type: '分类四',
+            type: 'Positive',
             value: 15,
         },
         {
-            type: '分类五',
+            type: 'Very positive',
             value: 10,
-        },
-        {
-            type: '其他',
-            value: 5,
         },
     ];
     const config = {

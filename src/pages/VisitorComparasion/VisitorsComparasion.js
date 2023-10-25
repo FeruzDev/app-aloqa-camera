@@ -1,39 +1,63 @@
 import React, {useEffect, useState} from 'react';
 import {DatePicker} from "antd";
 import {Line} from "@ant-design/plots";
+import {API_PATH, CONFIG} from "../../components/const";
 
 const VisitorsComparasion = () => {
+    const [time, setTime] = useState(new Date());
+    const [month, setMonth] = useState(time.getMonth());
+    const [year, setYear] = useState(time.getFullYear());
     const [data, setData] = useState([]);
-    const dateSelect = () => {
-      
-    }
-    useEffect(() => {
-        asyncFetch();
-    }, []);
 
+    function onChange(date, dateString) {
+        if (dateString.length > 0){
+            fetch(API_PATH + "analitics/gender/" + dateString.slice(0, 4) + "/" + Number( dateString.slice(5, 7)), CONFIG)
+                .then((response) => response.json())
+                .then((json) => setData(json))
+                .catch((error) => {
+                    console.log('fetch data failed', error);
+                });
+        }
+        else (
+            asyncFetch()
+        )
+    }
     const asyncFetch = () => {
-        fetch('https://gw.alipayobjects.com/os/bmw-prod/55424a73-7cb8-4f79-b60d-3ab627ac5698.json')
+        fetch(API_PATH + "analitics/counting/by/offices/" + year + "/" + Number(month+1), CONFIG)
             .then((response) => response.json())
-            .then((json) => setData(json))
+            .then((json) => {
+                    setData(json)
+
+                }
+            )
             .catch((error) => {
                 console.log('fetch data failed', error);
             });
     };
+
     const config = {
         data,
-        xField: 'year',
+        xField: 'date',
         yField: 'value',
-        seriesField: 'category',
-        xAxis: {
-            type: 'time',
-        },
+        seriesField: 'place_id',
+        // xAxis: {
+        //     type: 'time',
+        // },
+        // yAxis: {
+        //     label: {
+        //         formatter: (v) => `${v}`.replace(/\d{1,3}(?=(\d{3})+$)/g, (s) => `${s},`),
+        //     },
+        // },
         yAxis: {
             label: {
                 // 数值格式化为千分位
-                formatter: (v) => `${v}`.replace(/\d{1,3}(?=(\d{3})+$)/g, (s) => `${s},`),
+                formatter: (v) => `${v.slice(0, 4)}`,
             },
         },
     };
+    useEffect(() => {
+        asyncFetch()
+    }, []);
     return (
         <div>
             <div className="visitor visitor-box">
@@ -44,7 +68,7 @@ const VisitorsComparasion = () => {
                     Visitors
                 </span>
 
-                            <DatePicker onChange={dateSelect} />
+                            <DatePicker onChange={onChange} />
 
 
                         </h1>

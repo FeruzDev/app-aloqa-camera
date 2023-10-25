@@ -8,7 +8,7 @@ const VisitorComparasion = () => {
     return (
         <div className="visitor-comparasion">
             <VisitorsComparasion />
-            <PeakHoursComparasion />
+            {/*<PeakHoursComparasion />*/}
             <AnaluzCustomComparasion />
             <DailyAnalyticsComparasion />
 

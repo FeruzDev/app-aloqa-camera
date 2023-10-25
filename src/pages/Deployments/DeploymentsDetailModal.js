@@ -7,26 +7,25 @@ import {API_PATH, CONFIG} from "../../components/const";
 import {toast} from "react-toastify";
 
 const DeploymentsDetailModal = (props) => {
-    const [sendData, setSendData] = useState({
-        name: "",
-        country: "",
-        city: "",
-        state: "",
-        zip_code: "",
-        address: "",
-        latitude: 0,
-        longitude: 0
-    })
+    const [fixCon, setFixCon] = useState(null)
+    const [configsCam, setConfigsCam] = useState([])
+
     const sendAll = () => {
-        // axios.post(API_PATH + "building/create", sendData, CONFIG)
-        //     .then(res => {
-        //         toast.success("Добавлено успешно")
-        //         props.getBuilding()
-        //         props.setIsAddCameraModal(false)
-        //     })
-        //     .catch(err => {
-        //         toast.error("Ошибка")
-        //     })
+
+        axios.post(API_PATH + "line_crossing_analytics/attach_linecrossing_to_config/",
+            {
+                "config_id": props.isDeployDetailModalId,
+                "line_crossing_analytics_ids": props.configsList
+            }, CONFIG)
+            .then(res => {
+                toast.success("Добавлено успешно")
+                // props.getBuilding()
+                props.setIsDeployDetailModal(false)
+                props.getConfigCam(props.selectId)
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
     }
     var canvas = document.getElementById('canvas');
     var ctx = canvas?.getContext('2d');
@@ -58,46 +57,7 @@ const DeploymentsDetailModal = (props) => {
 
     function mainFc(mainMock, id) {
         console.log(mainMock)
-        // axios.get(API_PATH + "camera/" + id, CONFIG)
-        //     .then(res => {
         document.getElementById("canvas").click()
-        // setMyItem(res.data)
-        // var canvas = document.getElementById('canvas');
-        // var ctx = canvas?.getContext('2d');
-        // function clipboard(selector) {
-        //     var copyText = document.querySelector(selector).innerText;
-        //     navigator.clipboard.writeText(copyText);
-        //
-        // }
-
-        // function zoom(clicks) {
-        //     // if w > 60em, stop
-        //     if ((scaleFactor + clicks * scaleSpeed) * img.width > 40 * 16) {
-        //         return;
-        //     }
-        //     scaleFactor += clicks * scaleSpeed;
-        //     scaleFactor = Math.max(0.1, Math.min(scaleFactor, 0.8));
-        //     var w = img.width * scaleFactor;
-        //     var h = img.height * scaleFactor;
-        //     canvas.style.width = w + 'px';
-        //     canvas.style.height = h + 'px';
-        // }
-
-// placeholder image
-//         img.src = 'https://assets.website-files.com/5f6bc60e665f54545a1e52a5/63d3f236a6f0dae14cdf0063_drag-image-here.png';
-//                 img.src = res?.data?.screenshot;
-//                 img.onload = function () {
-//                     // scaleFactor = 0.5;
-//                     // canvas.style.width = '100%';
-//                     // canvas.style.height = '100%';
-//                     scaleFactor = 0.3;
-//                     canvas.style.width = img.width * scaleFactor + 'px';
-//                     canvas.style.height = img.height * scaleFactor + 'px';
-//                     canvas.width = img.width;
-//                     canvas.height = img.height;
-//                     canvas.style.borderRadius = '0px';
-//                     ctx.drawImage(img, 0, 0);
-//                 };
 
         function drawLine(x1, y1, x2, y2) {
             ctx.beginPath();
@@ -148,15 +108,6 @@ const DeploymentsDetailModal = (props) => {
             }
         }
 
-
-        // document.querySelector('#clear').addEventListener('click', function (e) {
-        //     e.preventDefault();
-        //     clearall();
-        // });
-        // canvas.addEventListener('dragover', function (e) {
-        //     e.preventDefault();
-        // });
-// on canvas hover, if cursor is crosshair, draw line from last point to cursor
         document.getElementById('canvas').addEventListener('click', function (e) {
             var x = getScaledCoords(e)[0];
             var y = getScaledCoords(e)[1];
@@ -277,40 +228,34 @@ const DeploymentsDetailModal = (props) => {
                 parentPoints = normalized;
             }
             var code_template = `
-[
-${parentPoints.map(function (points) {
+            [
+                        ${parentPoints.map(function (points) {
                 return `np.array([
                                 ${points.map(function (point) {
                     return `[${point[0]}, ${point[1]}]`;
                 }).join(',')}
-                                    ])`;
+                                                ])`;
             }).join(',')}
-]
-    `;
+            ]
+                `;
             setMyArr(parentPoints)
             var json_template = `
-{
-            ${parentPoints.map(function (points) {
+                {
+                            ${parentPoints.map(function (points) {
                 return `[
-            ${points.map(function (point) {
+                            ${points.map(function (point) {
                     return `{"x": ${point[0]}, "y": ${point[1]}}`;
                 }).join(',')}
-]`;
+                ]`;
             }).join(',')}
-}
+                }
     `;
-        }
-        function clearall() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0);
-            points = [];
-            setMasterPoints([])
         }
 
         document.getElementById('canvas').addEventListener('click', function (e) {
             // masterPoints.push(mock);
-            // clearall()
             console.log("2")
+            console.log(mainMock)
             masterPoints.push(mainMock)
             canvas.style.cursor = 'crosshair';
             ctx.strokeStyle = rgb_color;
@@ -319,43 +264,43 @@ ${parentPoints.map(function (points) {
             }
             var parentPoints = [];
             parentPoints.push(points);
-            writePoints(mainMock.slice(0, 2));
-
-
+            writePoints(masterPoints);
         });
-        // })
-        // .finally(() => {
-        //     document.getElementById('canvas').click()
-        // })
+
     }
 
-
-    function getImg() {
-        axios.get(API_PATH + "camera/" + "1", CONFIG)
+    const getConfigCam = (id) => {
+        axios.get(API_PATH + "config/deployment/camera/" + params.id + "/" + props.selectId, CONFIG)
             .then(res => {
-                console.log(res?.data?.screenshot)
-                img.src = res?.data?.screenshot;
-                img.onload = function () {
-                    // scaleFactor = 0.5;
-                    // canvas.style.width = '100%';
-                    // canvas.style.height = '100%';
-                    let scaleFactor = 0.3;
-                    document.getElementById('canvas').style.width = img.width * scaleFactor + 'px';
-                    document.getElementById('canvas').style.height = img.height * scaleFactor + 'px';
-                    document.getElementById('canvas').width = img.width;
-                    document.getElementById('canvas').height = img.height;
-                    document.getElementById('canvas').style.borderRadius = '0px';
-                    document.getElementById('canvas').getContext('2d').drawImage(img, 0, 0);
+                // console.log(res.data?.line_crossing_analytics)
+                setConfigsCam(res?.data?.line_crossing_analytics?.map((item, index) => {
+                    return item?.id
+                }))
+                console.log(res?.data?.line_crossing_analytics)
+                setTimeout(()=>{
+                    console.log(configsCam)
+                }, 1000)
 
-                };
             })
     }
 
+    const onChange = (e) => {
+        console.log(e)
+        if (props.configsList.includes(e)){
+            props.setConfigList(props.configsList.filter(item => item != e))
+        } else {
+            props.configsList.push(e)
+        }
+        console.log(props.configsList)
+    }
+
     useEffect(() => {
-        // mainFc([0, 0], 1)
-        console.log("3")
-        getImg()
-        console.log("4")
+
+
+        // getConfigCam()
+        props.getConfigCam(props.selectId)
+        // console.log(props.configsCam)
+
     }, [])
 
     return (
@@ -390,20 +335,19 @@ ${parentPoints.map(function (points) {
                                     {
                                         props.configs?.map((item, index) => (
                                             <div className="check-list-main-item" key={index}>
-                                                <input type="checkbox"/>
+                                                {/*<input typeof="checkbox" value={item} type="checkbox"*/}
+                                                {/*/>*/}
+
+                                                <input type="checkbox" defaultChecked={item?.is_true} onClick={(e) => onChange(item?.id)}/>
                                                 <button className="check-list-main-item-span"
                                                         onClick={() => {
-                                                            console.log("1")
                                                             document.getElementById("canvas").click()
-                                                            mainFc([[item?.x1c, item?.x1d], [item?.y1c, item?.y1d]], item?.camera_id)
-                                                            mainFc([ [item?.x2c, item?.x2d], [item?.y2c, item?.y2d]], item?.camera_id)
-                                                            // document.getElementById("canvas").click()
+                                                            mainFc([[item?.x1d,  item?.y1d], [item?.x2d, item?.y2d]], item?.camera_id)
+                                                            mainFc([[item?.x1c, item?.y1c], [item?.x2c, item?.y2c]], item?.camera_id)
                                                             setTimeout(() => {
                                                                 document.getElementById("canvas").click()
                                                                 document.getElementById("canvas").click()
                                                             }, 300)
-                                                            console.log("6")
-
                                                         }}
                                                         type="button"
                                                 >
@@ -431,16 +375,10 @@ ${parentPoints.map(function (points) {
                             <div className="col-md-9">
                                 <canvas id="canvas"></canvas>
                             </div>
-                            <div style={{marginTop: "20px", marginLeft: "20px"}}>
-                                <a href="" id="clear" className="widgetButton text-decoration-none">Clear Draws</a>
-                                <button onClick={() => document.getElementById("canvas").click()}
-                                        type="button">nimadir
-                                </button>
-                            </div>
                             <div className="canvas-control">
                             </div>
                         </div>
-                        <div className="right">
+                        <div className="right opacity-0 position-absolute">
                             <span style={{opacity: "0"}} id="x"></span>
                             <span style={{opacity: "0"}} id="y"></span>
                         </div>

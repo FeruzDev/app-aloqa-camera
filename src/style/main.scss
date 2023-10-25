@@ -821,6 +821,21 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
     margin-right: 8px;
   }
 }
+.add-btn-red{
+  border-radius: 6px;
+  background: rgba(171, 19, 54, 0.2);
+  border: none;
+  height: 40px;
+  font-weight: 450;
+  padding-left: 16px;
+  padding-right: 16px;
+  color: #EB5757;
+  box-shadow: 0  1px 2px 0  rgba(27, 36, 44, 0.12);
+
+  img {
+    margin-right: 8px;
+  }
+}
 .add-btn-video {
   border-radius: 6px;
   background: #1A99FF;

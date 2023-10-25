@@ -2,19 +2,32 @@ import React, {useEffect, useState} from 'react';
 import {Column} from '@ant-design/plots';
 import {DatePicker} from "antd";
 import DailyAnalytics from "./DailyAnalytics";
+import {API_PATH, CONFIG} from "../../components/const";
+import axios from "axios";
 
 const Visitor = () => {
+    const [time, setTime] = useState(new Date());
+    const [month, setMonth] = useState(time.getMonth());
+    const [year, setYear] = useState(time.getFullYear());
     const [data, setData] = useState([]);
-    const dateSelect = () => {
 
+    function onChange(date, dateString) {
+        if (dateString.length > 0){
+            fetch(API_PATH + "analitics/gender/" + dateString.slice(0, 4) + "/" + Number( dateString.slice(5, 7)), CONFIG)
+                .then((response) => response.json())
+                .then((json) => setData(json))
+                .catch((error) => {
+                    console.log('fetch data failed', error);
+                });
+        }
+        else (
+            asyncFetch()
+        )
     }
-    useEffect(() => {
-        asyncFetch();
-    }, []);
-
     const asyncFetch = () => {
-        fetch('https://gw.alipayobjects.com/os/antfincdn/8elHX%26irfq/stack-column-data.json')
+        fetch(API_PATH + "analitics/gender/" + year + "/" + Number(month+1), CONFIG)
             .then((response) => response.json())
+            // .then((json) => setData(json.map(item => {return {...item, date2: item.date.slice(5, 7)}})))
             .then((json) => setData(json))
             .catch((error) => {
                 console.log('fetch data failed', error);
@@ -23,81 +36,43 @@ const Visitor = () => {
     const config = {
         data,
         isStack: true,
-        xField: 'year',
+        xField: 'date',
         yField: 'value',
         seriesField: 'type',
-        xAxis: {
-            label: {
-                style: {
-                    fill: "#000",
-                },
-            },
-        },
-        yAxis: {
-            count: {
-                label: {
-                    style: {
-                        fill: "#000",
-                    },
-                },
-            },
-            value: {
-                label: {
-                    style: {
-                        fill: "#000",
-                    },
-                },
-            },
-        },
-        style: {fill: '#000'},
-        geometryOptions: [
-            {
-                geometry: "line",
-                color: ["#000", "#000"],
-                seriesField: "type",
-            },
-            {
-                geometry: "line",
-                color: "#000",
-                seriesField: "type",
-            },
-        ],
         label: {
-            // 可手动配置 label 数据标签位置
             position: 'middle',
-            // 'top', 'bottom', 'middle'
-            // 可配置附加的布局方法
-            style: {
-                fontSize: 14,
-                textAlign: 'center',
-            },
             layout: [
-                // 柱形图数据标签位置自动调整
                 {
                     type: 'interval-adjust-position',
-                }, // 数据标签防遮挡
+                },
                 {
                     type: 'interval-hide-overlap',
-                }, // 数据标签文颜色自动调整
+                },
                 {
                     type: 'adjust-color',
                 },
             ],
         },
     };
+
+    useEffect(() => {
+
+        asyncFetch();
+
+    }, []);
     return (
         <div className="visitor visitor-box">
             <div className="chart-box">
 
-            <div className="visitor-title">
-                <h1><span>
+                <div className="visitor-title">
+                    <h1><span>
                     Visitor
                 </span>
 
-                    <DatePicker onChange={dateSelect}/>
+                        <DatePicker picker="month" onChange={onChange}/>
 
-                </h1>
-            </div>
+                    </h1>
+                </div>
                 <Column {...config} />
             </div>
         </div>

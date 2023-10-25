@@ -1,18 +1,35 @@
 import React, {useEffect, useState} from 'react';
 import {DatePicker} from "antd";
+
 import {Column} from "@ant-design/plots";
 
+import {API_PATH, CONFIG} from "../../components/const";
+const { RangePicker } = DatePicker;
+const dateFormat = 'YYYY-MM-DD';
 const DailyAnalytics = () => {
+    const [time, setTime] = useState(new Date());
+    const [month, setMonth] = useState(time.getMonth());
+    const [year, setYear] = useState(time.getFullYear());
     const [data, setData] = useState([]);
-    const dateSelect = () => {
 
+    function onChange(date, dateString) {
+        console.log(date)
+        console.log(dateString[0])
+        console.log(dateString[1])
+        if (dateString.length > 0){
+            fetch(API_PATH + "analitics/age?start_date_str=" + dateString[0] +"&end_date_str=" + dateString[1], CONFIG)
+                .then((response) => response.json())
+                .then((json) => setData(json))
+                .catch((error) => {
+                    console.log('fetch data failed', error);
+                });
+        }
+        else (
+            asyncFetch()
+        )
     }
-    useEffect(() => {
-        asyncFetch();
-    }, []);
-
     const asyncFetch = () => {
-        fetch('https://gw.alipayobjects.com/os/antfincdn/8elHX%26irfq/stack-column-data.json')
+        fetch(API_PATH + "analitics/age?start_date_str=2023-09-01&end_date_str=2023-10-31", CONFIG)
             .then((response) => response.json())
             .then((json) => setData(json))
             .catch((error) => {
@@ -22,7 +39,7 @@ const DailyAnalytics = () => {
     const config = {
         data,
         isStack: true,
-        xField: 'year',
+        xField: 'age_range',
         yField: 'value',
         seriesField: 'type',
         xAxis: {
@@ -62,28 +79,27 @@ const DailyAnalytics = () => {
             },
         ],
         label: {
-            // 可手动配置 label 数据标签位置
             position: 'middle',
-            // 'top', 'bottom', 'middle'
-            // 可配置附加的布局方法
             style: {
                 fontSize: 14,
                 textAlign: 'center',
             },
             layout: [
-                // 柱形图数据标签位置自动调整
                 {
                     type: 'interval-adjust-position',
-                }, // 数据标签防遮挡
+                },
                 {
                     type: 'interval-hide-overlap',
-                }, // 数据标签文颜色自动调整
+                },
                 {
                     type: 'adjust-color',
                 },
             ],
         },
     };
+    useEffect(() => {
+        asyncFetch()
+    }, []);
     return (
         <div className="visitor visitor-box ">
             <div className="chart-box">
@@ -91,9 +107,11 @@ const DailyAnalytics = () => {
                 <h1><span>
                     Daily analytics
                 </span>
-
-                        <DatePicker onChange={dateSelect}/>
-
+                    <RangePicker
+                        // defaultValue={[dayjs('2023-01-01', dateFormat), dayjs('2023-0-01', dateFormat)]}
+                        format={dateFormat}
+                        onChange={onChange}
+                    />
                 </h1>
             </div>
             <Column {...config} />

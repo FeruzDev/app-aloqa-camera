@@ -5,15 +5,15 @@ import {useHistory} from "react-router-dom";
 import {API_PATH} from "../components/const";
 
 const Login = () => {
-    const [userName, setUserName] = useState([])
-    const [pass, setPass] = useState([])
+    const [userName, setUserName] = useState("ozodbek")
+    const [pass, setPass] = useState("ping!@#$")
     let history = useHistory()
     const loginFc = () => {
 
         let newData = new FormData()
         newData.append('username', userName)
         newData.append('password', pass)
-        newData.append('scope', "snapshot:read camera:write camera:read admin:read admin:write line_crossing_analytics:write module:read module:write fleet:read fleet:write config:read config:write line_crossing_analytics:read line_crossing_analytics:write")
+        newData.append('scope', "snapshot:read camera:write camera:read admin:read admin:write line_crossing_analytics:write module:read module:write fleet:read fleet:write config:read config:write line_crossing_analytics:read line_crossing_analytics:write analitiks:read")
         axios.post(API_PATH + "token/", newData)
             .then(res => {
                 localStorage.setItem("token", res.data.access_token)
@@ -37,14 +37,14 @@ const Login = () => {
                     <h3>Авторизоваться</h3>
                     <div className="inputs-box">
                         <label className="font-family-medium" htmlFor="mainLogin">Login</label>
-                        <input type="text" id="mainLogin" onChange={(e) => setUserName(e.target.value)}
+                        <input type="text" value={userName} id="mainLogin" onChange={(e) => setUserName(e.target.value)}
                                placeholder="Ваш номер телефона или логин"/>
                         <p>Вы можете получить логин в отделе кадров
                             0/0</p>
                     </div>
                     <div className="inputs-box">
                         <label className="font-family-medium" htmlFor="mainPassword">Пароль </label>
-                        <input type="text" id="mainPassword" onChange={(e) => setPass(e.target.value)}
+                        <input type="password" value={pass} id="mainPassword" onChange={(e) => setPass(e.target.value)}
                                placeholder="Ваш пароль"/>
                     </div>
                     <button onClick={loginFc} className="login-btn">Вход</button>

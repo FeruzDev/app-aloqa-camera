@@ -380,16 +380,18 @@ ${parentPoints.map(function (points) {
          console.log(myArr[0][0][0])
             axios.post(API_PATH + "line_crossing_analytics/create",
                 {
-                    x1d: myArr[0][0][0],
-                    y1d: myArr[0][0][1],
-                    x2d: myArr[0][1][0],
-                    y2d: myArr[0][1][1],
-                    // x1c: myArr[1][0][0],
-                    // y1c: myArr[1][0][1],
-                    x1c: (myArr[0][0][0] + myArr[0][1][0]) / 2,
-                    y1c: (myArr[0][0][1] + myArr[0][1][1]) / 2,
-                    x2c: myArr[1][1][0],
-                    y2c: myArr[1][1][1],
+                    x1c: myArr[0][0][0],
+                    y1c: myArr[0][0][1],
+
+                    x2c: myArr[0][1][0],
+                    y2c: myArr[0][1][1],
+
+                    x1d: myArr[1][0][0],
+                    y1d: myArr[1][0][1],
+                    // x1c: (myArr[0][0][0] + myArr[0][1][0]) / 2,
+                    // y1c: (myArr[0][0][1] + myArr[0][1][1]) / 2,
+                    x2d: myArr[1][1][0],
+                    y2d: myArr[1][1][1],
                     camera_id: Number(params.id),
                     name: myItem?.name},
                 CONFIG)

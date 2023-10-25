@@ -85,12 +85,19 @@ const Deployments = () => {
 
                                                </div>
                                            </div>
-                                           <div className="add-btn-green mt-20 font-family-medium align-items-center justify-content-center d-flex" >
-                                               Deploy
-                                           </div>
-                                           <div className="add-btn mt-20 font-family-medium align-items-center justify-content-center d-flex" >
-                                               Deploy
-                                           </div>
+                                           {/*<div className="add-btn-green mt-20 font-family-medium align-items-center justify-content-center d-flex" >*/}
+                                           {/*    Deploy*/}
+                                           {/*</div>*/}
+                                           {
+                                               item?.deployed ?
+                                                   <div className="add-btn-green mt-20 font-family-medium align-items-center justify-content-center d-flex" >
+                                                       Deployed
+                                                   </div>
+                                                   :
+                                                   <div className="add-btn-red mt-20 font-family-medium align-items-center justify-content-center d-flex" >
+                                                       Not Deployed
+                                                   </div>
+                                           }
                                        </div>
 
                                    </div>
