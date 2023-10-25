@@ -5,9 +5,9 @@ const OurPotential = () => {
         <div className="out-potntial">
         <div className="container">
             <h1 className="l-title">Our potential</h1>
-            <div className="row mt-40">
-                <div className="col-md-4">
-                    <div className="pot-img">
+            <div className="row mt-20">
+                <div className="col-md-4 ">
+                    <div className="pot-img mt-20">
                         <img src="/img/pot1.png" alt="img"/>
                     </div>
                     <div className="pot-box">
@@ -18,7 +18,7 @@ const OurPotential = () => {
                     </div>
                 </div>
                 <div className="col-md-4">
-                    <div className="pot-img">
+                    <div className="pot-img mt-20">
                         <img src="/img/pot2.png" alt="img"/>
                     </div>
                     <div className="pot-box">
@@ -29,7 +29,7 @@ const OurPotential = () => {
                     </div>
                 </div>
                 <div className="col-md-4">
-                    <div className="pot-img">
+                    <div className="pot-img mt-20">
                         <img src="/img/pot3.png" alt="img"/>
                     </div>
                     <div className="pot-box">

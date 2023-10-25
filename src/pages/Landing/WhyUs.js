@@ -6,7 +6,7 @@ const WhyUs = () => {
             <h1 className="l-title"> Why us</h1>
             <div className="container">
                 <div className="row">
-                    <div className="col-md-3">
+                    <div className="col-md-3 col-sm-6">
                         <div className="us-box">
                             <div className="us-box-img us-1">
                                 <img src="/icon/us1.svg" alt="us"/>
@@ -19,7 +19,7 @@ const WhyUs = () => {
                             </p>
                         </div>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-md-3 col-sm-6">
                         <div className="us-box">
                             <div className="us-box-img us-2">
                                 <img src="/icon/us2.svg" alt="us"/>
@@ -32,7 +32,7 @@ const WhyUs = () => {
                             </p>
                         </div>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-md-3 col-sm-6">
                         <div className="us-box">
                             <div className="us-box-img us-3">
                                 <img src="/icon/us3.svg" alt="us"/>
@@ -45,7 +45,7 @@ const WhyUs = () => {
                             </p>
                         </div>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-md-3 col-sm-6">
                         <div className="us-box">
                             <div className="us-box-img us-4">
                                 <img src="/icon/us4.svg" alt="us"/>

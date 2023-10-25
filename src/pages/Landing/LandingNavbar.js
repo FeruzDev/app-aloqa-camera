@@ -12,7 +12,8 @@ const LandingNavbar = () => {
                 <div className="container-fluid">
                     <a className="navbar-brand" href="#"><img src="/icon/homeLogo.svg" alt=""/></a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
+                        {/*<span className="navbar-toggler-icon"></span>*/}
+                        <img src="/icon/menuBurger.svg" alt=""/>
                     </button>
                     <div className="container collapse navbar-collapse" id="navbarNavDropdown">
                         <ul className="navbar-nav">

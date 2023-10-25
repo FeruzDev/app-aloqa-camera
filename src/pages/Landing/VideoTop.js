@@ -4,7 +4,7 @@ const VideoTop = () => {
     return (
         <div className="video-top">
            <div className="container">
-               <h1 className="l-title">System includes: Mobile app, Cameras, Admin panel... <br/>
+               <h1 className="l-title">System includes: Mobile app, Cameras, Admin panel...
                    Something gonna be written here...</h1>
                <div className="container">
                    <div className="video-box">

@@ -20,6 +20,8 @@ const LandingFooter = () => {
                         <a href="#!">Work flow</a>
                         <a href="#!">Our team</a>
                         <a href="#!">Why us</a>
+                        <h3></h3>
+
                     </div>
                     <div className="col-md-4">
                         <h3>Contacts</h3>
