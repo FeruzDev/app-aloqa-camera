@@ -9,8 +9,12 @@ import Collapse from '@mui/material/Collapse';
 
 const VisitorSideBar = () => {
     const [open, setOpen] = React.useState(false);
+    const [open2, setOpen2] = React.useState(false);
     const handleClick = () => {
         setOpen(!open);
+    };
+    const handleClick2 = () => {
+        setOpen2(!open2);
     };
     return (
         <div className="main-side-bar">
@@ -48,6 +52,102 @@ const VisitorSideBar = () => {
                                         </Link>
 
                                     </ListItemButton>
+                                </List>
+                            </Collapse>
+                        </List>
+                        <List
+                            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                            component="nav"
+                            aria-labelledby="nested-list-subheader"
+                        >
+                            <ListItemButton onClick={handleClick2}>
+                                <div  className="link-item-style ">
+                                    <img src="/icon/analys.svg" alt=""/>
+                                    <span>Hr Admin</span>
+                                </div>
+                                {open2 ? <img src="/icon/arrowup.png" className="arrow-up-down-size" /> : <img src="/icon/arrowdown.png"  className="arrow-up-down-size"  />}
+                            </ListItemButton>
+                            <Collapse in={open2} timeout="auto" unmountOnExit>
+                                <List component="div" disablePadding>
+                                    <ListItemButton sx={{ pl: 2 }}>
+                                        <Link to="/main/hr-admin/home-page-hr" className="link-item-style">
+                                            <img src="/icon/Icon1.svg" alt=""/>
+                                            <span>Главная страница</span>
+                                        </Link>
+                                    </ListItemButton>
+                                    <ListItemButton sx={{ pl: 2 }}>
+                                        <Link to="/main/hr-admin/employees" className="link-item-style">
+                                            <img src="/icon/Icon2.svg" alt=""/>
+                                            <span>Cотрудники</span>
+                                        </Link>
+                                    </ListItemButton>
+                                    <ListItemButton sx={{ pl: 2 }}>
+                                        <Link to="/main/hr-admin/statistika" className="link-item-style">
+                                            <img src="/icon/Icon3.svg" alt=""/>
+                                            <span>Статистика</span>
+                                        </Link>
+                                    </ListItemButton>
+                                    <ListItemButton sx={{ pl: 2 }}>
+                                        <Link to="/main/hr-admin/report" className="link-item-style">
+                                            <img src="/icon/Icon5.svg" alt=""/>
+                                            <span> Отчеты</span>
+                                        </Link>
+                                    </ListItemButton>
+                                    <ListItemButton sx={{ pl: 2 }}>
+                                        <Link to="/main/hr-admin/audit" className="link-item-style">
+                                            <img src="/icon/Icon6.svg" alt=""/>
+                                            <span>Аудит</span>
+                                        </Link>
+                                    </ListItemButton>
+                                    <ListItemButton sx={{ pl: 2 }}>
+                                        <Link to="/main/hr-admin/logging" className="link-item-style">
+                                            <img src="/icon/Icon6.svg" alt=""/>
+                                            <span>Логирование</span>
+                                        </Link>
+                                    </ListItemButton>
+                                    <ListItemButton sx={{ pl: 2 }}>
+                                        <Link to="/main/hr-admin/users" className="link-item-style">
+                                            <img src="/icon/Icon7.svg" alt=""/>
+                                            <span>Пользователи</span>
+                                        </Link>
+                                    </ListItemButton>
+                                    <ListItemButton sx={{ pl: 2 }}>
+                                        <Link to="/main/hr-admin/notification" className="link-item-style">
+                                            <img src="/icon/Icon8.svg" alt=""/>
+                                            <span>Уведомления</span>
+                                        </Link>
+                                    </ListItemButton>
+                                    <ListItemButton sx={{ pl: 2 }}>
+                                        <Link to="/main/hr-admin/branches" className="link-item-style">
+                                            <img src="/icon/Icon9.svg" alt=""/>
+                                            <span>Филиалы</span>
+                                        </Link>
+                                    </ListItemButton>
+                                    <ListItemButton sx={{ pl: 2 }}>
+                                        <Link to="/main/hr-admin/departments" className="link-item-style">
+                                            <img src="/icon/Icon10.svg" alt=""/>
+                                            <span>Отделы</span>
+                                        </Link>
+                                    </ListItemButton>
+                                    <ListItemButton sx={{ pl: 2 }}>
+                                        <Link to="/main/hr-admin/modes" className="link-item-style">
+                                            <img src="/icon/Icon11.svg" alt=""/>
+                                            <span>Режимы</span>
+                                        </Link>
+                                    </ListItemButton>
+                                    <ListItemButton sx={{ pl: 2 }}>
+
+                                        <Link to="/main/hr-admin/positions" className="link-item-style">
+                                            <img src="/icon/Icon12.svg" alt=""/>
+                                            <span>Должность</span>
+                                        </Link>
+                                    </ListItemButton>
+                                    {/*<ListItemButton sx={{ pl: 2 }}>*/}
+                                    {/*    <Link to="/main/hr-admin/home-page" className="link-item-style">*/}
+                                    {/*        <img src="/icon/Icon4.svg" alt=""/>*/}
+                                    {/*        <span>Аналитика</span>*/}
+                                    {/*    </Link>*/}
+                                    {/*</ListItemButton>*/}
                                 </List>
                             </Collapse>
                         </List>

@@ -280,10 +280,11 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
       justify-content: space-between;
       height: calc(100% - 64px);
       background: #FFFFFF;
-
       .menu-list-item {
         display: block;
         background: #FFFFFF;
+        overflow: auto;
+        overflow-x: hidden;
 
         .link-item-style {
           border-radius: 6px;
@@ -292,7 +293,7 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
           margin: 4px 8px;
           text-decoration: none;
           align-items: center;
-
+          width: 100%;
           img {
             margin-top: -2px;
           }
