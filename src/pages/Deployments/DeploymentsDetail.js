@@ -31,11 +31,11 @@ const DeploymentsDetail = () => {
         // }
 
         const getDep = () => {
-            axios.get(API_PATH + "deployment/" + params.id, CONFIG)
+            axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/deployment/" + params.id, CONFIG)
                 .then(res => {
                     console.log(res.data)
 
-                    axios.get(API_PATH + "camera/module/" + res.data?.module?.id + "/all", CONFIG)
+                    axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/module/" + res.data?.module?.id + "/all", CONFIG)
                         .then(res => {
                             setData(res?.data)
                         })
@@ -46,7 +46,7 @@ const DeploymentsDetail = () => {
         }
         const deploy = () => {
 
-            axios.post(API_PATH + "deploy/deploy_analytics_service", {deployment_id: params.id}, CONFIG)
+            axios.post(API_PATH + API_PATH + "company/" + localStorage.getItem('id') + "/deploy/deploy_analytics_service", {deployment_id: params.id}, CONFIG)
                 .then(res => {
                     toast.success("SUCCESS")
                 })
@@ -57,13 +57,10 @@ const DeploymentsDetail = () => {
             setSelectId(id)
             getConfigCam(id)
             getImg(id)
-
             setIsDeployDetailModal(true)
-
         }
-
         function getImg(imgId) {
-            axios.get(API_PATH + "camera/" + imgId, CONFIG)
+            axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/" + imgId, CONFIG)
                 .then(res => {
                     img.src = res?.data?.screenshot;
                     img.onload = function () {
@@ -79,20 +76,20 @@ const DeploymentsDetail = () => {
         }
 
         const getConfig = (id) => {
-            axios.get(API_PATH + "line_crossing_analytics/" + id + "/all", CONFIG)
+            axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/line_crossing_analytics/" + id + "/all", CONFIG)
                 .then(res => {
                     setConfigs(res?.data)
                 })
         }
         const getConfigCam = (id) => {
-            axios.get(API_PATH + "config/deployment/camera/" + params.id + "/" + id, CONFIG)
+            axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/config/deployment/camera/" + params.id + "/" + id, CONFIG)
                 .then(res => {
                     // setConfigsCam(res?.data?.line_crossing_analytics?.map((item, index) => {
                     //     return item?.id
                     // }))
                     setIsDeployDetailModalId(res.data?.id)
 
-                    axios.get(API_PATH + "line_crossing_analytics/" + id + "/all/" +  res.data?.id, CONFIG)
+                    axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/line_crossing_analytics/" + id + "/all/" +  res.data?.id, CONFIG)
                         .then(res => {
                             setConfigs(res?.data)
                             setConfigList(res?.data.filter(item => item.is_true).map(item => item.id))

@@ -19,7 +19,7 @@ const ModalCamera = (props) => {
     const params = useParams()
     const sendAll = () => {
         console.log(props.selectRooms)
-        axios.post(API_PATH + "camera/create",
+        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/camera/create",
             {
                 name: sendData.name,
                 ip_address: sendData.ip_address,
@@ -28,11 +28,12 @@ const ModalCamera = (props) => {
                 real_time_stream: "",
                 camera_number: 0,
                 stream_quality: 0,
-                room_id: params.room_id
+                room_id: params.camera_id
             } , CONFIG)
             .then(res => {
                 toast.success("Добавлено успешно")
-                props.getCameras(props.selectRooms)
+                // props.getCameras(params.camera_id)
+                props.getCamerasSelects()
                 props.setIsModalCamera(false)
             })
             .catch(err =>{
@@ -41,8 +42,6 @@ const ModalCamera = (props) => {
     }
     useEffect(() => {
         setSendData({...sendData, room_id: props.selectRooms})
-        console.log(props.selectRooms)
-        console.log(sendData)
     }, []);
     return (
         <Modal title="Добавить камера"

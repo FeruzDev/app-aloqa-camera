@@ -17,13 +17,13 @@ const Rooms = () => {
     const [rooms, setRooms] = useState([])
     const [cameras, setCameras] = useState([])
 
-    const [selectOffices, setSelectOffices] = useState(0)
-    const [selectRooms, setSelectRooms] = useState(0)
+    const [selectOffices, setSelectOffices] = useState(null)
+    const [selectRooms, setSelectRooms] = useState(null)
     const params = useParams()
 
     const history = useHistory()
     const getBuilding = () => {
-        axios.get(API_PATH + "building/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", CONFIG)
             .then(res => {
                 setOffices(res.data)
             })
@@ -34,9 +34,9 @@ const Rooms = () => {
     const getRooms = (id) => {
         window.scrollTo(0, 0);
         console.log(selectRooms);
-        setSelectOffices(id)
+        // setSelectOffices(id)
         // setSelectRooms(id)
-        axios.get(API_PATH + "room/" + params.room_id + "/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/room/" + params.room_id + "/all", CONFIG)
             .then(res => {
                 setRooms(res.data)
             })
@@ -46,8 +46,8 @@ const Rooms = () => {
     }
     const getCameras = (id) => {
         history.push(""+ params.room_id + "/camera-list/" + id)
-        setSelectRooms(id)
-        axios.get(API_PATH + "camera/" + id + "/all", CONFIG)
+        // setSelectRooms(id)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/by/room/" + id + "/all", CONFIG)
             .then(res => {
                 setCameras(res.data)
             })
@@ -77,7 +77,7 @@ const Rooms = () => {
                             key={index}
                             className={selectOffices !== 0 && selectOffices === item?.id ? "office-box office-box-active" : "office-box"}
                             onClick={() => {
-                                // setSelectOffices(item.id)
+                                setSelectOffices(item.id)
                                 history.push("/main/building/"+ item.id)
                             }}>
                             <button className="hor-dot">
@@ -138,7 +138,7 @@ const Rooms = () => {
                         <div key={index}
                              className={(selectRooms !== 0 && selectRooms === item?.id) ? "office-box office-box-active" : "office-box"}
                              onClick={() => {
-                                 // setSelectOffices(item.id)
+                                 setSelectOffices(item.id)
                                  getCameras(item.id)
                              }}>
                             <button className="hor-dot">
@@ -235,7 +235,7 @@ const Rooms = () => {
         <ModalRoom
             isModalRoom={isModalRoom}
             getRooms={getRooms}
-            selectOffices={selectOffices}
+            selectOffices={params.room_id}
             setIsModalRoom={setIsModalRoom}
         />
 

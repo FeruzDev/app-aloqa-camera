@@ -12,7 +12,7 @@ const MyModules = () => {
 
 
     const getData = () => {
-        axios.get(API_PATH + "module/all" , CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/module/all" , CONFIG)
             .then(res =>{
                 setModuleData(res.data)
             })

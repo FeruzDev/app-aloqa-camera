@@ -16,10 +16,10 @@ const Users = () => {
     const [isModalOpen2, setIsModalOpen2] = useState(false);
     let history = useHistory()
     const createPage = () => {
-        history.push("/home/users/add-user")
+        history.push("/main/hr-admin/users/add-user")
     }
     const editPage = () => {
-        history.push("/home/users/edit")
+        history.push("/main/hr-admin/users/edit")
     }
     const showModalDelete = () => {
         setIsModalOpen(true);

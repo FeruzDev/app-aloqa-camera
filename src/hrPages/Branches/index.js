@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -10,11 +10,18 @@ import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
 import {Button, Modal} from 'antd';
 import {useHistory} from "react-router-dom";
+import axios from "axios";
+import {API_PATH, CONFIG} from "../../components/const";
+import {toast} from "react-toastify";
+import ModalOffice from "../../pages/Camera/ModalOffice";
 
 const Branches = () => {
     let history = useHistory()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalOpen2, setIsModalOpen2] = useState(false);
+    const [offices, setOffices] = useState([])
+    const [isModalOffice, setIsModalOffice] = useState(false);
+
     const showModalDelete = () => {
         setIsModalOpen(true);
     };
@@ -35,23 +42,23 @@ const Branches = () => {
     };
 
     const createPage = () => {
-        history.push("/home/branches/add")
+        history.push("/main/hr-admin/branches/add")
     }
-    const editPage = () => {
-        history.push("/home/branches/edit")
+    const editPage = (id) => {
+        history.push("/main/hr-admin/branches/edit/" + id)
     }
-
-    function createData(name, calories, fat, carbs, protein) {
-        return {name, calories, fat, carbs, protein};
+    const getBuilding = () => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", CONFIG)
+            .then(res => {
+                setOffices(res.data)
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
     }
-
-    const rows = [
-        createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-        createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-        createData('Eclair', 262, 16.0, 24, 6.0),
-        createData('Cupcake', 305, 3.7, 67, 4.3),
-        createData('Gingerbread', 356, 16.0, 49, 3.9),
-    ];
+    useEffect(() => {
+        getBuilding()
+    }, []);
     return (
         <div className="users">
             <div className="employees-header">
@@ -63,7 +70,7 @@ const Branches = () => {
                         <button className="upload-btn font-family-medium ml-16 mr-16"><img
                             src="/icon/upload.svg"/> Экспорт в Excel
                         </button>
-                        <button className="add-btn font-family-medium" onClick={createPage}><img src="/icon/plus.svg"/> Добавить новое
+                        <button className="add-btn font-family-medium" onClick={() => setIsModalOffice(true)}><img src="/icon/plus.svg"/> Добавить новое
                         </button>
                     </div>
                 </div>
@@ -78,13 +85,13 @@ const Branches = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
+                            {offices?.map((item) => (
                                 <TableRow
-                                    key={row.name}
+                                    key={item.name}
                                     sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                 >
                                     <TableCell component="th" scope="row">
-                                        <span className="t-name font-family-medium">Филиал 1</span>
+                                        <span className="t-name font-family-medium">{item?.name}</span>
                                     </TableCell>
                                      <TableCell className="twt" align="right">
                                         <div className="con-btns-all">
@@ -95,7 +102,7 @@ const Branches = () => {
                                                 <button className="t-block-btn font-family-medium"
                                                         onClick={showModalBlock}>Блокировать
                                                 </button>
-                                                <button className="t-edit-btn font-family-medium" onClick={editPage}>Изменить</button>
+                                                <button className="t-edit-btn font-family-medium" onClick={() => editPage(item.id)}>Изменить</button>
                                             </div>
                                         </div>
                                     </TableCell>
@@ -106,6 +113,12 @@ const Branches = () => {
                 </TableContainer>
 
             </div>
+            <ModalOffice
+                isModalOffice={isModalOffice}
+                setIsModalOffice={setIsModalOffice}
+                getBuilding={getBuilding}
+            />
+
             <Modal title="Внимание!"
                    open={isModalOpen}
                    onCancel={handleCancelDelete}

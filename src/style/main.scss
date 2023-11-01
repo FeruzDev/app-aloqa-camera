@@ -259,6 +259,11 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
       align-items: center;
       height: 64px;
 
+      .logo-company{
+        max-width: 150px;
+        max-height: 50px;
+        object-fit: cover;
+      }
       h3 {
         color: #1A99FF;
         font-size: 16px;
@@ -272,6 +277,7 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
         background: transparent;
         margin-top: -3px;
       }
+
     }
 
     .menu-list {
@@ -2369,5 +2375,20 @@ align-items: center;
     color: #4A545E;
     font-size: 14px;
 
+  }
+}
+
+.add-btn-modal{
+  display: flex;
+  .add-btn-plus{
+    border: none;
+    width: 40px;
+    border-radius: 5px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1A99FF;
+    padding: 0;
   }
 }

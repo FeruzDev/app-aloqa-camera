@@ -20,7 +20,7 @@ const AddCameraModal = (props) => {
 
 
     const getBuilding = () => {
-        axios.get(API_PATH + "building/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", CONFIG)
             .then(res => {
                 setOffices(res.data)
                 console.log(res.data)
@@ -36,7 +36,7 @@ const AddCameraModal = (props) => {
         console.log(selectRooms);
         setSelectOffices(id)
 
-        axios.get(API_PATH + "room/" + id + "/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/room/" + id + "/all", CONFIG)
             .then(res => {
                 setRooms(res.data)
                 setSendData({...sendData, room_id: res.data.id})
@@ -48,7 +48,7 @@ const AddCameraModal = (props) => {
     const getCameras = (id) => {
 
         setSelectRooms(id)
-        axios.get(API_PATH + "camera/" + id + "/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/by/room/" + id + "/all", CONFIG)
             .then(res => {
                 setCameras(res.data)
             })
@@ -60,7 +60,7 @@ const AddCameraModal = (props) => {
     }
 
     const sendAll = () => {
-        axios.post(API_PATH + "camera/attach_to_module", {cameras_id: sendData.cameras_id, module_id: props.isAddCameraModalId}, CONFIG)
+        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/camera/attach_to_module", {cameras_id: sendData.cameras_id, module_id: props.isAddCameraModalId}, CONFIG)
             .then(res => {
                 toast.success("Добавлено успешно")
                 props.getData()

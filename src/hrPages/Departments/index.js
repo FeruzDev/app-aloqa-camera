@@ -16,13 +16,11 @@ const Departments = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalOpen2, setIsModalOpen2] = useState(false);
     const createPage = () => {
-        history.push("/home/departments/departments-add")
+        history.push("/main/hr-admin/departments/departments-add")
     }
     const editPage = () => {
-        history.push("/home/departments/departments-edit")
+        history.push("/main/hr-admin/departments/departments-edit")
     }
-
-
     const showModalDelete = () => {
         setIsModalOpen(true);
     };
@@ -74,7 +72,6 @@ const Departments = () => {
                         <TableHead>
                             <TableRow>
                                 <TableCell className="table-head">Название</TableCell>
-                                <TableCell className="table-head" >Филиал</TableCell>
                                 <TableCell className="table-head" align="right">Действие</TableCell>
                             </TableRow>
                         </TableHead>
@@ -87,7 +84,6 @@ const Departments = () => {
                                     <TableCell component="th" scope="row">
                                         <span className="t-name font-family-medium">Отдель 1</span>
                                     </TableCell>
-                                    <TableCell className="twt" ><span className="font-family-medium">Филиал 1</span></TableCell>
                                     <TableCell className="twt" align="right">
                                         <div className="con-btns-all">
                                             <div className="con-btns-all">

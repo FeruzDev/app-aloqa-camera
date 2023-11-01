@@ -12,7 +12,6 @@ const CameraList = () => {
     const [isModalOffice, setIsModalOffice] = useState(false);
     const [isModalRoom, setIsModalRoom] = useState(false);
     const [isModalCamera, setIsModalCamera] = useState(false);
-
     const [offices, setOffices] = useState([])
     const [rooms, setRooms] = useState([])
     const [cameras, setCameras] = useState([])
@@ -23,7 +22,7 @@ const CameraList = () => {
 
     const history = useHistory()
     const getBuilding = () => {
-        axios.get(API_PATH + "building/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", CONFIG)
             .then(res => {
                 setOffices(res.data)
             })
@@ -37,7 +36,7 @@ const CameraList = () => {
         // history.push("/main/building/"+ id)
         setSelectOffices(id)
         // setSelectRooms(id)
-        axios.get(API_PATH + "room/" + params.room_id + "/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/room/" + params.room_id + "/all", CONFIG)
             .then(res => {
                 setRooms(res.data)
             })
@@ -46,17 +45,26 @@ const CameraList = () => {
             })
     }
     const getCameras = (id) => {
-        history.push("/main/building/"+ params.room_id + "/camera-list/" + id)
-        setSelectRooms(id)
-        axios.get(API_PATH + "camera/" + params.camera_id + "/all", CONFIG)
+        // history.push("/main/building/"+ params.room_id + "/camera-list/" + id)
+        // setSelectRooms(id)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/by/room/" + id + "/all", CONFIG)
             .then(res => {
                 setCameras(res.data)
             })
             .catch(err => {
                 toast.error("Ошибка")
             })
-        window.scrollTo(0, 0);
+        // window.scrollTo(0, 0);
 
+    }
+    const getCamerasSelects = () => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/by/room/" + params.camera_id + "/all", CONFIG)
+            .then(res => {
+                setCameras(res.data)
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
     }
     const openROI = (id) => {
         history.push("/detect-camera/" + id)
@@ -64,13 +72,7 @@ const CameraList = () => {
     useEffect(() => {
         getBuilding()
         getRooms()
-        axios.get(API_PATH + "camera/" + params.camera_id + "/all", CONFIG)
-            .then(res => {
-                setCameras(res.data)
-            })
-            .catch(err => {
-                toast.error("Ошибка")
-            })
+        getCamerasSelects()
     }, [params.camera_id]);
     return (<div className="add-camera">
         <div className="row ">
@@ -244,7 +246,7 @@ const CameraList = () => {
 
         <ModalCamera
             isModalCamera={isModalCamera}
-            getCameras={getCameras}
+            getCamerasSelects={getCamerasSelects}
             selectRooms={selectRooms}
             setIsModalCamera={setIsModalCamera}/>
     </div>);

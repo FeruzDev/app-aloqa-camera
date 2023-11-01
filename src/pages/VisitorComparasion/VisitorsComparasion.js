@@ -11,7 +11,7 @@ const VisitorsComparasion = () => {
 
     function onChange(date, dateString) {
         if (dateString.length > 0){
-            fetch(API_PATH + "analitics/gender/" + dateString.slice(0, 4) + "/" + Number( dateString.slice(5, 7)), CONFIG)
+            fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/gender/" + dateString.slice(0, 4) + "/" + Number( dateString.slice(5, 7)), CONFIG)
                 .then((response) => response.json())
                 .then((json) => setData(json))
                 .catch((error) => {
@@ -23,7 +23,7 @@ const VisitorsComparasion = () => {
         )
     }
     const asyncFetch = () => {
-        fetch(API_PATH + "analitics/counting/by/offices/" + year + "/" + Number(month+1), CONFIG)
+        fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/counting/by/offices/" + year + "/" + Number(month+1), CONFIG)
             .then((response) => response.json())
             .then((json) => {
                     setData(json)

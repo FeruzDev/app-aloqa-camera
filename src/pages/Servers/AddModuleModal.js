@@ -17,10 +17,10 @@ const AddModuleModal = (props) => {
         password: "",
         type: "",
         name: "",
-        fleet_id: 1
+        // fleet_id: 1
     })
     const sendAll = () => {
-        axios.post(API_PATH + "module/create", sendData, CONFIG)
+        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/module/create", sendData, CONFIG)
             .then(res => {
                 toast.success("Добавлено успешно")
                 props.getData()

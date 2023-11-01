@@ -12,7 +12,7 @@ const PeakHours = () => {
     function onChange(date, dateString) {
         console.log(dateString);
         if (dateString.length > 0){
-            fetch(API_PATH + "analitics/hourly?date_str=" + dateString, CONFIG)
+            fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/hourly?date_str=" + dateString, CONFIG)
                 .then((response) => response.json())
                 .then((json) => setData(json))
                 .catch((error) => {
@@ -24,7 +24,7 @@ const PeakHours = () => {
         )
     }
     const asyncFetch = () => {
-        fetch(API_PATH + "analitics/hourly?date_str=" + time?.getFullYear() + "-" + Number(time?.getMonth() + 1) + "-" +  Number(time?.getDate()) , CONFIG)
+        fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/hourly?date_str=" + time?.getFullYear() + "-" + Number(time?.getMonth() + 1) + "-" +  Number(time?.getDate()) , CONFIG)
             .then((response) => response.json())
             .then((json) => setData(json))
             .catch((error) => {

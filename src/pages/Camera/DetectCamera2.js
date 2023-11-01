@@ -34,7 +34,7 @@ const DetectCamera2 = () => {
     useEffect(() => {
         var canvas = document.getElementById('canvas');
         var ctx = canvas.getContext('2d');
-        axios.get(API_PATH + "camera/" + params.id, CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/" + params.id, CONFIG)
             .then(res => {
                 setMyItem(res.data)
 

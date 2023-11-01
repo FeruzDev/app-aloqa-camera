@@ -3,12 +3,14 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import {API_PATH, CONFIG} from "./const";
+import axios from "axios";
 const VisitorNavbar = () => {
-    const [date, setDate] = useState("")
     const [time, setTime] = useState(new Date());
 
     const [viewCreated] = React.useState(Date.now())
     const month = ["Январь ","Февраль ","Март ","Апрель ","Май ","Июнь ","Июль ","Август ","Сентябрь ","Октябрь ","Ноябрь ","Декабрь ",]
+
 
     useEffect(() => {
         setInterval(( () =>

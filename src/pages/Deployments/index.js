@@ -9,7 +9,7 @@ const Deployments = () => {
     const [depData, setDepData] = useState([])
     let history = useHistory()
     const getDep = () => {
-        axios.get(API_PATH + "deployment/all" , CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/deployment/all" , CONFIG)
             .then(res =>{
                 console.log(res.data)
                 setDepData(res.data)

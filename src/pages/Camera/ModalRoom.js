@@ -3,15 +3,17 @@ import {Button, Modal} from "antd";
 import axios from "axios";
 import {API_PATH, CONFIG} from "../../components/const";
 import {toast} from "react-toastify";
+import {useParams} from "react-router-dom";
 
 const ModalRoom = (props) => {
+    // let params = useParams()
     const [sendData, setSendData] = useState({
         name: "",
-        building_id: 1
+        building_id: props.selectOffices
     })
 
     const sendAll = () => {
-        axios.post(API_PATH + "room/create",  sendData, CONFIG)
+        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/room/create",  sendData, CONFIG)
             .then(res => {
                 toast.success("Добавлено успешно")
                 props.getRooms(props.selectOffices)

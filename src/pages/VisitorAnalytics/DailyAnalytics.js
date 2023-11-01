@@ -17,7 +17,7 @@ const DailyAnalytics = () => {
         console.log(dateString[0])
         console.log(dateString[1])
         if (dateString.length > 0){
-            fetch(API_PATH + "analitics/age?start_date_str=" + dateString[0] +"&end_date_str=" + dateString[1], CONFIG)
+            fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/age?start_date_str=" + dateString[0] +"&end_date_str=" + dateString[1], CONFIG)
                 .then((response) => response.json())
                 .then((json) => setData(json))
                 .catch((error) => {
@@ -29,7 +29,7 @@ const DailyAnalytics = () => {
         )
     }
     const asyncFetch = () => {
-        fetch(API_PATH + "analitics/age?start_date_str=2023-09-01&end_date_str=2023-10-31", CONFIG)
+        fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/age?start_date_str=2023-09-01&end_date_str=2023-10-31", CONFIG)
             .then((response) => response.json())
             .then((json) => setData(json))
             .catch((error) => {

@@ -24,14 +24,14 @@ const AddDeployModal = (props) => {
             )
     }
     const getModule= () => {
-        axios.get(API_PATH + "module/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/module/all", CONFIG)
             .then(res =>
                 setModuleData(res.data)
             )
 
     }
     const sendAll = () => {
-        axios.post(API_PATH + "deployment/create", sendData, CONFIG)
+        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/deployment/create", sendData, CONFIG)
             .then(res => {
                 toast.success("Добавлено успешно")
                 props.setIsDeployModal(false)

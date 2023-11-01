@@ -41,6 +41,7 @@ import BranchesAdd from "../hrPages/Branches/BranchesAdd";
 import BranchesEdit from "../hrPages/Branches/BranchesEdit";
 import JobTitle from "../hrPages/JobTitle";
 import Logging from "../hrPages/Logging";
+import SmartCamera from "../pages/Camera/SmartCamera";
 
 const MainLayoutVisitor = () => {
     return (
@@ -53,6 +54,7 @@ const MainLayoutVisitor = () => {
                 <VisitorNavbar />
                 <Switch>
                     <Route path="/main/building" exact component={Camera} />
+                    <Route path="/main/smart-camera" exact component={SmartCamera} />
                     <Route path="/main/building/:room_id" exact component={Rooms} />
                     <Route path="/main/building/:room_id/camera-list/:camera_id" exact component={CameraList} />
                     <Route path="/main/visitor-home" exact component={VisitorAnalytics} />
@@ -61,7 +63,7 @@ const MainLayoutVisitor = () => {
                     <Route path="/main/services" exact component={Services} />
                     <Route path="/main/deployments" exact component={Deployments} />
                     <Route path="/main/deployments/:id" exact component={DeploymentsDetail} />
-                    {/*<Route path="/main/detect-camera/:id" exact component={DetectCamera2} />*/}
+                    <Route path="/main/detect-camera/:id" exact component={DetectCamera2} />
                     {/*<Route path="/visitor-home/detect-camera" exact component={DetectCamera} />*/}
 
                     {/*<Route path="/" exact component={Home} />*/}
@@ -91,7 +93,7 @@ const MainLayoutVisitor = () => {
                     <Route path="/main/hr-admin/positions/edit" exact component={PositionEdit} />
                     <Route path="/main/hr-admin/branches" exact component={Branches} />
                     <Route path="/main/hr-admin/branches/add" exact component={BranchesAdd} />
-                    <Route path="/main/hr-admin/branches/edit" exact component={BranchesEdit} />
+                    <Route path="/main/hr-admin/branches/edit/:id" exact component={BranchesEdit} />
                     <Route path="/main/hr-admin/job-title" exact component={JobTitle} />
                     <Route path="/main/hr-admin/logging" exact component={Logging} />
 

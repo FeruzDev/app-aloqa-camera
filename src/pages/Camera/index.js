@@ -22,23 +22,21 @@ const Camera = () => {
 
     const history = useHistory()
     const getBuilding = () => {
-        axios.get(API_PATH + "building/all", CONFIG)
+        axios.get(API_PATH + "company/"+localStorage.getItem('id') + "/building/all", CONFIG)
             .then(res => {
                 setOffices(res.data)
             })
             .catch(err => {
                 toast.error("Ошибка")
             })
-
     }
     const getRooms = (id) => {
         window.scrollTo(0, 0);
         console.log(selectRooms);
         setSelectOffices(id)
-
         history.push("building/"+ id)
         // setSelectRooms(id)
-        axios.get(API_PATH + "room/" + id + "/all", CONFIG)
+        axios.get(API_PATH + "company/"+localStorage.getItem('id') + "/room/" + id + "/all", CONFIG)
             .then(res => {
                 setRooms(res.data)
             })
@@ -47,9 +45,8 @@ const Camera = () => {
             })
     }
     const getCameras = (id) => {
-
         setSelectRooms(id)
-        axios.get(API_PATH + "camera/" + id + "/all", CONFIG)
+        axios.get(API_PATH + "company/"+localStorage.getItem('id') + "/room/" + id + "/all", CONFIG)
             .then(res => {
                 setCameras(res.data)
             })
@@ -57,7 +54,6 @@ const Camera = () => {
                 toast.error("Ошибка")
             })
         window.scrollTo(0, 0);
-
     }
     const openROI = (id) => {
         history.push("/detect-camera/" + id)
@@ -141,7 +137,6 @@ const Camera = () => {
                     Привязанные камеры
                     <img src="/icon/rightArrow.png" alt=""/>
                 </h3>
-
                 {
                     cameras?.map((item, index) => (
                         <div key={index} className="office-box" onClick={() => openROI(item?.id)}>
@@ -169,7 +164,6 @@ const Camera = () => {
                     ))
                 }
                 {selectRooms !== 0 ?
-
                     <button className="add-btn mt-20 font-family-medium" onClick={() => setIsModalCamera(true)}><img
                         src="/icon/plus.svg"/>
                         Добавить камера

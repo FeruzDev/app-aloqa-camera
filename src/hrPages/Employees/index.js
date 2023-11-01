@@ -15,10 +15,10 @@ import {useHistory} from "react-router-dom";
 const Employees = () => {
     let history = useHistory()
     const createPage = () => {
-      history.push("/home/employees/profile/create")
+      history.push("/main/hr-admin/employees/profile/create")
     }
     const editPage = () => {
-      history.push("/home/employees/profile/edit")
+      history.push("/main/hr-admin/employees/profile/edit")
     }
     function createData(name, calories, fat, carbs, protein) {
         return { name, calories, fat, carbs, protein };
