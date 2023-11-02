@@ -1030,7 +1030,29 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
   }
 }
 
+.userPhoto{
+  margin-right:60px;
+  .pl20{
+    padding-left: 25px;
+  }
+  p{
+    margin-top: 10px;
+    font-size: 16px;
+    text-align: center;
+  }
+  label{
+    img{
+      width: 150px;
+      border-radius: 10px;
+    }
+  }
+  input{
+    display: none;
+  }
+}
+
 .profile {
+
   .profile-header {
     padding-left: 24px;
     padding-right: 24px;

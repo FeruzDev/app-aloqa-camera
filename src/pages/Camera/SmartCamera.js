@@ -67,7 +67,7 @@ const SmartCamera = () => {
                 // setSendData({...sendData, room_id: res.data.id})
             })
             .catch(err => {
-                toast.error("Ошибка")
+                // toast.error("Ошибка")
             })
     }
     const handleClick = (event) => {

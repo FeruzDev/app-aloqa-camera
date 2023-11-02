@@ -25,8 +25,6 @@ import PositionAdd from "../hrPages/Positions/PositionAdd";
 import Positions from "../hrPages/Positions";
 import PositionEdit from "../hrPages/Positions/PositionEdit";
 import Branches from "../hrPages/Branches";
-import BranchesAdd from "../hrPages/Branches/BranchesAdd";
-import BranchesEdit from "../hrPages/Branches/BranchesEdit";
 import JobTitle from "../hrPages/JobTitle";
 import Logging from "../hrPages/Logging";
 

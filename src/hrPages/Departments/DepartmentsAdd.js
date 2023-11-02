@@ -1,9 +1,22 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Select} from "antd";
+import {toast} from "react-toastify";
+import axios from "axios";
+import {API_PATH, CONFIG} from "../../components/const";
+import {useHistory} from "react-router-dom";
 
 const DepartmentsAdd = () => {
-    const handleChange = () => {
-
+    const [sendData, setSendData] = useState({})
+    let history = useHistory()
+    const sendAll = () => {
+        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/create", sendData, CONFIG)
+            .then(res => {
+                toast.success("Добавлено успешно")
+                setSendData({...sendData, department_title: ""})
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
     }
     return (
         <div className="edit-user">
@@ -22,26 +35,17 @@ const DepartmentsAdd = () => {
                     <div className="col-md-4">
                         <div className="inputs-box w-100">
                             <label  className="font-family-medium">Названия отдела </label>
-                            <input type="text" placeholder="Напишите названия" className="w-100"/>
-                        </div>
-                        <div className="inputs-box m-0">
-                            <label  className="font-family-medium">Филиал </label>
-                            <Select
-                                className="w-100"
-                                onChange={handleChange}
-                                options={[
-                                    { value: 'jack', label: 'Jack' },
-                                    { value: '1', label: '1' },
-                                    { value: 'Yiminghe', label: 'yiminghe' },
-                                    { value: 'disabled', label: 'Disabled', disabled: true },
-                                ]}
-                            />
+                            <input
+                                value={sendData?.department_title}
+                                onChange={(e) => setSendData({...sendData, department_title: e.target.value})}
+                                type="text"
+                                placeholder="Напишите названия" className="w-100"/>
                         </div>
                     </div>
                 </div>
                 <div className="con-btn mt-4 w-auto">
-                    <button className="font-family-medium"><span>Сохранить изменения</span></button>
-                    <button className="font-family-medium ml-8  ">Отменить</button>
+                    <button className="font-family-medium" onClick={sendAll}><span>Сохранить изменения</span></button>
+                    <button className="font-family-medium ml-8" onClick={ () => history.push("/main/hr-admin/departments")}>Отменить</button>
                 </div>
             </div>
 

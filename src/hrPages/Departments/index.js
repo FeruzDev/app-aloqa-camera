@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -10,16 +10,20 @@ import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
 import {Button, Modal} from 'antd';
 import {useHistory} from "react-router-dom";
+import axios from "axios";
+import {API_PATH, CONFIG} from "../../components/const";
+import {toast} from "react-toastify";
 
 const Departments = () => {
     let history = useHistory()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalOpen2, setIsModalOpen2] = useState(false);
+    const [departments, setDepartments] = useState([])
     const createPage = () => {
         history.push("/main/hr-admin/departments/departments-add")
     }
-    const editPage = () => {
-        history.push("/main/hr-admin/departments/departments-edit")
+    const editPage = (id) => {
+        history.push("/main/hr-admin/departments/departments-edit/" + id)
     }
     const showModalDelete = () => {
         setIsModalOpen(true);
@@ -39,17 +43,18 @@ const Departments = () => {
     const handleCancelBlock = () => {
         setIsModalOpen2(false);
     };
-    function createData(name, calories, fat, carbs, protein) {
-        return {name, calories, fat, carbs, protein};
+    const getDeps = () => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all", CONFIG)
+            .then(res => {
+                setDepartments(res.data)
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
     }
-
-    const rows = [
-        createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-        createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-        createData('Eclair', 262, 16.0, 24, 6.0),
-        createData('Cupcake', 305, 3.7, 67, 4.3),
-        createData('Gingerbread', 356, 16.0, 49, 3.9),
-    ];
+    useEffect(() => {
+        getDeps()
+    }, []);
     return (
         <div className="users">
             <div className="employees-header">
@@ -76,13 +81,13 @@ const Departments = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
+                            {departments.map((item) => (
                                 <TableRow
-                                    key={row.name}
+                                    key={item.name}
                                     sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                 >
                                     <TableCell component="th" scope="row">
-                                        <span className="t-name font-family-medium">Отдель 1</span>
+                                        <span className="t-name font-family-medium">{item?.department_title}</span>
                                     </TableCell>
                                     <TableCell className="twt" align="right">
                                         <div className="con-btns-all">
@@ -93,7 +98,7 @@ const Departments = () => {
                                                 <button className="t-block-btn font-family-medium"
                                                         onClick={showModalBlock}>Блокировать
                                                 </button>
-                                                <button className="t-edit-btn font-family-medium" onClick={editPage}>Изменить</button>
+                                                <button className="t-edit-btn font-family-medium" onClick={() => editPage(item.id)}>Изменить</button>
                                             </div>
                                         </div>
                                     </TableCell>

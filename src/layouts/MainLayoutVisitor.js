@@ -1,4 +1,4 @@
-import React from 'react';
+import   React from 'react';
 import {Route, Switch} from "react-router-dom";
 import VisitorNavbar from "../components/VisitorNavbar";
 import VisitorSideBar from "../components/VisitorSideBar";
@@ -37,11 +37,11 @@ import Positions from "../hrPages/Positions";
 import PositionAdd from "../hrPages/Positions/PositionAdd";
 import PositionEdit from "../hrPages/Positions/PositionEdit";
 import Branches from "../hrPages/Branches";
-import BranchesAdd from "../hrPages/Branches/BranchesAdd";
-import BranchesEdit from "../hrPages/Branches/BranchesEdit";
 import JobTitle from "../hrPages/JobTitle";
 import Logging from "../hrPages/Logging";
 import SmartCamera from "../pages/Camera/SmartCamera";
+import Live from "../pages/Live";
+import RTSPPlayer2 from "../pages/Live/RTSPPlayer";
 
 const MainLayoutVisitor = () => {
     return (
@@ -53,6 +53,8 @@ const MainLayoutVisitor = () => {
             <div className="right-side">
                 <VisitorNavbar />
                 <Switch>
+                    <Route path="/main/live" exact component={Live} />
+                    <Route path="/main/live2" exact component={RTSPPlayer2} />
                     <Route path="/main/building" exact component={Camera} />
                     <Route path="/main/smart-camera" exact component={SmartCamera} />
                     <Route path="/main/building/:room_id" exact component={Rooms} />
@@ -65,12 +67,11 @@ const MainLayoutVisitor = () => {
                     <Route path="/main/deployments/:id" exact component={DeploymentsDetail} />
                     <Route path="/main/detect-camera/:id" exact component={DetectCamera2} />
                     {/*<Route path="/visitor-home/detect-camera" exact component={DetectCamera} />*/}
-
                     {/*<Route path="/" exact component={Home} />*/}
                     <Route path="/main/hr-admin/home-page-hr" exact component={Home} />
                     <Route path="/main/hr-admin/employees" exact component={Employees} />
                     <Route path="/main/hr-admin/employees/profile" exact component={Profile} />
-                    <Route path="/main/hr-admin/employees/profile/edit" exact component={ProfileEdit} />
+                    <Route path="/main/hr-admin/employees/profile/edit/:id" exact component={ProfileEdit} />
                     <Route path="/main/hr-admin/employees/profile/create" exact component={ProfileCreate} />
                     <Route path="/main/hr-admin/statistika" exact component={Statistika} />
                     <Route path="/main/hr-admin/statistika/detail" exact component={StatistikaDetail} />
@@ -83,7 +84,7 @@ const MainLayoutVisitor = () => {
                     <Route path="/main/hr-admin/notification/notification-edit" exact component={NotificationEdit} />
                     <Route path="/main/hr-admin/notification/notification-add" exact component={NotificationAdd} />
                     <Route path="/main/hr-admin/departments" exact component={Departments} />
-                    <Route path="/main/hr-admin/departments/departments-edit" exact component={DepartmentsEdit} />
+                    <Route path="/main/hr-admin/departments/departments-edit/:id" exact component={DepartmentsEdit} />
                     <Route path="/main/hr-admin/departments/departments-add" exact component={DepartmentsAdd} />
                     <Route path="/main/hr-admin/modes" exact component={Modes} />
                     <Route path="/main/hr-admin/modes/add" exact component={ModesAdd} />
@@ -92,12 +93,8 @@ const MainLayoutVisitor = () => {
                     <Route path="/main/hr-admin/positions/add" exact component={PositionAdd} />
                     <Route path="/main/hr-admin/positions/edit" exact component={PositionEdit} />
                     <Route path="/main/hr-admin/branches" exact component={Branches} />
-                    <Route path="/main/hr-admin/branches/add" exact component={BranchesAdd} />
-                    <Route path="/main/hr-admin/branches/edit/:id" exact component={BranchesEdit} />
                     <Route path="/main/hr-admin/job-title" exact component={JobTitle} />
                     <Route path="/main/hr-admin/logging" exact component={Logging} />
-
-
                 </Switch>
             </div>
 

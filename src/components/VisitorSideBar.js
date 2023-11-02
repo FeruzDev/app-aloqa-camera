@@ -166,13 +166,13 @@ const VisitorSideBar = () => {
                                             <span>Cотрудники</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{ pl: 2 }}>
+                                    {/*<ListItemButton sx={{ pl: 2 }}>*/}
 
-                                        <Link to="/main/hr-admin/positions" className="link-item-style">
-                                            <img src="/icon/Icon12.svg" alt=""/>
-                                            <span>Должность</span>
-                                        </Link>
-                                    </ListItemButton>
+                                    {/*    <Link to="/main/hr-admin/positions" className="link-item-style">*/}
+                                    {/*        <img src="/icon/Icon12.svg" alt=""/>*/}
+                                    {/*        <span>Должность</span>*/}
+                                    {/*    </Link>*/}
+                                    {/*</ListItemButton>*/}
                                     <ListItemButton sx={{ pl: 2 }}>
                                         <Link to="/main/hr-admin/users" className="link-item-style">
                                             <img src="/icon/Icon7.svg" alt=""/>
