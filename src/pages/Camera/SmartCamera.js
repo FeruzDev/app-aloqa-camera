@@ -225,7 +225,7 @@ const SmartCamera = () => {
                                 <TableCell className="table-head" align="right">software_version</TableCell>
                                 <TableCell className="table-head" align="right">lib_ai_version</TableCell>
                                 <TableCell className="table-head" align="right">device_ip</TableCell>
-                                <TableCell className="table-head" align="right">time_stamp</TableCell>
+                                <TableCell className="table-head" align="right">camera_type</TableCell>
                                 <TableCell className="table-head" align="right">device_name</TableCell>
                                 <TableCell className="pr20 table-head" align="right">Эффективность</TableCell>
                             </TableRow>
@@ -245,7 +245,7 @@ const SmartCamera = () => {
                                     <TableCell align="right">{row.lib_ai_version}</TableCell>
                                     <TableCell align="right">{row.device_ip}</TableCell>
                                     <TableCell align="right">{row.lib_ai_version}</TableCell>
-                                    <TableCell align="right">{row.time_stamp}</TableCell>
+                                    <TableCell align="right">{row.camera_type}</TableCell>
                                     <TableCell align="right">{row.device_name}</TableCell>
                                     <TableCell className="twt" align="right">
                                         <div className="con-btns-all">

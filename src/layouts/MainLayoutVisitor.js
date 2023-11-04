@@ -41,7 +41,6 @@ import JobTitle from "../hrPages/JobTitle";
 import Logging from "../hrPages/Logging";
 import SmartCamera from "../pages/Camera/SmartCamera";
 import Live from "../pages/Live";
-import RTSPPlayer2 from "../pages/Live/RTSPPlayer";
 
 const MainLayoutVisitor = () => {
     return (
@@ -54,7 +53,6 @@ const MainLayoutVisitor = () => {
                 <VisitorNavbar />
                 <Switch>
                     <Route path="/main/live" exact component={Live} />
-                    <Route path="/main/live2" exact component={RTSPPlayer2} />
                     <Route path="/main/building" exact component={Camera} />
                     <Route path="/main/smart-camera" exact component={SmartCamera} />
                     <Route path="/main/building/:room_id" exact component={Rooms} />

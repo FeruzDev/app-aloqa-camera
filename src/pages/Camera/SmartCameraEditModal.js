@@ -63,7 +63,7 @@ const SmartCameraEditModal = (props) => {
                             className="w-100"
                             defaultValue={props.sendData?.building_id}
                             onChange={(e) => {
-                                props.setSendData({...props.sendData, name: e})
+                                props.setSendData({...props.sendData, building_id: e})
                                 props.getRooms(e)
                             }}
                         >
@@ -194,6 +194,17 @@ const SmartCameraEditModal = (props) => {
                                onChange={(e) => props.setSendData({...props.sendData, device_long: e.target.value})}
                                type="text"/>
                     </div>
+                </div>
+                <div className="inputs-box w-100">
+                    <label className="font-family-medium">type </label>
+                    <Select
+                        className="w-100"
+                        value={props.sendData?.camera_type}
+                        onChange={(e) =>  props.setSendData({...props.sendData, camera_type: e})}
+                    >
+                        <option value="entry">entry</option>
+                        <option value="exit">exit</option>
+                    </Select>
                 </div>
                 {/*<div className="d-flex">*/}
                 {/*    <div className="inputs-box w-100 mr-16">*/}

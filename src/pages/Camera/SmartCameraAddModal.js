@@ -4,7 +4,8 @@ import axios from "axios";
 import {API_PATH, CONFIG} from "../../components/const";
 import {toast} from "react-toastify";
 import {InputMask, useMask} from "@react-input/mask";
-import { withMask } from 'use-mask-input';
+import {withMask} from 'use-mask-input';
+
 const SmartCameraAddModal = (props) => {
     const [show, setShow] = useState(false)
     const [offices, setOffices] = useState([])
@@ -58,7 +59,7 @@ const SmartCameraAddModal = (props) => {
             })
     }
     const inputRef = useMask({mask: "aa - bb - cc - dd - ee - ff", replacement: {_: /\d/}})
-    useEffect(() =>{
+    useEffect(() => {
         getBuilding()
     }, [])
     return (
@@ -81,44 +82,44 @@ const SmartCameraAddModal = (props) => {
                                                                         alt=""/> </label>
                     <input onChange={(e) => setSendData({...sendData, name: e.target.value})} type="text"/>
                 </div>
-               <div className="d-flex">
-                   <div className="inputs-box w-100 mr-16">
-                       <label className="font-family-medium">Выбрать здания </label>
-                       <Select
-                           className="w-100"
-                           onChange={(e) => {
-                               setSendData({...sendData, building_id: e})
-                               getRooms(e)
-                           }}
-                       >
+                <div className="d-flex">
+                    <div className="inputs-box w-100 mr-16">
+                        <label className="font-family-medium">Выбрать здания </label>
+                        <Select
+                            className="w-100"
+                            onChange={(e) => {
+                                setSendData({...sendData, building_id: e})
+                                getRooms(e)
+                            }}
+                        >
 
-                           {
-                               offices?.map((item, index) =>(
-                                   <option value={item?.id} key={index}>{item?.name}</option>
-                               ))
-                           }
+                            {
+                                offices?.map((item, index) => (
+                                    <option value={item?.id} key={index}>{item?.name}</option>
+                                ))
+                            }
 
-                       </Select>
-                   </div>
-                   <div className="inputs-box w-100">
-                       <label className="font-family-medium">Выбрать комнату </label>
-                       <Select
-                           className="w-100"
-                           onChange={(e) => setSendData({...sendData, room_id: e})}
-                       >
-                           {
-                               rooms?.map((item, index) =>(
-                                   <option value={item?.id} key={index}>{item?.name}</option>
-                               ))
-                           }
+                        </Select>
+                    </div>
+                    <div className="inputs-box w-100">
+                        <label className="font-family-medium">Выбрать комнату </label>
+                        <Select
+                            className="w-100"
+                            onChange={(e) => setSendData({...sendData, room_id: e})}
+                        >
+                            {
+                                rooms?.map((item, index) => (
+                                    <option value={item?.id} key={index}>{item?.name}</option>
+                                ))
+                            }
 
-                       </Select>
-                   </div>
-               </div>
+                        </Select>
+                    </div>
+                </div>
                 <div className="d-flex">
                     <div className="inputs-box w-100 mr-16">
                         <label className="font-family-medium">device_id <img src="/icon/star.svg"
-                                                                                     className="star-img" alt=""/>
+                                                                             className="star-img" alt=""/>
                         </label>
                         <input className="w-100"
                                onChange={(e) => setSendData({...sendData, device_id: e.target.value})}
@@ -126,31 +127,36 @@ const SmartCameraAddModal = (props) => {
                     </div>
                     <div className="inputs-box w-100">
                         <label className="font-family-medium">device_mac <img src="/icon/star.svg" className="star-img"
-                                                                             alt=""/> </label>
-                        <input className="w-100" onChange={(e) => setSendData({...sendData, device_mac: e.target.value})}
+                                                                              alt=""/> </label>
+                        <input className="w-100"
+                               onChange={(e) => setSendData({...sendData, device_mac: e.target.value})}
                                type="text"/>
                     </div>
                 </div>
                 <div className="d-flex">
                     <div className="inputs-box w-100 mr-16">
-                        <label className="font-family-medium">lib_platform_version <img src="/icon/star.svg" className="star-img"
-                                                                               alt=""/>
+                        <label className="font-family-medium">lib_platform_version <img src="/icon/star.svg"
+                                                                                        className="star-img"
+                                                                                        alt=""/>
                         </label>
                         <input className="w-100"
                                onChange={(e) => setSendData({...sendData, lib_platform_version: e.target.value})}
                                type="text"/>
                     </div>
                     <div className="inputs-box w-100">
-                        <label className="font-family-medium">software_version <img src="/icon/star.svg" className="star-img"
-                                                                        alt=""/> </label>
-                        <input className="w-100" onChange={(e) => setSendData({...sendData, software_version: e.target.value})}
+                        <label className="font-family-medium">software_version <img src="/icon/star.svg"
+                                                                                    className="star-img"
+                                                                                    alt=""/> </label>
+                        <input className="w-100"
+                               onChange={(e) => setSendData({...sendData, software_version: e.target.value})}
                                type="text"/>
                     </div>
                 </div>
                 <div className="d-flex">
                     <div className="inputs-box w-100 mr-16">
-                        <label className="font-family-medium">lib_ai_version <img src="/icon/star.svg" className="star-img"
-                                                                               alt=""/>
+                        <label className="font-family-medium">lib_ai_version <img src="/icon/star.svg"
+                                                                                  className="star-img"
+                                                                                  alt=""/>
                         </label>
                         <input className="w-100"
                                onChange={(e) => setSendData({...sendData, lib_ai_version: e.target.value})}
@@ -158,7 +164,7 @@ const SmartCameraAddModal = (props) => {
                     </div>
                     <div className="inputs-box w-100">
                         <label className="font-family-medium">device_ip <img src="/icon/star.svg" className="star-img"
-                                                                        alt=""/> </label>
+                                                                             alt=""/> </label>
                         <input className="w-100" onChange={(e) => setSendData({...sendData, device_ip: e.target.value})}
                                type="text"/>
                     </div>
@@ -166,7 +172,7 @@ const SmartCameraAddModal = (props) => {
                 <div className="d-flex">
                     <div className="inputs-box w-100 mr-16">
                         <label className="font-family-medium">time_stamp <img src="/icon/star.svg" className="star-img"
-                                                                               alt=""/>
+                                                                              alt=""/>
                         </label>
                         <input className="w-100"
                                onChange={(e) => setSendData({...sendData, time_stamp: e.target.value})}
@@ -174,15 +180,16 @@ const SmartCameraAddModal = (props) => {
                     </div>
                     <div className="inputs-box w-100">
                         <label className="font-family-medium">device_name <img src="/icon/star.svg" className="star-img"
-                                                                        alt=""/> </label>
-                        <input className="w-100" onChange={(e) => setSendData({...sendData, device_name: e.target.value})}
+                                                                               alt=""/> </label>
+                        <input className="w-100"
+                               onChange={(e) => setSendData({...sendData, device_name: e.target.value})}
                                type="text"/>
                     </div>
                 </div>
                 <div className="d-flex">
                     <div className="inputs-box w-100 mr-16">
                         <label className="font-family-medium">device_lat <img src="/icon/star.svg" className="star-img"
-                                                                               alt=""/>
+                                                                              alt=""/>
                         </label>
                         <input className="w-100"
                                onChange={(e) => setSendData({...sendData, device_lat: e.target.value})}
@@ -190,10 +197,21 @@ const SmartCameraAddModal = (props) => {
                     </div>
                     <div className="inputs-box w-100">
                         <label className="font-family-medium">device_long <img src="/icon/star.svg" className="star-img"
-                                                                        alt=""/> </label>
-                        <input className="w-100" onChange={(e) => setSendData({...sendData, device_long: e.target.value})}
+                                                                               alt=""/> </label>
+                        <input className="w-100"
+                               onChange={(e) => setSendData({...sendData, device_long: e.target.value})}
                                type="text"/>
                     </div>
+                </div>
+                <div className="inputs-box w-100">
+                    <label className="font-family-medium">type </label>
+                    <Select
+                        className="w-100"
+                        onChange={(e) => setSendData({...sendData, camera_type: e})}
+                    >
+                        <option value="entry">entry</option>
+                        <option value="exit">exit</option>
+                    </Select>
                 </div>
                 {/*<div className="d-flex">*/}
                 {/*    <div className="inputs-box w-100 mr-16">*/}
