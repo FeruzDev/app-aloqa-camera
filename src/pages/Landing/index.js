@@ -8,6 +8,7 @@ import Work from "./Work";
 import OurTeam from "./OurTeam";
 import WhyUs from "./WhyUs";
 import LandingFooter from "./LandingFooter";
+import ContactLan from "./ContactLan";
 
 const Landing = () => {
     return (
@@ -20,6 +21,7 @@ const Landing = () => {
             <Work />
             <OurTeam />
             <WhyUs />
+            <ContactLan />
             <LandingFooter />
         </div>
     );

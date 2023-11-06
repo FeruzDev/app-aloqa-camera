@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -10,48 +10,42 @@ import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
 import {Button, Modal} from 'antd';
 import {useHistory} from "react-router-dom";
+import axios from "axios";
+import {API_PATH, CONFIG} from "../../components/const";
 
 const Modes = () => {
     let history = useHistory()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalOpen2, setIsModalOpen2] = useState(false);
+    const [data, setData] = useState([])
+
     const showModalDelete = () => {
         setIsModalOpen(true);
     };
-    const showModalBlock = () => {
-        setIsModalOpen2(true);
-    };
+
     const handleOkDelete = () => {
         setIsModalOpen(false);
     };
     const handleCancelDelete = () => {
         setIsModalOpen(false);
     };
-    const handleOkBlock = () => {
-        setIsModalOpen2(false);
-    };
-    const handleCancelBlock = () => {
-        setIsModalOpen2(false);
-    };
-
     const createPage = () => {
-        history.push("/home/modes/add")
+        history.push("/main/hr-admin/modes/add")
     }
-    const editPage = () => {
-        history.push("/home/modes/edit")
-    }
-
-    function createData(name, calories, fat, carbs, protein) {
-        return {name, calories, fat, carbs, protein};
+    const editPage = (id) => {
+        history.push("/main/hr-admin/modes/edit/" + id)
     }
 
-    const rows = [
-        createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-        createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-        createData('Eclair', 262, 16.0, 24, 6.0),
-        createData('Cupcake', 305, 3.7, 67, 4.3),
-        createData('Gingerbread', 356, 16.0, 49, 3.9),
-    ];
+    const getAll = (e) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/timerange/all", CONFIG)
+            .then(res => {
+                setData(res.data)
+            })
+    }
+    useEffect(() => {
+        getAll('on_time')
+    }, []);
+
     return (
         <div className="users">
             <div className="employees-header">
@@ -76,30 +70,29 @@ const Modes = () => {
                                 <TableCell className="table-head">Название</TableCell>
                                 <TableCell className="table-head" >Рабочее время</TableCell>
                                 <TableCell className="table-head" >Рабочие дни</TableCell>
+                                <TableCell className="table-head" >Интервал</TableCell>
                                 <TableCell className="table-head" align="right">Действие</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
+                            {data.map((item, index) => (
                                 <TableRow
-                                    key={row.name}
+                                    key={index}
                                     sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                 >
                                     <TableCell component="th" scope="row">
-                                        <span className="t-name font-family-medium">Отдель 1</span>
+                                        <span className="t-name font-family-medium">Режим {index + 1}</span>
                                     </TableCell>
-                                    <TableCell className="twt" ><span className="font-family-medium">Филиал 1</span></TableCell>
-                                    <TableCell className="twt" ><span className="font-family-medium">Пн. Вт.</span></TableCell>
+                                    <TableCell className="twt" ><span className="font-family-medium">{item?.from_time?.slice(0, 5) + " : " + item?.to_time?.slice(0, 5)}</span></TableCell>
+                                    <TableCell className="twt" ><span className="font-family-medium">{item?.from_week_day + " - " +item?.to_week_day}</span></TableCell>
+                                    <TableCell className="twt" ><span className="font-family-medium">{item?.interval}</span></TableCell>
                                     <TableCell className="twt" align="right">
                                         <div className="con-btns-all">
                                             <div className="con-btns-all">
                                                 <button className="t-delete-btn font-family-medium"
                                                         onClick={showModalDelete}>Удалить
                                                 </button>
-                                                <button className="t-block-btn font-family-medium"
-                                                        onClick={showModalBlock}>Блокировать
-                                                </button>
-                                                <button className="t-edit-btn font-family-medium" onClick={editPage}>Изменить</button>
+                                                <button className="t-edit-btn font-family-medium" onClick={() => editPage(item?.id)}>Изменить</button>
                                             </div>
                                         </div>
                                     </TableCell>
@@ -124,20 +117,7 @@ const Modes = () => {
             >
                 <p className="pt-2 pb-2">Вы уверены, что удалите этого режим? Это невозможно отменить</p>
             </Modal>
-            <Modal title="Внимание!"
-                   open={isModalOpen2}
-                   onCancel={handleCancelBlock}
-                   footer={[
-                       <Button key="submit" type="default"   onClick={handleCancelBlock}>
-                           Отменить
-                       </Button>,
-                       <Button key="submit" type="primary"   onClick={handleOkBlock}>
-                           Да, подтверждаю
-                       </Button>
-                   ]}
-            >
-                <p className="pt-2 pb-2">Вы уверены, что заблокируете этого режим?</p>
-            </Modal>
+
             <div className="pag-bottom">
                 <Stack spacing={2}>
                     <Pagination count={10} shape="rounded"/>

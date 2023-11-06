@@ -85,9 +85,13 @@ const SmartCamera = () => {
     }
     const editPage = (e) => {
         // setSelectCamera(id)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/smartcamera/detail/" + e.id, CONFIG)
+            .then(res => {
+                setSendData(res.data)
+                console.log(res.data)
+            })
         getBuilding()
         getRooms(e?.building_id)
-        setSendData(e)
             setIsSmartCameraEdit(true)
 
     }
@@ -127,8 +131,6 @@ const SmartCamera = () => {
 
                     </Button>
                 </div>
-
-
                 <Menu
                     id="fade-menu"
                     MenuListProps={{

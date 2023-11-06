@@ -4,7 +4,8 @@ import {DatePicker} from "antd";
 import {Column} from "@ant-design/plots";
 
 import {API_PATH, CONFIG} from "../../components/const";
-const { RangePicker } = DatePicker;
+
+const {RangePicker} = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const DailyAnalytics = () => {
     const [time, setTime] = useState(new Date());
@@ -16,20 +17,21 @@ const DailyAnalytics = () => {
         console.log(date)
         console.log(dateString[0])
         console.log(dateString[1])
-        if (dateString.length > 0){
-            fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/age?start_date_str=" + dateString[0] +"&end_date_str=" + dateString[1], CONFIG)
+        if (dateString.length > 0) {
+            fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/age?start_date_str=" + dateString[0] + "&end_date_str=" + dateString[1], CONFIG)
                 .then((response) => response.json())
                 .then((json) => setData(json))
                 .catch((error) => {
                     console.log('fetch data failed', error);
                 });
-        }
-        else (
+        } else (
             asyncFetch()
         )
     }
+    const moment = require('moment')
     const asyncFetch = () => {
-        fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/age?start_date_str=2023-09-01&end_date_str=2023-10-31", CONFIG)
+        console.log()
+        fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/age?start_date_str=" + time?.getFullYear() + "-" + Number(time?.getMonth() + 1) + "-" + 1 + "&end_date_str=" + moment().endOf('month').format('YYYY-MM-DD') , CONFIG)
             .then((response) => response.json())
             .then((json) => setData(json))
             .catch((error) => {
@@ -103,19 +105,19 @@ const DailyAnalytics = () => {
     return (
         <div className="visitor visitor-box ">
             <div className="chart-box">
-            <div className="visitor-title">
-                <h1><span>
+                <div className="visitor-title">
+                    <h1><span>
                     Daily analytics
                 </span>
-                    <RangePicker
-                        // defaultValue={[dayjs('2023-01-01', dateFormat), dayjs('2023-0-01', dateFormat)]}
-                        format={dateFormat}
-                        onChange={onChange}
-                    />
-                </h1>
+                        <RangePicker
+                            // defaultValue={[dayjs('2023-01-01', dateFormat), dayjs('2023-0-01', dateFormat)]}
+                            format={dateFormat}
+                            onChange={onChange}
+                        />
+                    </h1>
+                </div>
+                <Column {...config} />
             </div>
-            <Column {...config} />
-        </div>
         </div>
     );
 };

@@ -105,7 +105,6 @@ const Work = () => {
                         </div>
                     </div>
                 </div>
-                <div className="line-landing" />
             </div>
         </div>
     );

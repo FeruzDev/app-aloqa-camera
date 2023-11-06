@@ -23,6 +23,7 @@ const SmartCameraAddModal = (props) => {
         // time_stamp: "",
         // device_name: "",
         // device_lat: "",
+        // ddns_rtsp_url: "",
         // device_long: "",
         distance: 0
     })
@@ -203,16 +204,26 @@ const SmartCameraAddModal = (props) => {
                                type="text"/>
                     </div>
                 </div>
-                <div className="inputs-box w-100">
-                    <label className="font-family-medium">type </label>
-                    <Select
-                        className="w-100"
-                        onChange={(e) => setSendData({...sendData, camera_type: e})}
-                    >
-                        <option value="entry">entry</option>
-                        <option value="exit">exit</option>
-                    </Select>
-                </div>
+               <div className="d-flex">
+                   <div className="inputs-box w-100">
+                       <label className="font-family-medium">type </label>
+                       <Select
+                           className="w-100"
+                           onChange={(e) => setSendData({...sendData, camera_type: e})}
+                       >
+                           <option value="entry">entry</option>
+                           <option value="exit">exit</option>
+                       </Select>
+                   </div>
+
+                   <div className="inputs-box w-100 ml-16">
+                       <label className="font-family-medium">ddns_rtsp_url <img src="/icon/star.svg" className="star-img"
+                                                                              alt=""/> </label>
+                       <input className="w-100"
+                              onChange={(e) => setSendData({...sendData, ddns_rtsp_url: e.target.value})}
+                              type="text"/>
+                   </div>
+               </div>
                 {/*<div className="d-flex">*/}
                 {/*    <div className="inputs-box w-100 mr-16">*/}
                 {/*        <label className="font-family-medium">User name<img src="/icon/star.svg" className="star-img"*/}

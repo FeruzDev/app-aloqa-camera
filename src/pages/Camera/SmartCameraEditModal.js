@@ -21,6 +21,7 @@ const SmartCameraEditModal = (props) => {
             .then(res => {
                 toast.success("Добавлено успешно")
                 props.getData()
+                props.sendData({})
                 props.setIsSmartCameraEdit(false)
             })
             .catch(err => {
@@ -31,6 +32,7 @@ const SmartCameraEditModal = (props) => {
     useEffect(() => {
 
         // getItem(props.selectCamera)
+
 
     }, [])
 
@@ -43,7 +45,11 @@ const SmartCameraEditModal = (props) => {
                    <Button key="submit" type="primary" onClick={sendAll}>
                        Изменить
                    </Button>,
-                   <Button key="submit" type="default" onClick={() => props.setIsSmartCameraEdit(false)}>
+                   <Button key="submit" type="default" onClick={() => {
+                       props.setIsSmartCameraEdit(false)
+                       props.setSendData({})
+
+                   }}>
                        Отменить
                    </Button>
                ]}
@@ -61,7 +67,7 @@ const SmartCameraEditModal = (props) => {
                         <label className="font-family-medium">Выбрать здания </label>
                         <Select
                             className="w-100"
-                            defaultValue={props.sendData?.building_id}
+                            value={props.sendData?.building_id}
                             onChange={(e) => {
                                 props.setSendData({...props.sendData, building_id: e})
                                 props.getRooms(e)
@@ -72,14 +78,13 @@ const SmartCameraEditModal = (props) => {
                                     <option value={item?.id} key={index}>{item?.name}</option>
                                 ))
                             }
-
                         </Select>
                     </div>
                     <div className="inputs-box w-100">
                         <label className="font-family-medium">Выбрать комнату </label>
                         <Select
                             className="w-100"
-                            defaultValue={props.sendData?.room_id}
+                            value={props.sendData?.room_id}
                             onChange={(e) => props.setSendData({...props.sendData, room_id: e})}
                         >
                             {
@@ -87,14 +92,14 @@ const SmartCameraEditModal = (props) => {
                                     <option value={item?.id} key={index}>{item?.name}</option>
                                 ))
                             }
-
                         </Select>
                     </div>
                 </div>
                 <div className="d-flex">
                     <div className="inputs-box w-100 mr-16">
-                        <label className="font-family-medium">device_id <img src="/icon/star.svg"
-                                                                             className="star-img" alt=""/>
+                        <label className="font-family-medium">device_id
+                            <img src="/icon/star.svg"
+                            className="star-img" alt=""/>
                         </label>
                         <input className="w-100"
                                value={props.sendData?.device_id}
@@ -195,16 +200,27 @@ const SmartCameraEditModal = (props) => {
                                type="text"/>
                     </div>
                 </div>
-                <div className="inputs-box w-100">
-                    <label className="font-family-medium">type </label>
-                    <Select
-                        className="w-100"
-                        value={props.sendData?.camera_type}
-                        onChange={(e) =>  props.setSendData({...props.sendData, camera_type: e})}
-                    >
-                        <option value="entry">entry</option>
-                        <option value="exit">exit</option>
-                    </Select>
+
+                <div className="d-flex">
+                    <div className="inputs-box w-100">
+                        <label className="font-family-medium">type </label>
+                        <Select
+                            className="w-100"
+                            value={props.sendData?.camera_type}
+                            onChange={(e) =>  props.setSendData({...props.sendData, camera_type: e})}
+                        >
+                            <option value="entry">entry</option>
+                            <option value="exit">exit</option>
+                        </Select>
+                    </div>
+                    <div className="inputs-box w-100 ml-16">
+                        <label className="font-family-medium">ddns_rtsp_url <img src="/icon/star.svg" className="star-img"
+                                                                                 alt=""/> </label>
+                        <input className="w-100"
+                               value={props.sendData?.ddns_rtsp_url}
+                               onChange={(e) => props.setSendData({...props.sendData, ddns_rtsp_url: e.target.value})}
+                               type="text"/>
+                    </div>
                 </div>
                 {/*<div className="d-flex">*/}
                 {/*    <div className="inputs-box w-100 mr-16">*/}

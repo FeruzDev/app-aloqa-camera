@@ -204,6 +204,21 @@ const ProfileEdit = () => {
                                                })}
                                         />
                                     </div>
+                                    <div className="inputs-box for-select">
+                                        <label  className="font-family-medium">Пол </label>
+                                        <FormControl>
+
+                                            <RadioGroup
+                                                row
+                                                onChange={(e) => setSendData({...sendData, gender: e.target.value})}
+                                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                                name="row-radio-buttons-group"
+                                            >
+                                                <FormControlLabel value="female" control={<Radio />} label="Мужской" />
+                                                <FormControlLabel value="male" control={<Radio />} label="Женский" />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </div>
                                     {/*<div className="inputs-box for-select">*/}
                                     {/*    <label  className="font-family-medium">Пол </label>*/}
                                     {/*    <FormControl>*/}

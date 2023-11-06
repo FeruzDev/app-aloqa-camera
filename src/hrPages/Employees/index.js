@@ -88,7 +88,7 @@ const Employees = () => {
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell   className="pl20" component="th" scope="row">
-                                        <img src={item?.image} alt="img" className="mr-8" style={{width: "40px", borderRadius: "50%"}}/>
+                                        <img src={item?.image} alt="img" className="mr-8" style={{width: "40px", height: "40px", objectFit: "cover", borderRadius: "50%"}}/>
                                         {item.first_name + " " + item.last_name}
                                     </TableCell>
                                     <TableCell align="right">{item.username}</TableCell>

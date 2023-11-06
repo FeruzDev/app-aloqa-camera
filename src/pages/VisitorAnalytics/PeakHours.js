@@ -10,9 +10,12 @@ const PeakHours = () => {
     const [data, setData] = useState([]);
 
     function onChange(date, dateString) {
-        console.log(dateString);
+        console.log(dateString.slice(8, 10));
+        console.log(dateString.slice(5, 7));
+        console.log(dateString.slice(0, 4));
+
         if (dateString.length > 0){
-            fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/hourly?date_str=" + dateString, CONFIG)
+            fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/hourly?date_str=" + Number(dateString.slice(0, 4)) +"-"+   Number(dateString.slice(5, 7)) + "-"+  Number(dateString.slice(8, 10)), CONFIG)
                 .then((response) => response.json())
                 .then((json) => setData(json))
                 .catch((error) => {

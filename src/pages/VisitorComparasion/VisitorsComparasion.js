@@ -50,7 +50,7 @@ const VisitorsComparasion = () => {
         // },
         yAxis: {
             label: {
-                // 数值格式化为千分位
+
                 formatter: (v) => `${v.slice(0, 4)}`,
             },
         },

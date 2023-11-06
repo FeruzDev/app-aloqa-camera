@@ -36,24 +36,27 @@ const ProfileCreate = () => {
         bigData.append("phone", sendData?.phone)
         bigData.append("building_id", sendData?.building_id)
         bigData.append("department_id", sendData?.department_id)
+        bigData.append("gender", sendData?.gender)
 
         axios.post(API_PATH + "user/company/" + localStorage.getItem('id') + "/create/user", bigData, CONFIG)
             .then(res => {
                 // console.log(res)
                 toast.success("Добавлено успешно")
-                setSendData({
-                    "first_name": "",
-                    "last_name": "",
-                    "username": "",
-                    "email": "",
-                    "password": "",
-                    "position": "",
-                    "date_of_birth": "",
-                    "middle_name": "",
-                    "phone": "",
-                    "building_id": "",
-                    "department_id": "",
-                })
+                // setSendData({
+                //     "first_name": "",
+                //     "last_name": "",
+                //     "username": "",
+                //     "email": "",
+                //     "password": "",
+                //     "position": "",
+                //     "date_of_birth": "",
+                //     "middle_name": "",
+                //     "phone": "",
+                //     "gender": "",
+                //     "building_id": "",
+                //     "department_id": "",
+                // })
+                history.push("/main/hr-admin/employees")
             })
     }
     const getDeps = () => {
@@ -176,19 +179,21 @@ const ProfileCreate = () => {
                                                })}
                                         />
                                     </div>
-                                    {/*<div className="inputs-box for-select">*/}
-                                    {/*    <label  className="font-family-medium">Пол </label>*/}
-                                    {/*    <FormControl>*/}
-                                    {/*        <RadioGroup*/}
-                                    {/*            row*/}
-                                    {/*            aria-labelledby="demo-row-radio-buttons-group-label"*/}
-                                    {/*            name="row-radio-buttons-group"*/}
-                                    {/*        >*/}
-                                    {/*            <FormControlLabel value="female" control={<Radio />} label="Мужской" />*/}
-                                    {/*            <FormControlLabel value="male" control={<Radio />} label="Женский" />*/}
-                                    {/*        </RadioGroup>*/}
-                                    {/*    </FormControl>*/}
-                                    {/*</div>*/}
+                                    <div className="inputs-box for-select">
+                                        <label  className="font-family-medium">Пол </label>
+                                        <FormControl>
+
+                                            <RadioGroup
+                                                row
+                                                onChange={(e) => setSendData({...sendData, gender: e.target.value})}
+                                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                                name="row-radio-buttons-group"
+                                            >
+                                                <FormControlLabel value="female" control={<Radio />} label="Мужской" />
+                                                <FormControlLabel value="male" control={<Radio />} label="Женский" />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </div>
                                     <div className="inputs-box">
                                         <label className="font-family-medium">Филиал <button
                                             className="font-family-medium"
