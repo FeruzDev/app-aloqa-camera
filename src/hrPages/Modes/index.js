@@ -16,16 +16,11 @@ import {API_PATH, CONFIG} from "../../components/const";
 const Modes = () => {
     let history = useHistory()
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isModalOpen2, setIsModalOpen2] = useState(false);
+    const [isModalOpenItem, setIsModalOpenItem] = useState(null);
     const [data, setData] = useState([])
 
-    const showModalDelete = () => {
-        setIsModalOpen(true);
-    };
 
-    const handleOkDelete = () => {
-        setIsModalOpen(false);
-    };
+
     const handleCancelDelete = () => {
         setIsModalOpen(false);
     };
@@ -35,15 +30,27 @@ const Modes = () => {
     const editPage = (id) => {
         history.push("/main/hr-admin/modes/edit/" + id)
     }
-
     const getAll = (e) => {
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/timerange/all", CONFIG)
             .then(res => {
                 setData(res.data)
             })
     }
+    const showModalDelete = (id) => {
+        setIsModalOpen(true);
+        setIsModalOpenItem(id)
+
+    };
+    const handleOkDelete = () => {
+        axios.delete(API_PATH + "company/" + localStorage.getItem('id') + "/hr/timerange/" + isModalOpenItem, CONFIG)
+            .then(res => {
+                setIsModalOpen(false);
+                setIsModalOpenItem(null)
+                getAll()
+            })
+    };
     useEffect(() => {
-        getAll('on_time')
+        getAll()
     }, []);
 
     return (
@@ -90,7 +97,7 @@ const Modes = () => {
                                         <div className="con-btns-all">
                                             <div className="con-btns-all">
                                                 <button className="t-delete-btn font-family-medium"
-                                                        onClick={showModalDelete}>Удалить
+                                                        onClick={() => showModalDelete(item?.id)}>Удалить
                                                 </button>
                                                 <button className="t-edit-btn font-family-medium" onClick={() => editPage(item?.id)}>Изменить</button>
                                             </div>

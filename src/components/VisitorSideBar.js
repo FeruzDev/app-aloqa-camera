@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -16,7 +16,7 @@ const VisitorSideBar = () => {
     const [open4, setOpen4] = React.useState(false);
     const [open5, setOpen5] = React.useState(false);
     const [company, setCompany] = useState({})
-
+    let history = useHistory()
     const handleClick = () => {
         setOpen(!open);
         setOpen2(false);
@@ -53,9 +53,8 @@ const VisitorSideBar = () => {
     };
 
     const getCompany = () => {
-        axios.get(API_PATH + "company/1" +
-            " ", CONFIG)
-            .then(res =>{
+        axios.get(API_PATH + "company/" +  localStorage.getItem("for_com"), CONFIG)
+            .then(res => {
                 setCompany(res.data)
                 localStorage.setItem("name", res?.data?.name)
                 localStorage.setItem("description", res?.data?.description)
@@ -65,7 +64,11 @@ const VisitorSideBar = () => {
                 localStorage.setItem("owner_id", res?.data?.owner_id)
             })
     }
-    useEffect(() =>{
+    const logout = () => {
+        history.push("/login")
+        localStorage.clear()
+    }
+    useEffect(() => {
         getCompany()
     }, [])
     return (
@@ -74,38 +77,40 @@ const VisitorSideBar = () => {
                 <div className="top-logo">
                     {
                         company ?
-                            <img src={company?.logo} alt="..." className="logo-company" />
+                            <img src={company?.logo} alt="..." className="logo-company"/>
                             :
-                            <img src="/img/visitorLogo.png"  className="logo-company" alt="..."/>
+                            <img src="/img/visitorLogo.png" className="logo-company" alt="..."/>
 
                     }
-                    <button><img src="/icon/logout.svg" alt="logout"/></button>
+
+                    <button onClick={logout}><img src="/icon/logout.svg" alt="logout"/></button>
                 </div>
                 <div className="menu-list">
                     <div className="menu-list-item">
                         <List
-                            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                            sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}
                             component="nav"
                             aria-labelledby="nested-list-subheader"
                         >
                             <ListItemButton onClick={handleClick}>
-                                <div  className="link-item-style ">
+                                <div className="link-item-style ">
                                     <img src="/icon/analys.svg" alt=""/>
                                     <span>Аналитика посетителей</span>
                                 </div>
-                                {open ? <img src="/icon/arrowup.png" className="arrow-up-down-size" /> : <img src="/icon/arrowdown.png"  className="arrow-up-down-size"  />}
+                                {open ? <img src="/icon/arrowup.png" className="arrow-up-down-size"/> :
+                                    <img src="/icon/arrowdown.png" className="arrow-up-down-size"/>}
                             </ListItemButton>
                             <Collapse in={open} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItemButton sx={{ pl: 2 }}>
+                                    <ListItemButton sx={{pl: 2}}>
                                         <Link to="/main/visitor-home" className="link-item-style ">
-                                            <img src="/icon/bar.svg" alt=""/>
+                                            <img src="/icon/datareport.png" alt=""/>
                                             <span>Аналитика</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{ pl: 2 }}>
+                                    <ListItemButton sx={{pl: 2}}>
                                         <Link to="/main/visitor-comparasion" className="link-item-style ">
-                                            <img src="/icon/bar.svg" alt=""/>
+                                            <img src="/icon/donutchart.png" alt=""/>
                                             <span>Сравнение по филиалом</span>
                                         </Link>
 
@@ -113,109 +118,102 @@ const VisitorSideBar = () => {
                                 </List>
                             </Collapse>
                         </List>
-                        <Link to="/main/hr-admin/home-page-hr" className="link-item-style">
-                            <img src="/icon/Icon1.svg" alt=""/>
-                            <span>HR аналитика</span>
-                        </Link>
+
                         <List
-                            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                            sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}
                             component="nav"
                             aria-labelledby="nested-list-subheader"
                         >
                             <ListItemButton onClick={handleClick3}>
-                                <div  className="link-item-style ">
+                                <div className="link-item-style ">
                                     <img src="/icon/Icon10.svg" alt=""/>
-                                    <span>Отделы кадров</span>
+                                    <span>HR</span>
                                 </div>
-                                {open3 ? <img src="/icon/arrowup.png" className="arrow-up-down-size" /> : <img src="/icon/arrowdown.png"  className="arrow-up-down-size"  />}
+                                {open3 ? <img src="/icon/arrowup.png" className="arrow-up-down-size"/> :
+                                    <img src="/icon/arrowdown.png" className="arrow-up-down-size"/>}
                             </ListItemButton>
                             <Collapse in={open3} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItemButton sx={{ pl: 2 }}>
+                                    <ListItemButton sx={{pl: 2}}>
+                                        <Link to="/main/hr-admin/home-page-hr" className="link-item-style">
+                                            <img src="/icon/Icon1.svg" alt=""/>
+                                            <span>HR аналитика</span>
+                                        </Link>
+                                    </ListItemButton>
+                                    <ListItemButton sx={{pl: 2}}>
                                         <Link to="/main/hr-admin/departments" className="link-item-style">
                                             <img src="/icon/Icon10.svg" alt=""/>
                                             <span>Отделы</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{ pl: 2 }}>
+                                    <ListItemButton sx={{pl: 2}}>
                                         <Link to="/main/hr-admin/employees" className="link-item-style">
                                             <img src="/icon/Icon2.svg" alt=""/>
                                             <span>Cотрудники</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{ pl: 2 }}>
-                                        <Link to="/main/hr-admin/users" className="link-item-style">
-                                            <img src="/icon/Icon7.svg" alt=""/>
-                                            <span>Пользователи</span>
-                                        </Link>
-                                    </ListItemButton>
-                                    <ListItemButton sx={{ pl: 2 }}>
-                                        <Link to="/main/hr-admin/branches" className="link-item-style">
-                                            <img src="/icon/Icon9.svg" alt=""/>
-                                            <span>Филиалы</span>
-                                        </Link>
-                                    </ListItemButton>
-                                    <ListItemButton sx={{ pl: 2 }}>
+                                    <ListItemButton sx={{pl: 2}}>
                                         <Link to="/main/hr-admin/modes" className="link-item-style">
                                             <img src="/icon/Icon11.svg" alt=""/>
                                             <span>Режимы</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{ pl: 2 }}>
+                                    <ListItemButton sx={{pl: 2}}>
                                         <Link to="/main/hr-admin/audit" className="link-item-style">
                                             <img src="/icon/Icon6.svg" alt=""/>
                                             <span>Аудит</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{ pl: 2 }}>
-                                        <Link to="/main/hr-admin/logging" className="link-item-style">
-                                            <img src="/icon/Icon6.svg" alt=""/>
-                                            <span>Логирование</span>
-                                        </Link>
-                                    </ListItemButton>
+                                    {/*<ListItemButton sx={{ pl: 2 }}>*/}
+                                    {/*    <Link to="/main/hr-admin/logging" className="link-item-style">*/}
+                                    {/*        <img src="/icon/Icon6.svg" alt=""/>*/}
+                                    {/*        <span>Логирование</span>*/}
+                                    {/*    </Link>*/}
+                                    {/*</ListItemButton>*/}
 
-                                    <ListItemButton sx={{ pl: 2 }}>
-                                        <Link to="/main/hr-admin/notification" className="link-item-style">
-                                            <img src="/icon/Icon8.svg" alt=""/>
-                                            <span>Уведомления</span>
-                                        </Link>
-                                    </ListItemButton>
+                                    {/*<ListItemButton sx={{ pl: 2 }}>*/}
+                                    {/*    <Link to="/main/hr-admin/notification" className="link-item-style">*/}
+                                    {/*        <img src="/icon/Icon8.svg" alt=""/>*/}
+                                    {/*        <span>Уведомления</span>*/}
+                                    {/*    </Link>*/}
+                                    {/*</ListItemButton>*/}
                                 </List>
                             </Collapse>
                         </List>
                         <List
-                            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                            sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}
                             component="nav"
                             aria-labelledby="nested-list-subheader"
                         >
                             <ListItemButton onClick={handleClick4}>
-                                <div  className="link-item-style ">
+                                <div className="link-item-style ">
                                     <img src="/icon/Live.svg" alt=""/>
                                     <span>Live</span>
                                 </div>
-                                {open4 ? <img src="/icon/arrowup.png" className="arrow-up-down-size" /> : <img src="/icon/arrowdown.png"  className="arrow-up-down-size"  />}
+                                {open4 ? <img src="/icon/arrowup.png" className="arrow-up-down-size"/> :
+                                    <img src="/icon/arrowdown.png" className="arrow-up-down-size"/>}
                             </ListItemButton>
                             <Collapse in={open4} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItemButton sx={{ pl: 2 }}>
+                                    <ListItemButton sx={{pl: 2}}>
                                         <Link to="/main/live" className="link-item-style">
                                             <img src="/icon/live.svg" alt=""/>
                                             <span>Live</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{ pl: 2 }}>
+                                    <ListItemButton sx={{pl: 2}}>
                                         <Link to="/main/smart-camera" className="link-item-style ">
                                             <img src="/icon/camera2.svg" alt=""/>
                                             <span>Smart Camera</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{ pl: 2 }}>
+                                    <ListItemButton sx={{pl: 2}}>
                                         <Link to="/main/roi-employee" className="link-item-style">
                                             <img src="/icon/roi_employee.svg" alt=""/>
                                             <span>ROI Employee</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{ pl: 2 }}>
+                                    <ListItemButton sx={{pl: 2}}>
                                         <Link to="/main/roi-employee" className="link-item-style">
                                             <img src="/icon/roi_visitor.svg" alt=""/>
                                             <span>ROI Visitor</span>
@@ -225,38 +223,51 @@ const VisitorSideBar = () => {
                             </Collapse>
                         </List>
                         <List
-                            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                            sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}
                             component="nav"
                             aria-labelledby="nested-list-subheader"
                         >
                             <ListItemButton onClick={handleClick5}>
-                                <div  className="link-item-style ">
+                                <div className="link-item-style ">
                                     <img src="/icon/settings.svg" alt=""/>
                                     <span>Settings</span>
                                 </div>
-                                {open5 ? <img src="/icon/arrowup.png" className="arrow-up-down-size" /> : <img src="/icon/arrowdown.png"  className="arrow-up-down-size"  />}
+                                {open5 ? <img src="/icon/arrowup.png" className="arrow-up-down-size"/> :
+                                    <img src="/icon/arrowdown.png" className="arrow-up-down-size"/>}
                             </ListItemButton>
                             <Collapse in={open5} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItemButton sx={{ pl: 2 }}>
+                                    <ListItemButton sx={{pl: 2}}>
+                                        <Link to="/main/hr-admin/users" className="link-item-style">
+                                            <img src="/icon/Icon7.svg" alt=""/>
+                                            <span>Пользователи</span>
+                                        </Link>
+                                    </ListItemButton>
+                                    <ListItemButton sx={{pl: 2}}>
+                                        <Link to="/main/hr-admin/branches" className="link-item-style">
+                                            <img src="/icon/Icon9.svg" alt=""/>
+                                            <span>Филиалы</span>
+                                        </Link>
+                                    </ListItemButton>
+                                    <ListItemButton sx={{pl: 2}}>
                                         <Link to="/main/building" className="link-item-style ">
                                             <img src="/icon/camera2.svg" alt=""/>
                                             <span>Cameras</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{ pl: 2 }}>
+                                    <ListItemButton sx={{pl: 2}}>
                                         <Link to="/main/my-modules" className="link-item-style ">
                                             <img src="/icon/server.svg" alt=""/>
                                             <span>Servers</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{ pl: 2 }}>
+                                    <ListItemButton sx={{pl: 2}}>
                                         <Link to="/main/services" className="link-item-style ">
                                             <img src="/icon/services.svg" alt=""/>
                                             <span>Services</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{ pl: 2 }}>
+                                    <ListItemButton sx={{pl: 2}}>
                                         <Link to="/main/deployments" className="link-item-style ">
                                             <img src="/icon/deployment.svg" alt=""/>
                                             <span>Deployment</span>
@@ -269,16 +280,31 @@ const VisitorSideBar = () => {
                     <div className="menu-list-bottom">
                         <div className="left-img-center">
                             <Link to="/home/job-title" className="left-img">
-                                <img src="/icon/Avatar.png" alt="Avatar"/>
+                                {
+                                    localStorage.getItem("image") === "null" ?
+                                        <img src="/icon/profileUser.png"/>
+                                        :
+                                        <img src={localStorage.getItem("image")} alt="Avatar"/>
+                                }
                             </Link>
                             <div className="center-content">
-                                <h5 className="font-family-medium"><Link to="/home/job-title">Shoxrux R.</Link></h5>
-                                <h6> 99 877 34 22</h6>
+                                <h5 className="font-family-medium"><Link to="/home/job-title">  {
+                                    localStorage.getItem("first_name") === "null" ?
+                                        "User"
+                                        :
+                                        localStorage.getItem("first_name") + " " + localStorage.getItem("last_name")?.slice(0, 1) + "."
+                                }</Link></h5>
+                                <h6>{
+                                    localStorage.getItem("phone_user") === "null" ?
+                                    ""
+                                        :
+                                        localStorage.getItem("phone_user")
+                                }</h6>
                             </div>
                         </div>
-                        <div className="right-dot">
-                            <button type="submit"><img src="/icon/verdot.svg" alt="..."/></button>
-                        </div>
+                        {/*<div className="right-dot">*/}
+                        {/*    <button type="submit"><img src="/icon/verdot.svg" alt="..."/></button>*/}
+                        {/*</div>*/}
                     </div>
                 </div>
             </div>

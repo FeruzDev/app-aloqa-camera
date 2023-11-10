@@ -95,9 +95,7 @@ const Users = () => {
                                             <button className="t-delete-btn font-family-medium"
                                                     onClick={showModalDelete}>Удалить
                                             </button>
-                                            <button className="t-block-btn font-family-medium"
-                                                    onClick={showModalBlock}>Блокировать
-                                            </button>
+
                                             <button className="t-edit-btn font-family-medium" onClick={editPage}>Изменить</button>
                                         </div>
                                     </TableCell>

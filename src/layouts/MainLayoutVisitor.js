@@ -86,7 +86,7 @@ const MainLayoutVisitor = () => {
                     <Route path="/main/hr-admin/departments/departments-add" exact component={DepartmentsAdd} />
                     <Route path="/main/hr-admin/modes" exact component={Modes} />
                     <Route path="/main/hr-admin/modes/add" exact component={ModesAdd} />
-                    <Route path="/main/hr-admin/modes/edit" exact component={ModesEdit} />
+                    <Route path="/main/hr-admin/modes/edit/:id" exact component={ModesEdit} />
                     <Route path="/main/hr-admin/positions" exact component={Positions} />
                     <Route path="/main/hr-admin/positions/add" exact component={PositionAdd} />
                     <Route path="/main/hr-admin/positions/edit" exact component={PositionEdit} />

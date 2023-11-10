@@ -1,10 +1,38 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import {FormGroup} from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {Select} from "antd";
+import axios from "axios";
+import {API_PATH, CONFIG} from "../../components/const";
+import {toast} from "react-toastify";
 
 const AddUser = () => {
+    const [users, setUsers] = useState([])
+    const [departments, setDepartments] = useState([])
+
+    const getUsers = () => {
+        axios.get(API_PATH + "user/company/" + localStorage.getItem('id') + "/user/all", CONFIG)
+            .then(res => {
+                setUsers(res.data)
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
+    }
+    const getDeps = () => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all", CONFIG)
+            .then(res => {
+                setDepartments(res.data)
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
+    }
+    useEffect(() =>{
+        getUsers()
+        getDeps()
+    }, [])
     return (
         <div className="edit-user">
             <div className="progress-link">
@@ -12,7 +40,7 @@ const AddUser = () => {
                 <img src="/icon/arrowleft.svg" alt="."/>
                 <span>Пользователи</span>
                 <img src="/icon/arrowleft.svg" alt="."/>
-                <span>Ali Muzaffarov</span>
+                <span>item</span>
             </div>
             <h3 className="edit-user-title font-family-medium">
                 Добавить нового пользователя
@@ -20,20 +48,37 @@ const AddUser = () => {
             <div className="edit-user-box">
                 <div className="row">
                     <div className="col-md-4">
-                        <div className="inputs-box">
-                            <label  className="font-family-medium">Имя и фамилия </label>
-                            <input type="text" className="w-100"/>
+                        <div className="inputs-boxw">
+                            <label  className="font-family-medium mb-2">Имя и фамилия </label>
+                            <Select
+                                showSearch
+                                placeholder="Поиск, чтобы выбрать"
+                                optionFilterProp="children"
+                                className="w-100"
+                                filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                                filterSort={(optionA, optionB) =>
+                                    (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                                }
+                                options={users?.map((item) => {
+                                    return {
+                                        value: item.id,
+                                        label:
+                                        item?.first_name + " " +  item?.last_name
+                                    };
+                                })}
+                            />
                         </div>
-                        <div className="inputs-box">
+                        <div className="inputs-box mt-2">
                             <label  className="font-family-medium">Отдел </label>
                             <Select
                                 className="w-100"
-                                options={[
-                                    { value: 'jack', label: 'Jack' },
-                                    { value: '1', label: '1' },
-                                    { value: 'Yiminghe', label: 'yiminghe' },
-                                    { value: 'disabled', label: 'Disabled', disabled: true },
-                                ]}
+                                options={departments?.map((item) => {
+                                    return {
+                                        value: item.id,
+                                        label:
+                                            item?.department_title
+                                    };
+                                })}
                             />
                         </div>
                     </div>

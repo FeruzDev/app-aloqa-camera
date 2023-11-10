@@ -13,6 +13,7 @@ const VisitorNavbar = () => {
 
 
     useEffect(() => {
+        console.log(time.toLocaleDateString().slice(3, 5))
         setInterval(( () =>
         setTime(new Date())
         ), 1000  )
@@ -23,11 +24,11 @@ const VisitorNavbar = () => {
                 <div className="left-nav">
                     <div className="cal-time">
                         <img src="/icon/calendar.svg" alt="calendar"/>
-                        <span>{time.toLocaleDateString().slice(0, 2) + " " + month[time.toLocaleDateString().slice(3, 5) - 1]} </span>
+                        <span>{time.getDate() + " " + month[Number(time.getMonth())]} </span>
                     </div>
                     <div className="cal-time">
                         <img src="/icon/timeclock.svg" alt="timeclock"/>
-                        <span>{time.toLocaleTimeString().slice(0, 5)}</span>
+                        <span>{time.toLocaleTimeString('it-IT').slice(0, 5)}</span>
                     </div>
                 </div>
                 <div className="right-nav">

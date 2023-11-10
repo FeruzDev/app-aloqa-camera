@@ -74,7 +74,6 @@ const Live = () => {
 
     }
     const getAll = (id) => {
-
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/smartcamera/detail/" + id, CONFIG)
             .then(res => {
                 setSelectCameras(res.data?.ddns_stream_url)
@@ -217,12 +216,11 @@ const Live = () => {
                             <Table sx={{minWidth: 650}} aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell className="pl20 table-head">Screenshot</TableCell>
-                                        <TableCell className="table-head" align="right">Name</TableCell>
-                                        <TableCell className="table-head" align="right">ID</TableCell>
-                                        <TableCell className="table-head" align="right">Time</TableCell>
-                                        <TableCell className="table-head" align="right">Gender</TableCell>
-                                        <TableCell className="table-head" align="right">Age</TableCell>
+                                        <TableCell className="pl20 table-head" style={{width: "140px"}}>Screenshot</TableCell>
+                                        <TableCell className="table-head" align="left">Name</TableCell>
+                                        <TableCell className="table-head" align="left">Time</TableCell>
+                                        <TableCell className="table-head" align="left">Gender</TableCell>
+                                        <TableCell className="table-head" align="left">Age</TableCell>
                                         <TableCell className="pr20 table-head" align="right">Type</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -233,7 +231,7 @@ const Live = () => {
                                                 key={index}
                                                 sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                             >
-                                                <TableCell className="pl20" component="th" scope="row">
+                                                <TableCell className="pl20"  style={{width: "140px"}} component="th" scope="row">
                                                     <img src={item?.image} alt="img" className="mr-8"
                                                          style={{width: "40px", borderRadius: "4px"}}/>
 
@@ -241,16 +239,18 @@ const Live = () => {
                                                 </TableCell>
 
                                                 <TableCell className="pr20 con-btns-all"
-                                                           align="right">   <span>{item?.first_name ? item?.first_name : ""}</span>
-                                                    <span style={{marginLeft: "5p"}}>{item?.last_name ? item?.last_name : ""}</span></TableCell>
+                                                           align="left">   <span>{item?.first_name ? item?.first_name : "" }</span>
+                                                    <span style={{marginLeft: "5px"}}>{item?.last_name ? item?.last_name : ""}</span>
+                                                   <span>
+                                                        {(item?.first_name?.length > 0 && item?.last_name?.length > 0) ? "" : "Visitor"}
+                                                   </span>
+                                                </TableCell>
                                                 <TableCell className="pr20 con-btns-all"
-                                                           align="right">{item?.id}</TableCell>
+                                                           align="left">{item?.id}</TableCell>
                                                 <TableCell className="pr20 con-btns-all"
-                                                           align="right">{item?.id}</TableCell>
+                                                           align="left">{item?.gender}</TableCell>
                                                 <TableCell className="pr20 con-btns-all"
-                                                           align="right">{item?.gender}</TableCell>
-                                                <TableCell className="pr20 con-btns-all"
-                                                           align="right">{item?.age}</TableCell>
+                                                           align="left">{item?.age}</TableCell>
                                                 <TableCell className="pr20 con-btns-all"
                                                            align="right">{item?.capture_type}</TableCell>
 

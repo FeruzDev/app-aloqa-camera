@@ -2,30 +2,48 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import {toast} from "react-toastify";
 import {useHistory} from "react-router-dom";
-import {API_PATH} from "../components/const";
+import {API_PATH, CONFIG} from "../components/const";
 
 const Login = () => {
     const [userName, setUserName] = useState("ozodbek")
     const [pass, setPass] = useState("ping!@#$")
     let history = useHistory()
     const loginFc = () => {
-
         let newData = new FormData()
         newData.append('username', userName)
         newData.append('password', pass)
         newData.append('scope', "snapshot:read camera:write camera:read admin:read admin:write line_crossing_analytics:write module:read module:write fleet:read fleet:write config:read config:write line_crossing_analytics:read line_crossing_analytics:write analitiks:read")
         axios.post(API_PATH + "token/", newData)
             .then(res => {
-                localStorage.setItem("token", res.data.access_token)
+                localStorage.setItem("token", res.data?.access_token)
+                localStorage.setItem("first_name", res.data?.user_info?.first_name)
+                localStorage.setItem("last_name", res.data?.user_info?.last_name)
+                localStorage.setItem("username", res.data?.user_info?.username)
+                localStorage.setItem("phone_user", res.data?.user_info?.phone)
+                localStorage.setItem("image", res.data?.user_info?.image)
+
+                if (res.data?.user_info?.companies?.length > 0){
+                    localStorage.setItem("for_com", res.data?.user_info?.companies[0]?.id)
+
+                }
+                else if (res.data?.user_info?.companies?.length <= 0) {
+                    localStorage.setItem("for_com", res.data?.user_info?.company)
+
+                }
+                // axios.get(API_PATH + "user/company/1/user/" + res?.data?.user_id   , CONFIG)
+                //     .then(res =>{
+                //         console.log(res)
+                //     })
+
                 history.push("/main/visitor-home")
+
             })
             .catch(err => {
                 toast.error("Ошибка")
             })
     }
-    useEffect(() => {
 
-    }, [])
+
     return (
         <div className="main-login">
             <div className="login-top-title">
