@@ -19,20 +19,21 @@ const Departments = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalOpen2, setIsModalOpen2] = useState(false);
     const [departments, setDepartments] = useState([])
+    const [departmentsObj, setDepartmentsObj] = useState({})
+    const [selectDepartments, setSelectDepartments] = useState("")
+    const [current, setCurrent] = useState(1);
     const createPage = () => {
         history.push("/main/hr-admin/departments/departments-add")
     }
     const editPage = (id) => {
         history.push("/main/hr-admin/departments/departments-edit/" + id)
     }
-    const showModalDelete = () => {
+    const showModalDelete = (id) => {
+        setSelectDepartments(id)
         setIsModalOpen(true);
     };
     const showModalBlock = () => {
         setIsModalOpen2(true);
-    };
-    const handleOkDelete = () => {
-        setIsModalOpen(false);
     };
     const handleCancelDelete = () => {
         setIsModalOpen(false);
@@ -46,7 +47,28 @@ const Departments = () => {
     const getDeps = () => {
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all", CONFIG)
             .then(res => {
-                setDepartments(res.data)
+                setDepartments(res.data?.items)
+                setDepartmentsObj(res?.data)
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
+    }
+    const handleOkDelete = () => {
+        axios.delete(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/" + selectDepartments, CONFIG)
+            .then(res => {
+                getDeps()
+                setIsModalOpen(false);
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
+    };
+    const changePagination = (current, size) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all?page=" + size, CONFIG)
+            .then(res => {
+                setDepartments(res.data?.items)
+                setDepartmentsObj(res?.data)
             })
             .catch(err => {
                 toast.error("Ошибка")
@@ -81,7 +103,7 @@ const Departments = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {departments.map((item) => (
+                            {departments?.map((item) => (
                                 <TableRow
                                     key={item.name}
                                     sx={{'&:last-child td, &:last-child th': {border: 0}}}
@@ -93,7 +115,7 @@ const Departments = () => {
                                         <div className="con-btns-all">
                                             <div className="con-btns-all">
                                                 <button className="t-delete-btn font-family-medium"
-                                                        onClick={showModalDelete}>Удалить
+                                                        onClick={() => showModalDelete(item?.id)}>Удалить
                                                 </button>
                                                 <button className="t-block-btn font-family-medium"
                                                         onClick={showModalBlock}>Блокировать
@@ -139,7 +161,7 @@ const Departments = () => {
             </Modal>
             <div className="pag-bottom">
                 <Stack spacing={2}>
-                    <Pagination count={10} shape="rounded"/>
+                    <Pagination  count={departmentsObj?.pages}   total={departmentsObj?.total} current={current}  onChange={changePagination}  shape="rounded"/>
                 </Stack>
             </div>
         </div>

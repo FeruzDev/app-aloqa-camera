@@ -5,15 +5,11 @@ import {API_PATH, CONFIG} from "../../components/const";
 import {toast} from "react-toastify";
 
 const SmartCameraDeleteModal = (props) => {
-    const [sendData, setSendData] = useState({
-        name: "",
-    })
-
     const sendAll = (id) => {
-        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/camera/smartcamera/update" + id,  sendData, CONFIG)
+        axios.delete(API_PATH + "company/" + localStorage.getItem('id') + "/camera/smartcamera/delete/" + props.selectCam, CONFIG)
             .then(res => {
-                toast.success("Добавлено успешно")
-                props.getRooms(props.selectOffices)
+                toast.success("Удален успешно")
+                props.getData()
                 props.setIsSmartCameraDelete(false)
             })
             .catch(err =>{

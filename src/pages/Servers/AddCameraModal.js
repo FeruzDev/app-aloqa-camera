@@ -22,8 +22,7 @@ const AddCameraModal = (props) => {
     const getBuilding = () => {
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", CONFIG)
             .then(res => {
-                setOffices(res.data)
-                console.log(res.data)
+                setOffices(res.data?.items)
                 props.getData()
                 setSendData({...sendData, buildings_id: res.data.id})
             })
@@ -38,7 +37,7 @@ const AddCameraModal = (props) => {
 
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/room/" + id + "/all", CONFIG)
             .then(res => {
-                setRooms(res.data)
+                setRooms(res.data?.items)
                 setSendData({...sendData, room_id: res.data.id})
             })
             .catch(err => {

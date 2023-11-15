@@ -6,6 +6,9 @@ import {toast} from "react-toastify";
 import {useMask} from "@react-input/mask";
 
 const SmartCameraEditModal = (props) => {
+    const [selectOffices, setSelectOffices] = useState(null)
+    const [offices, setOffices] = useState([])
+
     const sendAll = () => {
         // axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/module/create", props.sendData, CONFIG)
         //     .then(res => {
@@ -28,13 +31,33 @@ const SmartCameraEditModal = (props) => {
                 toast.error("Ошибка 2")
             })
     }
-    const inputRef = useMask({mask: "aa - bb - cc - dd - ee - ff", replacement: {_: /\d/}})
+    const getRoomsSearch = (val) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/room/" + selectOffices + "/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+            .then(res => {
+                props.setRooms(res.data?.items)
+                props.setSendData({...props.sendData, room_id: res.data.id})
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
+    }
+
+    const getBuilding = (val) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+            .then(res => {
+                setOffices(res?.data?.items)
+                props.setSendData({...props.sendData, buildings_id: res.data.id})
+
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
+    }
+
     useEffect(() => {
-
-        // getItem(props.selectCamera)
-
-
+        getBuilding()
     }, [])
+
 
     return (
         <Modal title="Изменить камеру"
@@ -66,33 +89,55 @@ const SmartCameraEditModal = (props) => {
                     <div className="inputs-box w-100 mr-16">
                         <label className="font-family-medium">Выбрать здания </label>
                         <Select
+                            showSearch
+                            placeholder="Поиск, чтобы выбрать"
+                            optionFilterProp="children"
                             className="w-100"
+                            onSearch={getBuilding}
                             value={props.sendData?.building_id}
                             onChange={(e) => {
                                 props.setSendData({...props.sendData, building_id: e})
                                 props.getRooms(e)
                             }}
-                        >
-                            {
-                                props.offices?.map((item, index) => (
-                                    <option value={item?.id} key={index}>{item?.name}</option>
-                                ))
+                            filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                            filterSort={(optionA, optionB) =>
+                                (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                             }
-                        </Select>
+                            options={offices?.map((item) => {
+                                return {
+                                    value: item.id,
+                                    label:
+                                    item?.name
+                                };
+                            })}
+                        />
+
                     </div>
                     <div className="inputs-box w-100">
                         <label className="font-family-medium">Выбрать комнату </label>
                         <Select
+                            showSearch
+                            placeholder="Поиск, чтобы выбрать"
+                            optionFilterProp="children"
                             className="w-100"
+                            onSearch={getRoomsSearch}
                             value={props.sendData?.room_id}
+
                             onChange={(e) => props.setSendData({...props.sendData, room_id: e})}
-                        >
-                            {
-                                props.rooms?.map((item, index) => (
-                                    <option value={item?.id} key={index}>{item?.name}</option>
-                                ))
+                            // onChange={(e) => setCountry(e)}
+                            filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                            filterSort={(optionA, optionB) =>
+                                (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                             }
-                        </Select>
+                            options={props.rooms?.map((item) => {
+                                return {
+                                    value: item.id,
+                                    label:
+                                    item?.name
+                                };
+                            })}
+                        />
+
                     </div>
                 </div>
                 <div className="d-flex">

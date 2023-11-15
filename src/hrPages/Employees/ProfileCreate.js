@@ -24,19 +24,56 @@ const ProfileCreate = () => {
     const bigData = new FormData()
 
     const sendAll = () => {
-        bigData.append("image", pic.target.files[0])
-        bigData.append("first_name", sendData?.first_name)
-        bigData.append("last_name", sendData?.last_name)
-        bigData.append("username", sendData?.username)
-        bigData.append("email", sendData?.email)
-        bigData.append("password", sendData?.password)
-        bigData.append("position", sendData?.position)
-        bigData.append("date_of_birth", sendData?.date_of_birth)
-        bigData.append("middle_name", sendData?.middle_name)
-        bigData.append("phone", sendData?.phone)
-        bigData.append("building_id", sendData?.building_id)
-        bigData.append("department_id", sendData?.department_id)
-        bigData.append("gender", sendData?.gender)
+
+        if (pic.target.files[0]) {
+            bigData.append("image", pic.target.files[0])
+        }
+        if (sendData?.first_name) {
+            bigData.append("first_name", sendData?.first_name)
+        }
+        if (sendData?.last_name) {
+            bigData.append("last_name", sendData?.last_name)
+        }
+        if (sendData?.username) {
+            bigData.append("username", sendData?.username)
+
+        }
+        if (sendData?.email) {
+            bigData.append("email", sendData?.email)
+
+        }
+        if (sendData?.password) {
+            bigData.append("password", sendData?.password)
+
+        }
+        if (sendData?.position) {
+            bigData.append("position", sendData?.position)
+
+        }
+        if (sendData?.date_of_birth) {
+            bigData.append("date_of_birth", sendData?.date_of_birth)
+
+        }
+        if (sendData?.middle_name) {
+            bigData.append("middle_name", sendData?.middle_name)
+
+        }
+        if (sendData?.phone) {
+            bigData.append("phone", sendData?.phone)
+
+        }
+        if (sendData?.building_id) {
+            bigData.append("building_id", sendData?.building_id)
+
+        }
+        if (sendData?.department_id) {
+            bigData.append("department_id", sendData?.department_id)
+
+        }
+        if (sendData?.gender) {
+            bigData.append("gender", sendData?.gender)
+
+        }
 
         axios.post(API_PATH + "user/company/" + localStorage.getItem('id') + "/create/user", bigData, CONFIG)
             .then(res => {
@@ -59,19 +96,19 @@ const ProfileCreate = () => {
                 history.push("/main/hr-admin/employees")
             })
     }
-    const getDeps = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all", CONFIG)
+    const getDeps = (val) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
             .then(res => {
-                setDepartments(res.data)
+                setDepartments(res.data?.items)
             })
             .catch(err => {
                 toast.error("Ошибка")
             })
     }
-    const getBuilding = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", CONFIG)
+    const getBuilding = (val) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
             .then(res => {
-                setOffices(res.data)
+                setOffices(res.data?.items)
             })
             .catch(err => {
                 toast.error("Ошибка")
@@ -90,12 +127,12 @@ const ProfileCreate = () => {
 
     return (
         <div className="profile-edit">
+
             <div className="progress-link">
-                <img src="/icon/Icon1.svg" alt="."/>
+                <Link to="/main/visitor-home"> <img src="/icon/Icon1.svg" alt="."/></Link>
                 <img src="/icon/arrowleft.svg" alt="."/>
-                <span>Cотрудники</span>
+                <Link to="/main/hr-admin/employees"> <span>Cотрудники</span></Link>
                 <img src="/icon/arrowleft.svg" alt="."/>
-                <span>Zarifa Bakirova</span>
             </div>
 
             <div className="profile-header">
@@ -180,7 +217,7 @@ const ProfileCreate = () => {
                                         />
                                     </div>
                                     <div className="inputs-box for-select">
-                                        <label  className="font-family-medium">Пол </label>
+                                        <label className="font-family-medium">Пол </label>
                                         <FormControl>
 
                                             <RadioGroup
@@ -189,30 +226,39 @@ const ProfileCreate = () => {
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                                 name="row-radio-buttons-group"
                                             >
-                                                <FormControlLabel value="female" control={<Radio />} label="Мужской" />
-                                                <FormControlLabel value="male" control={<Radio />} label="Женский" />
+                                                <FormControlLabel value="female" control={<Radio/>} label="Мужской"/>
+                                                <FormControlLabel value="male" control={<Radio/>} label="Женский"/>
                                             </RadioGroup>
                                         </FormControl>
                                     </div>
-                                    <div className="inputs-box">
+                                    <div className="inputs-box-2">
                                         <label className="font-family-medium">Филиал <button
                                             className="font-family-medium"
                                             onClick={() => history.push("/main/hr-admin/branches")}>
                                             Добавить новое
-                                        </button></label>
+                                        </button>
+                                        </label>
                                         <Select
+                                            showSearch
+                                            placeholder="Поиск, чтобы выбрать"
+                                            optionFilterProp="children"
                                             className="w-100"
+                                            onSearch={getBuilding}
                                             onChange={(e) => setSendData({...sendData, building_id: e})}
-
-                                        >
-                                            {
-                                                offices?.map((item, index) => (
-                                                    <option value={item?.id} key={index}>{item?.name}</option>
-                                                ))
+                                            filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                                            filterSort={(optionA, optionB) =>
+                                                (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                                             }
-                                        </Select>
+                                            options={offices?.map((item) => {
+                                                return {
+                                                    value: item.id,
+                                                    label:
+                                                    item?.name
+                                                };
+                                            })}
+                                        />
                                     </div>
-                                    <div className="inputs-box">
+                                    <div className="inputs-box-2">
                                         <label className="font-family-medium">Отдел
                                             <button
                                                 className="font-family-medium"
@@ -221,16 +267,24 @@ const ProfileCreate = () => {
                                             </button>
                                         </label>
                                         <Select
+                                            showSearch
+                                            placeholder="Поиск, чтобы выбрать"
+                                            optionFilterProp="children"
                                             className="w-100"
+                                            onSearch={getDeps}
                                             onChange={(e) => setSendData({...sendData, department_id: e})}
-                                        >
-                                            {
-                                                departments?.map((item, index) => (
-                                                    <option value={item?.id}
-                                                            key={index}>{item?.department_title}</option>
-                                                ))
+                                            filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                                            filterSort={(optionA, optionB) =>
+                                                (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                                             }
-                                        </Select>
+                                            options={departments?.map((item) => {
+                                                return {
+                                                    value: item.id,
+                                                    label:
+                                                    item?.department_title
+                                                };
+                                            })}
+                                        />
                                     </div>
                                     {/*<div className="inputs-box">*/}
                                     {/*    <label  className="font-family-medium">Должность <button className="font-family-medium">Добавить новое</button></label>*/}

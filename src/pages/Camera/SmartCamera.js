@@ -27,8 +27,11 @@ import SmartCameraAddModal from "./SmartCameraAddModal";
 
 const SmartCamera = () => {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [selectCam, setSelectCam] = React.useState(null);
     const [data, setData] = useState([])
+    const [dataObj, setDataObj] = useState([])
     const [offices, setOffices] = useState([])
+    const [current, setCurrent] = useState(1);
     const [rooms, setRooms] = useState([])
     const [isSmartCameraEdit, setIsSmartCameraEdit] = useState(false)
     const [isSmartCameraDelete, setIsSmartCameraDelete] = useState(false)
@@ -37,13 +40,14 @@ const SmartCamera = () => {
     const open = Boolean(anchorEl);
 
     const deletePage = (id) => {
-        // history.push("/home/employees/profile/edit")
+        setSelectCam(id)
         setIsSmartCameraDelete(true)
     }
     const getData = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/smartcamera/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/smartcamera/all?page=1", CONFIG)
             .then(res => {
-                setData(res.data)
+                setData(res.data?.items)
+                setDataObj(res.data)
             })
             .catch(err => {
                 toast.error("Ошибка")
@@ -52,7 +56,7 @@ const SmartCamera = () => {
     const getBuilding = () => {
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", CONFIG)
             .then(res => {
-                setOffices(res.data)
+                setOffices(res.data?.items)
                 // setSendData({...sendData, building_id: res.data.id})
             })
             .catch(err => {
@@ -63,11 +67,21 @@ const SmartCamera = () => {
     const getRooms = (id) => {
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/room/" + id + "/all", CONFIG)
             .then(res => {
-                setRooms(res.data)
+                setRooms(res.data?.items)
                 // setSendData({...sendData, room_id: res.data.id})
             })
             .catch(err => {
                 // toast.error("Ошибка")
+            })
+    }
+    const changePagination = (current, size) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/smartcamera/all?page=" + size, CONFIG)
+            .then(res => {
+                setData(res.data?.items)
+                setDataObj(res.data)
+            })
+            .catch(err => {
+                toast.error("Ошибка")
             })
     }
     const handleClick = (event) => {
@@ -76,11 +90,10 @@ const SmartCamera = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    let history = useHistory()
     const createPage = () => {
         // history.push("/home/employees/profile/create")
         getBuilding()
-        getRooms()
+        // getRooms()
         setIsSmartCameraAdd(true)
     }
     const editPage = (e) => {
@@ -116,104 +129,103 @@ const SmartCamera = () => {
                     </div>
                 </div>
             </div>
-            <div className="search-top">
-                <div className="d-flex align-items-center justify-content-between">
-                    <div className="w-100"></div>
-                    <Button
-                        id="fade-button"
-                        aria-controls={open ? 'fade-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}
-                        className="filter-btn"
-                    >
-                        <img src="/icon/filtr.svg" alt="filter"/> Фильтр
+            {/*<div className="search-top">*/}
+            {/*    <div className="d-flex align-items-center justify-content-between">*/}
+            {/*        <div className="w-100"></div>*/}
+            {/*        <Button*/}
+            {/*            id="fade-button"*/}
+            {/*            aria-controls={open ? 'fade-menu' : undefined}*/}
+            {/*            aria-haspopup="true"*/}
+            {/*            aria-expanded={open ? 'true' : undefined}*/}
+            {/*            onClick={handleClick}*/}
+            {/*            className="filter-btn"*/}
+            {/*        >*/}
+            {/*            <img src="/icon/filtr.svg" alt="filter"/> Фильтр*/}
+            {/*        </Button>*/}
+            {/*    </div>*/}
+            {/*    <Menu*/}
+            {/*        id="fade-menu"*/}
+            {/*        MenuListProps={{*/}
+            {/*            'aria-labelledby': 'fade-button',*/}
+            {/*        }}*/}
+            {/*        anchorEl={anchorEl}*/}
+            {/*        open={open}*/}
+            {/*        onClose={handleClose}*/}
+            {/*        TransitionComponent={Fade}*/}
+            {/*    >*/}
+            {/*        <div className=" left-fl-big">*/}
+            {/*            <div className="d-flex">*/}
+            {/*                <div className="left-fl-pair">*/}
+            {/*                    <div className="inputs-box">*/}
+            {/*                        <label className="font-family-medium">Дата рождения </label>*/}
+            {/*                        <input type="date"/>*/}
+            {/*                    </div>*/}
+            {/*                    <div className="inputs-box">*/}
+            {/*                        <label className="font-family-medium">Возраст </label>*/}
+            {/*                        <input type="text"/>*/}
+            {/*                    </div>*/}
+            {/*                    <div className="inputs-box">*/}
+            {/*                        <label className="font-family-medium">Пол </label>*/}
+            {/*                        <FormControl>*/}
+            {/*                            <RadioGroup*/}
+            {/*                                row*/}
+            {/*                                aria-labelledby="demo-row-radio-buttons-group-label"*/}
+            {/*                                name="row-radio-buttons-group"*/}
+            {/*                            >*/}
+            {/*                                <FormControlLabel value="female" control={<Radio/>} label="Мужской"/>*/}
+            {/*                                <FormControlLabel value="male" control={<Radio/>} label="Женский"/>*/}
+            {/*                            </RadioGroup>*/}
+            {/*                        </FormControl>*/}
+            {/*                    </div>*/}
+            {/*                </div>*/}
+            {/*                <div className="left-fl-pair">*/}
+            {/*                    <div className="inputs-box">*/}
+            {/*                        <label className="font-family-medium">Отдел </label>*/}
+            {/*                        <Select*/}
+            {/*                            className="w-100"*/}
+            {/*                            options={[*/}
+            {/*                                {value: 'jack', label: 'Jack'},*/}
+            {/*                                {value: '1', label: '1'},*/}
+            {/*                                {value: 'Yiminghe', label: 'yiminghe'},*/}
+            {/*                                {value: 'disabled', label: 'Disabled', disabled: true},*/}
+            {/*                            ]}*/}
+            {/*                        />*/}
+            {/*                    </div>*/}
+            {/*                    <div className="inputs-box">*/}
+            {/*                        <label className="font-family-medium">Должность </label>*/}
+            {/*                        <Select*/}
+            {/*                            className="w-100"*/}
+            {/*                            options={[*/}
+            {/*                                {value: 'jack', label: 'Jack'},*/}
+            {/*                                {value: '1', label: '1'},*/}
+            {/*                                {value: 'Yiminghe', label: 'yiminghe'},*/}
+            {/*                                {value: 'disabled', label: 'Disabled', disabled: true},*/}
+            {/*                            ]}*/}
+            {/*                        />*/}
+            {/*                    </div>*/}
+            {/*                    <div className="inputs-box">*/}
+            {/*                        <label className="font-family-medium">Режим </label>*/}
+            {/*                        <Select*/}
+            {/*                            className="w-100"*/}
+            {/*                            options={[*/}
+            {/*                                {value: 'jack', label: 'Jack'},*/}
+            {/*                                {value: '1', label: '1'},*/}
+            {/*                                {value: 'Yiminghe', label: 'yiminghe'},*/}
+            {/*                                {value: 'disabled', label: 'Disabled', disabled: true},*/}
+            {/*                            ]}*/}
+            {/*                        />*/}
+            {/*                    </div>*/}
+            {/*                </div>*/}
+            {/*            </div>*/}
+            {/*            <div className="con-btn">*/}
+            {/*                <button className="font-family-medium"><img src="/icon/bird.svg" className="mr-8"/><span>Применить фильтры</span>*/}
+            {/*                </button>*/}
 
-                    </Button>
-                </div>
-                <Menu
-                    id="fade-menu"
-                    MenuListProps={{
-                        'aria-labelledby': 'fade-button',
-                    }}
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    TransitionComponent={Fade}
-                >
-                    <div className=" left-fl-big">
-                        <div className="d-flex">
-                            <div className="left-fl-pair">
-                                <div className="inputs-box">
-                                    <label className="font-family-medium">Дата рождения </label>
-                                    <input type="date"/>
-                                </div>
-                                <div className="inputs-box">
-                                    <label className="font-family-medium">Возраст </label>
-                                    <input type="text"/>
-                                </div>
-                                <div className="inputs-box">
-                                    <label className="font-family-medium">Пол </label>
-                                    <FormControl>
-                                        <RadioGroup
-                                            row
-                                            aria-labelledby="demo-row-radio-buttons-group-label"
-                                            name="row-radio-buttons-group"
-                                        >
-                                            <FormControlLabel value="female" control={<Radio/>} label="Мужской"/>
-                                            <FormControlLabel value="male" control={<Radio/>} label="Женский"/>
-                                        </RadioGroup>
-                                    </FormControl>
-                                </div>
-                            </div>
-                            <div className="left-fl-pair">
-                                <div className="inputs-box">
-                                    <label className="font-family-medium">Отдел </label>
-                                    <Select
-                                        className="w-100"
-                                        options={[
-                                            {value: 'jack', label: 'Jack'},
-                                            {value: '1', label: '1'},
-                                            {value: 'Yiminghe', label: 'yiminghe'},
-                                            {value: 'disabled', label: 'Disabled', disabled: true},
-                                        ]}
-                                    />
-                                </div>
-                                <div className="inputs-box">
-                                    <label className="font-family-medium">Должность </label>
-                                    <Select
-                                        className="w-100"
-                                        options={[
-                                            {value: 'jack', label: 'Jack'},
-                                            {value: '1', label: '1'},
-                                            {value: 'Yiminghe', label: 'yiminghe'},
-                                            {value: 'disabled', label: 'Disabled', disabled: true},
-                                        ]}
-                                    />
-                                </div>
-                                <div className="inputs-box">
-                                    <label className="font-family-medium">Режим </label>
-                                    <Select
-                                        className="w-100"
-                                        options={[
-                                            {value: 'jack', label: 'Jack'},
-                                            {value: '1', label: '1'},
-                                            {value: 'Yiminghe', label: 'yiminghe'},
-                                            {value: 'disabled', label: 'Disabled', disabled: true},
-                                        ]}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="con-btn">
-                            <button className="font-family-medium"><img src="/icon/bird.svg" className="mr-8"/><span>Применить фильтры</span>
-                            </button>
-
-                            <button className="font-family-medium ml-8 " onClick={handleClose}>Отменить</button>
-                        </div>
-                    </div>
-                </Menu>
-            </div>
+            {/*                <button className="font-family-medium ml-8 " onClick={handleClose}>Отменить</button>*/}
+            {/*            </div>*/}
+            {/*        </div>*/}
+            {/*    </Menu>*/}
+            {/*</div>*/}
 
             <div className="emp-table">
                 <TableContainer component={Paper}>
@@ -268,9 +280,7 @@ const SmartCamera = () => {
                 </TableContainer>
             </div>
             <div className="pag-bottom">
-                <Stack spacing={2}>
-                    <Pagination count={10} shape="rounded"/>
-                </Stack>
+                <Pagination  count={dataObj?.pages}   total={dataObj?.total} current={current}   onChange={changePagination} shape="rounded"/>
             </div>
 
             <SmartCameraEditModal
@@ -287,6 +297,8 @@ const SmartCamera = () => {
             <SmartCameraDeleteModal
                 setIsSmartCameraDelete={setIsSmartCameraDelete}
                 isSmartCameraDelete={isSmartCameraDelete}
+                selectCam={selectCam}
+                getData={getData}
             />
             <SmartCameraAddModal
                 setIsSmartCameraAdd={setIsSmartCameraAdd}

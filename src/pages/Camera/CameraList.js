@@ -24,7 +24,7 @@ const CameraList = () => {
     const getBuilding = () => {
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", CONFIG)
             .then(res => {
-                setOffices(res.data)
+                setOffices(res.data?.items)
             })
             .catch(err => {
                 toast.error("Ошибка")
@@ -38,7 +38,7 @@ const CameraList = () => {
         // setSelectRooms(id)
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/room/" + params.room_id + "/all", CONFIG)
             .then(res => {
-                setRooms(res.data)
+                setRooms(res.data?.items)
             })
             .catch(err => {
                 toast.error("Ошибка")
@@ -49,7 +49,7 @@ const CameraList = () => {
         // setSelectRooms(id)
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/by/room/" + id + "/all", CONFIG)
             .then(res => {
-                setCameras(res.data)
+                setCameras(res.data?.items)
             })
             .catch(err => {
                 toast.error("Ошибка")

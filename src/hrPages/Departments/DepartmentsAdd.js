@@ -3,7 +3,7 @@ import {Select} from "antd";
 import {toast} from "react-toastify";
 import axios from "axios";
 import {API_PATH, CONFIG} from "../../components/const";
-import {useHistory} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 
 const DepartmentsAdd = () => {
     const [sendData, setSendData] = useState({})
@@ -21,13 +21,13 @@ const DepartmentsAdd = () => {
     return (
         <div className="edit-user">
             <div className="progress-link">
-                <img src="/icon/Icon1.svg" alt="."/>
+                <Link to="/main/visitor-home" > <img src="/icon/Icon1.svg" alt="."/></Link>
                 <img src="/icon/arrowleft.svg" alt="."/>
-                <span>Пользователи</span>
+                <Link to="/main/hr-admin/departments"><span>Отделы</span></Link>
                 <img src="/icon/arrowleft.svg" alt="."/>
                 <span>Добавить нового отдела</span>
             </div>
-            <h3 className="edit-user-title font-family-medium">
+            <h3 className="edit-user-title font-family-medium ml-16">
                 Добавить нового отдела
             </h3>
             <div className="edit-user-box">

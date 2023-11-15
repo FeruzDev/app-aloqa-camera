@@ -16,6 +16,8 @@ const VisitorSideBar = () => {
     const [open4, setOpen4] = React.useState(false);
     const [open5, setOpen5] = React.useState(false);
     const [company, setCompany] = useState({})
+    const pathname = window.location.pathname;
+    console.log(pathname);
     let history = useHistory()
     const handleClick = () => {
         setOpen(!open);
@@ -53,7 +55,7 @@ const VisitorSideBar = () => {
     };
 
     const getCompany = () => {
-        axios.get(API_PATH + "company/" +  localStorage.getItem("for_com"), CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem("for_com"), CONFIG)
             .then(res => {
                 setCompany(res.data)
                 localStorage.setItem("name", res?.data?.name)
@@ -75,13 +77,14 @@ const VisitorSideBar = () => {
         <div className="main-side-bar">
             <div className="my-side-fix">
                 <div className="top-logo">
-                    {
-                        company ?
-                            <img src={company?.logo} alt="..." className="logo-company"/>
-                            :
-                            <img src="/img/visitorLogo.png" className="logo-company" alt="..."/>
-
-                    }
+                    <Link to="/main/visitor-home">
+                        {
+                            company ?
+                                <img src={company?.logo} alt="..." className="logo-company"/>
+                                :
+                                <img src="/img/visitorLogo.png" className="logo-company" alt="..."/>
+                        }
+                    </Link>
 
                     <button onClick={logout}><img src="/icon/logout.svg" alt="logout"/></button>
                 </div>
@@ -102,13 +105,13 @@ const VisitorSideBar = () => {
                             </ListItemButton>
                             <Collapse in={open} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/visitor-home" ? "active" : ""}>
                                         <Link to="/main/visitor-home" className="link-item-style ">
                                             <img src="/icon/datareport.png" alt=""/>
                                             <span>Аналитика</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/visitor-comparasion" ? "active" : ""}>
                                         <Link to="/main/visitor-comparasion" className="link-item-style ">
                                             <img src="/icon/donutchart.png" alt=""/>
                                             <span>Сравнение по филиалом</span>
@@ -134,31 +137,31 @@ const VisitorSideBar = () => {
                             </ListItemButton>
                             <Collapse in={open3} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/hr-admin/home-page-hr" ? "active" : ""}>
                                         <Link to="/main/hr-admin/home-page-hr" className="link-item-style">
                                             <img src="/icon/Icon1.svg" alt=""/>
                                             <span>HR аналитика</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/hr-admin/departments" ? "active" : ""}>
                                         <Link to="/main/hr-admin/departments" className="link-item-style">
                                             <img src="/icon/Icon10.svg" alt=""/>
                                             <span>Отделы</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/hr-admin/employees" ? "active" : ""}>
                                         <Link to="/main/hr-admin/employees" className="link-item-style">
                                             <img src="/icon/Icon2.svg" alt=""/>
                                             <span>Cотрудники</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/hr-admin/modes" ? "active" : ""}>
                                         <Link to="/main/hr-admin/modes" className="link-item-style">
                                             <img src="/icon/Icon11.svg" alt=""/>
                                             <span>Режимы</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/hr-admin/audit" ? "active" : ""}>
                                         <Link to="/main/hr-admin/audit" className="link-item-style">
                                             <img src="/icon/Icon6.svg" alt=""/>
                                             <span>Аудит</span>
@@ -195,25 +198,25 @@ const VisitorSideBar = () => {
                             </ListItemButton>
                             <Collapse in={open4} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/live" ? "active" : ""}>
                                         <Link to="/main/live" className="link-item-style">
                                             <img src="/icon/live.svg" alt=""/>
                                             <span>Live</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/smart-camera" ? "active" : ""}>
                                         <Link to="/main/smart-camera" className="link-item-style ">
                                             <img src="/icon/camera2.svg" alt=""/>
                                             <span>Smart Camera</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/roi-employee" ? "active" : ""}>
                                         <Link to="/main/roi-employee" className="link-item-style">
                                             <img src="/icon/roi_employee.svg" alt=""/>
                                             <span>ROI Employee</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/roi-employee" ? "active" : ""}>
                                         <Link to="/main/roi-employee" className="link-item-style">
                                             <img src="/icon/roi_visitor.svg" alt=""/>
                                             <span>ROI Visitor</span>
@@ -237,37 +240,37 @@ const VisitorSideBar = () => {
                             </ListItemButton>
                             <Collapse in={open5} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/hr-admin/users" ? "active" : ""}>
                                         <Link to="/main/hr-admin/users" className="link-item-style">
                                             <img src="/icon/Icon7.svg" alt=""/>
                                             <span>Пользователи</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/hr-admin/branches" ? "active" : ""}>
                                         <Link to="/main/hr-admin/branches" className="link-item-style">
                                             <img src="/icon/Icon9.svg" alt=""/>
                                             <span>Филиалы</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/building" ? "active" : ""}>
                                         <Link to="/main/building" className="link-item-style ">
                                             <img src="/icon/camera2.svg" alt=""/>
                                             <span>Cameras</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/my-modules" ? "active" : ""}>
                                         <Link to="/main/my-modules" className="link-item-style ">
                                             <img src="/icon/server.svg" alt=""/>
                                             <span>Servers</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/services" ? "active" : ""}>
                                         <Link to="/main/services" className="link-item-style ">
                                             <img src="/icon/services.svg" alt=""/>
                                             <span>Services</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}>
+                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/deployments" ? "active" : ""}>
                                         <Link to="/main/deployments" className="link-item-style ">
                                             <img src="/icon/deployment.svg" alt=""/>
                                             <span>Deployment</span>
@@ -296,7 +299,7 @@ const VisitorSideBar = () => {
                                 }</Link></h5>
                                 <h6>{
                                     localStorage.getItem("phone_user") === "null" ?
-                                    ""
+                                        ""
                                         :
                                         localStorage.getItem("phone_user")
                                 }</h6>

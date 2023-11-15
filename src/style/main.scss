@@ -305,7 +305,7 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
           border-radius: 6px;
           padding: 10px 18px;
           display: flex;
-          margin: 4px 8px;
+          margin: 4px 2px;
           text-decoration: none;
           align-items: center;
           width: 100%;
@@ -1037,13 +1037,14 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
     }
   }
 
+  a{
+    text-decoration: none;
+    color: #3e4144;
+
+  }
   span {
-    color: #4A545E;
+    color: #3e4144;
 
-    &:nth-last-child(1) {
-      color: rgba(74, 84, 94, 0.2);
-
-    }
   }
 }
 
@@ -1230,6 +1231,36 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
           font-size: 14px;
           border-radius: 6px;
           border: 1px solid #CFD6DD;
+          background: #FFF;
+          width: 100%;
+          padding: 8px 16px;
+
+          &:focus {
+            outline: none;
+          }
+        }
+
+        label {
+          font-size: 14px;
+          margin-bottom: 8px;
+          display: flex;
+          justify-content: space-between;
+
+          button {
+            border: none;
+            background: transparent;
+            padding: 0;
+            color: #3062D4;
+            text-decoration: underline;
+          }
+        }
+      }
+      .inputs-box-2 {
+        margin-bottom: 16px;
+
+        input, select {
+          font-size: 14px;
+          border-radius: 6px;
           background: #FFF;
           width: 100%;
           padding: 8px 16px;
@@ -2550,4 +2581,20 @@ canvas {
     background: #FBFCFD;
     padding: 24px;
   }
+}
+
+.css-1mk9mw3-MuiList-root{
+  .css-behmn9-MuiButtonBase-root-MuiListItemButton-root{
+    padding-left: 15px !important;
+  }
+  .active{
+    background-color: #E9ECEF;
+    &:hover{
+      background-color: #E9ECEF !important;
+
+    }
+  }
+}
+.ant-select-dropdown{
+  z-index: 9999;
 }

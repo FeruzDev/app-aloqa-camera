@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Select} from "antd";
 import axios from "axios";
 import {API_PATH, CONFIG} from "../../components/const";
-import {useHistory, useParams} from "react-router-dom";
+import {Link, useHistory, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
 
 const DepartmentsEdit = () => {
@@ -34,13 +34,13 @@ const DepartmentsEdit = () => {
     return (
         <div className="edit-user">
             <div className="progress-link">
-                <img src="/icon/Icon1.svg" alt="."/>
+                <Link to="/main/visitor-home" > <img src="/icon/Icon1.svg" alt="."/></Link>
                 <img src="/icon/arrowleft.svg" alt="."/>
-                <span>Пользователи</span>
+                <Link to="/main/hr-admin/departments"><span>Отделы</span></Link>
                 <img src="/icon/arrowleft.svg" alt="."/>
-                <span>Ali Muzaffarov</span>
+                <span>{sendData?.department_title}</span>
             </div>
-            <h3 className="edit-user-title font-family-medium">
+            <h3 className="edit-user-title font-family-medium ml-16">
                 Редактировать данные
             </h3>
             <div className="edit-user-box">

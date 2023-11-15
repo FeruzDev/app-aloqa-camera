@@ -14,23 +14,34 @@ import axios from "axios";
 import {API_PATH, CONFIG} from "../../components/const";
 import {toast} from "react-toastify";
 import ModalOffice from "../../pages/Camera/ModalOffice";
+import ModalOfficeEdit from "./ModalOfficeEdit";
 
 const Branches = () => {
     let history = useHistory()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalOpen2, setIsModalOpen2] = useState(false);
     const [offices, setOffices] = useState([])
+    const [officesObj, setOfficesObj] = useState({})
+    const [current, setCurrent] = useState(1);
+    const [buId, setBuId] = useState(null);
     const [isModalOffice, setIsModalOffice] = useState(false);
-
-    const showModalDelete = () => {
+    const [isModalOfficeEdit, setIsModalOfficeEdit] = useState(false);
+    const [deleteId, setDeleteId] = useState([]);
+    const [sendData, setSendData] = useState({
+        name: "",
+        country_id: null,
+        region_id: null,
+        district_id: null,
+        zip_code: "",
+        address: "",
+        latitude: 0,
+        longitude: 0
+    })
+    const showModalDelete = (id) => {
         setIsModalOpen(true);
+        setDeleteId(id)
     };
-    const showModalBlock = () => {
-        setIsModalOpen2(true);
-    };
-    const handleOkDelete = () => {
-        setIsModalOpen(false);
-    };
+
     const handleCancelDelete = () => {
         setIsModalOpen(false);
     };
@@ -41,21 +52,55 @@ const Branches = () => {
         setIsModalOpen2(false);
     };
 
-    const createPage = () => {
-        history.push("/main/hr-admin/branches/add")
-    }
     const editPage = (id) => {
-        history.push("/main/hr-admin/branches/edit/" + id)
-    }
-    const getBuilding = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", CONFIG)
+        setBuId(id)
+        // history.push("/main/hr-admin/branches/edit/" + id)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/" + id, CONFIG)
             .then(res => {
-                setOffices(res.data)
+                // setOffices(res.data?.items)
+                // setOfficesObj(res?.data)
+                setSendData(res?.data)
+                setIsModalOfficeEdit(true)
             })
             .catch(err => {
                 toast.error("Ошибка")
             })
     }
+    const getBuilding = () => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all/?page=1", CONFIG)
+            .then(res => {
+                setOffices(res.data?.items)
+                setOfficesObj(res?.data)
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
+    }
+    const changePagination = (current, size) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all?page=" + size, CONFIG)
+            .then(res => {
+                setOffices(res.data?.items)
+                setOfficesObj(res?.data)
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
+    }
+    const showModalBlock = () => {
+        setIsModalOpen2(true);
+    };
+    const handleOkDelete = () => {
+
+        axios.delete(API_PATH + "company/" + localStorage.getItem('id') + "/building/delete/" + deleteId, CONFIG)
+            .then(res => {
+                getBuilding()
+                setIsModalOpen(false);
+
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
+    };
     useEffect(() => {
         getBuilding()
     }, []);
@@ -97,7 +142,7 @@ const Branches = () => {
                                         <div className="con-btns-all">
                                             <div className="con-btns-all">
                                                 <button className="t-delete-btn font-family-medium"
-                                                        onClick={showModalDelete}>Удалить
+                                                        onClick={() => showModalDelete(item?.id)}>Удалить
                                                 </button>
                                                 <button className="t-block-btn font-family-medium"
                                                         onClick={showModalBlock}>Блокировать
@@ -119,6 +164,20 @@ const Branches = () => {
                 getBuilding={getBuilding}
             />
 
+            {
+                isModalOfficeEdit
+                ?
+                    <ModalOfficeEdit
+                        sendData={sendData}
+                        buId={buId}
+                        isModalOffice={isModalOfficeEdit}
+                        setIsModalOffice={setIsModalOfficeEdit}
+                        getBuilding={getBuilding}
+                    />
+                    :
+                    ""
+
+            }
             <Modal title="Внимание!"
                    open={isModalOpen}
                    onCancel={handleCancelDelete}
@@ -147,10 +206,12 @@ const Branches = () => {
             >
                 <p className="pt-2 pb-2">Вы уверены, что заблокируете этого филиаля?</p>
             </Modal>
+
             <div className="pag-bottom">
-                <Stack spacing={2}>
-                    <Pagination count={10} shape="rounded"/>
-                </Stack>
+                {/*<Stack spacing={2}>*/}
+                    <Pagination  count={officesObj?.pages}   total={officesObj?.total} current={current}  onChange={changePagination} shape="rounded"/>
+                {/*    <Pagination  count={3}   total={offices.length} current={current}  onChange={changePagination} shape="rounded"/>*/}
+                {/*</Stack>*/}
             </div>
         </div>
     );

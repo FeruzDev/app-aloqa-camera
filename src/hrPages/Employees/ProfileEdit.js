@@ -25,19 +25,19 @@ const ProfileEdit = () => {
     const bigData = new FormData()
 
 
-    const getDeps = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all", CONFIG)
+    const getDeps = (val) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
             .then(res => {
-                setDepartments(res.data)
+                setDepartments(res.data?.items)
             })
             .catch(err => {
                 toast.error("Ошибка")
             })
     }
-    const getBuilding = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", CONFIG)
+    const getBuilding = (val) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
             .then(res => {
-                setOffices(res.data)
+                setOffices(res.data?.items)
             })
             .catch(err => {
                 toast.error("Ошибка")
@@ -47,6 +47,7 @@ const ProfileEdit = () => {
         axios.get(API_PATH + "user/company/" + localStorage.getItem('id') + "/user/" + params.id, CONFIG)
             .then(res => {
                 setSendData(res.data)
+                console.log(typeof res.data.gender)
                 // setSendData({...sendData, building_id: res.data.building_id})
             })
             .catch(err => {
@@ -54,7 +55,7 @@ const ProfileEdit = () => {
             })
     }
     const sendAll = () => {
-        if (pic?.target?.files[0]){
+        if (pic?.target?.files[0]) {
             bigData.append("image", pic?.target?.files[0])
         }
         bigData.append("first_name", sendData?.first_name)
@@ -62,6 +63,7 @@ const ProfileEdit = () => {
         bigData.append("username", sendData?.username)
         bigData.append("email", sendData?.email)
         bigData.append("password", sendData?.password)
+        bigData.append("gender", sendData?.gender)
         bigData.append("position", sendData?.position)
         bigData.append("date_of_birth", sendData?.date_of_birth)
         bigData.append("middle_name", sendData?.middle_name)
@@ -85,19 +87,19 @@ const ProfileEdit = () => {
     };
 
     useEffect(() => {
-        getBuilding()
-        getDeps()
+        getBuilding(1)
+        getDeps(1)
         getItem()
     }, []);
 
     return (
         <div className="profile-edit">
             <div className="progress-link">
-                <img src="/icon/Icon1.svg" alt="."/>
+                <Link to="/main/visitor-home" > <img src="/icon/Icon1.svg" alt="."/></Link>
                 <img src="/icon/arrowleft.svg" alt="."/>
-                <span>Cотрудники</span>
+                <Link to="/main/hr-admin/employees"  > <span>Cотрудники</span></Link>
                 <img src="/icon/arrowleft.svg" alt="."/>
-                <span>Zarifa Bakirova</span>
+                <span>{sendData?.first_name + " " + sendData?.last_name}</span>
             </div>
 
             <div className="profile-header">
@@ -205,52 +207,52 @@ const ProfileEdit = () => {
                                         />
                                     </div>
                                     <div className="inputs-box for-select">
-                                        <label  className="font-family-medium">Пол </label>
+                                        <label className="font-family-medium">Пол </label>
                                         <FormControl>
 
                                             <RadioGroup
                                                 row
+                                                defaultValue={sendData?.gender}
+
                                                 onChange={(e) => setSendData({...sendData, gender: e.target.value})}
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                                 name="row-radio-buttons-group"
                                             >
-                                                <FormControlLabel value="female" control={<Radio />} label="Мужской" />
-                                                <FormControlLabel value="male" control={<Radio />} label="Женский" />
+                                                <FormControlLabel value="male" control={
+                                                    <Radio/>} label="Мужской"/>
+                                                <FormControlLabel value="female" control={
+                                                    <Radio/>} label="Женский"/>
                                             </RadioGroup>
                                         </FormControl>
                                     </div>
-                                    {/*<div className="inputs-box for-select">*/}
-                                    {/*    <label  className="font-family-medium">Пол </label>*/}
-                                    {/*    <FormControl>*/}
-                                    {/*        <RadioGroup*/}
-                                    {/*            row*/}
-                                    {/*            aria-labelledby="demo-row-radio-buttons-group-label"*/}
-                                    {/*            name="row-radio-buttons-group"*/}
-                                    {/*        >*/}
-                                    {/*            <FormControlLabel value="female" control={<Radio />} label="Мужской" />*/}
-                                    {/*            <FormControlLabel value="male" control={<Radio />} label="Женский" />*/}
-                                    {/*        </RadioGroup>*/}
-                                    {/*    </FormControl>*/}
-                                    {/*</div>*/}
-                                    <div className="inputs-box">
+                                    <div className="inputs-box-2">
                                         <label className="font-family-medium">Филиал <button
                                             className="font-family-medium"
                                             onClick={() => history.push("/main/hr-admin/branches")}>
                                             Добавить новое
                                         </button></label>
                                         <Select
+                                            showSearch
+                                            placeholder="Поиск, чтобы выбрать"
+                                            optionFilterProp="children"
                                             className="w-100"
                                             value={sendData?.building_id}
+                                            onSearch={getBuilding}
                                             onChange={(e) => setSendData({...sendData, building_id: e})}
-                                        >
-                                            {
-                                                offices?.map((item, index) => (
-                                                    <option value={item?.id} key={index}>{item?.name}</option>
-                                                ))
+                                            filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                                            filterSort={(optionA, optionB) =>
+                                                (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                                             }
-                                        </Select>
+                                            options={offices?.map((item) => {
+                                                return {
+                                                    value: item.id,
+                                                    label:
+                                                    item?.name
+                                                };
+                                            })}
+                                        />
                                     </div>
-                                    <div className="inputs-box">
+                                    <div className="inputs-box-2">
                                         <label className="font-family-medium">Отдел
                                             <button
                                                 className="font-family-medium"
@@ -259,30 +261,26 @@ const ProfileEdit = () => {
                                             </button>
                                         </label>
                                         <Select
+                                            showSearch
+                                            placeholder="Поиск, чтобы выбрать"
+                                            optionFilterProp="children"
                                             className="w-100"
                                             value={sendData?.department_id}
+                                            onSearch={getDeps}
                                             onChange={(e) => setSendData({...sendData, department_id: e})}
-                                        >
-                                            {
-                                                departments?.map((item, index) => (
-                                                    <option value={item?.id}
-                                                            key={index}>{item?.department_title}</option>
-                                                ))
+                                            filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                                            filterSort={(optionA, optionB) =>
+                                                (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                                             }
-                                        </Select>
+                                            options={departments?.map((item) => {
+                                                return {
+                                                    value: item.id,
+                                                    label:
+                                                    item?.department_title
+                                                };
+                                            })}
+                                        />
                                     </div>
-                                    {/*<div className="inputs-box">*/}
-                                    {/*    <label  className="font-family-medium">Должность <button className="font-family-medium">Добавить новое</button></label>*/}
-                                    {/*       <Select*/}
-                                    {/*    className="w-100" */}
-                                    {/*    options={[*/}
-                                    {/*        { value: 'jack', label: 'Jack' },*/}
-                                    {/*        { value: '1', label: '1' },*/}
-                                    {/*        { value: 'Yiminghe', label: 'yiminghe' },*/}
-                                    {/*        { value: 'disabled', label: 'Disabled', disabled: true },*/}
-                                    {/*    ]}*/}
-                                    {/*/>*/}
-                                    {/*</div>*/}
 
                                     <div className="inputs-box">
                                         <label className="font-family-medium">Должность </label>
@@ -290,18 +288,7 @@ const ProfileEdit = () => {
                                                value={sendData?.position}
                                                onChange={(e) => setSendData({...sendData, position: e.target.value})}/>
                                     </div>
-                                    {/*<div className="inputs-box">*/}
-                                    {/*    <label  className="font-family-medium">Режим <button className="font-family-medium">Добавить новое</button> </label>*/}
-                                    {/*       <Select*/}
-                                    {/*    className="w-100" */}
-                                    {/*    options={[*/}
-                                    {/*        { value: 'jack', label: 'Jack' },*/}
-                                    {/*        { value: '1', label: '1' },*/}
-                                    {/*        { value: 'Yiminghe', label: 'yiminghe' },*/}
-                                    {/*        { value: 'disabled', label: 'Disabled', disabled: true },*/}
-                                    {/*    ]}*/}
-                                    {/*/>*/}
-                                    {/*</div>*/}
+
                                 </div>
                             </div>
                             <div className="con-btn">

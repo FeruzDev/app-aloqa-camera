@@ -3,11 +3,11 @@ import {Button, Modal, Select} from "antd";
 import axios from "axios";
 import {API_PATH, CONFIG} from "../../components/const";
 import {toast} from "react-toastify";
-import CountryModal from "../LocationModal/CountryModal";
-import RegionModal from "../LocationModal/RegionModal";
-import DistrictModal from "../LocationModal/DistrictModal";
+import CountryModal from "../../pages/LocationModal/CountryModal";
+import RegionModal from "../../pages/LocationModal/RegionModal";
+import DistrictModal from "../../pages/LocationModal/DistrictModal";
 
-const ModalOffice = (props) => {
+const ModalOfficeEdit = (props) => {
     const [isCountryModal, setIsCountryModal] = useState(false)
     const [isCityModal, setIsCityModal] = useState(false)
     const [isDistrictModal, setIsDistrictModal] = useState(false)
@@ -18,18 +18,8 @@ const ModalOffice = (props) => {
     const [regionId, setRegionId] = useState(null)
     const [regionItem, setRegionItem] = useState("")
     const [districts, setDistricts] = useState([])
-    const [sendData, setSendData] = useState({
-        name: "",
-        country_id: null,
-        region_id: null,
-        district_id: null,
-        zip_code: "",
-        address: "",
-        latitude: 0,
-        longitude: 0
-    })
     const sendAll = () => {
-        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/building/create", sendData, CONFIG)
+        axios.put(API_PATH + "company/" + localStorage.getItem('id') + "/building/create", props.sendData, CONFIG)
             .then(res => {
                 toast.success("Добавлено успешно")
                 props.getBuilding()
@@ -50,7 +40,7 @@ const ModalOffice = (props) => {
     }
     const setCountry = (countryIde) => {
         setCountryId(countryIde)
-        setSendData({...sendData, country_id: countryIde})
+        props.setSendData({...props.sendData, country_id: countryIde})
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/country/" + countryIde, CONFIG)
             .then(res => {
                 setCountryItem(res?.data?.name)
@@ -62,7 +52,7 @@ const ModalOffice = (props) => {
     }
     const setDistrict = (countryIde) => {
         setRegionId(countryIde)
-        setSendData({...sendData, region_id: countryIde})
+        props.setSendData({...props.sendData, region_id: countryIde})
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/region/" + countryIde, CONFIG)
             .then(res => {
                 setRegionItem(res.data?.name)
@@ -111,7 +101,9 @@ const ModalOffice = (props) => {
             })
     }
     useEffect(() => {
-        getCountry()
+        getCountry(props.sendData?.country_id)
+        getRegion(props.sendData?.country_id)
+        getDistrict(props.sendData?.country_id)
     }, []);
     return (
         <Modal title="Добавить здания"
@@ -129,7 +121,10 @@ const ModalOffice = (props) => {
             <div className="cam-add-modal">
                 <div className="inputs-box">
                     <label className="font-family-medium">Название здания </label>
-                    <input onChange={(e) => setSendData({...sendData, name: e.target.value})} type="text"/>
+                    <input
+                        value={props.sendData?.name}
+                        onChange={(e) => props.setSendData({...props.sendData, name: e.target.value})}
+                        type="text"/>
                 </div>
                 <div className="inputs-box">
                     <label className="font-family-medium">Страна </label>
@@ -140,6 +135,7 @@ const ModalOffice = (props) => {
                             optionFilterProp="children"
                             className="w-100"
                             onSearch={getCountry}
+                            value={props.sendData?.country_id}
                             onChange={(e) => setCountry(e)}
                             // onChange={(e) => setCountry(e)}
                             filterOption={(input, option) => (option?.label ?? '').includes(input)}
@@ -168,6 +164,7 @@ const ModalOffice = (props) => {
                             optionFilterProp="children"
                             className="w-100"
                             onSearch={getRegionSearch}
+                            value={props.sendData?.region_id}
                             onChange={(e) => setDistrict(e)}
                             filterOption={(input, option) => (option?.label ?? '').includes(input)}
                             filterSort={(optionA, optionB) =>
@@ -195,7 +192,8 @@ const ModalOffice = (props) => {
                             optionFilterProp="children"
                             className="w-100"
                             onSearch={getDistrictSearch}
-                            onChange={(e) => setSendData({...sendData, district_id: e})}
+                            value={props.sendData?.district_id}
+                            onChange={(e) => props.setSendData({...props.sendData, district_id: e})}
                             filterOption={(input, option) => (option?.label ?? '').includes(input)}
                             filterSort={(optionA, optionB) =>
                                 (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
@@ -215,7 +213,10 @@ const ModalOffice = (props) => {
                 </div>
                 <div className="inputs-box">
                     <label className="font-family-medium">Адрес </label>
-                    <input onChange={(e) => setSendData({...sendData, address: e.target.value})} type="text"/>
+                    <input
+                        value={props.sendData?.address}
+                        onChange={(e) => props.setSendData({...props.sendData, address: e.target.value})}
+                        type="text"/>
                 </div>
             </div>
             <CountryModal
@@ -226,7 +227,7 @@ const ModalOffice = (props) => {
             <RegionModal
                 isLocModal={isCityModal}
                 setIsLocModal={setIsCityModal}
-                sendData={sendData}
+                sendData={props.sendData}
                 getRegion={getRegion}
                 countryItem={countryItem}
                 countryId={countryId}
@@ -234,7 +235,7 @@ const ModalOffice = (props) => {
             <DistrictModal
                 isLocModal={isDistrictModal}
                 setIsLocModal={setIsDistrictModal}
-                sendData={sendData}
+                sendData={props.sendData}
                 countryItem={countryItem}
                 regionItem={regionItem}
                 regionId={regionId}
@@ -244,4 +245,4 @@ const ModalOffice = (props) => {
     );
 };
 
-export default ModalOffice;
+export default ModalOfficeEdit;

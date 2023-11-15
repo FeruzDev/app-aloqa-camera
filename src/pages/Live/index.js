@@ -21,7 +21,6 @@ const Live = () => {
     const [selectRooms, setSelectRooms] = useState(null)
     const [selectCameras, setSelectCameras] = useState("")
     const [sendData, setSendData] = useState(null)
-
     const [message, setMessage] = useState({});
 
     const getUsers = () => {
@@ -34,25 +33,34 @@ const Live = () => {
             })
     }
 
-    const getBuilding = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", CONFIG)
+    const getBuilding = (val) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
             .then(res => {
-                setOffices(res.data)
+                setOffices(res?.data?.items)
                 setSendData({...sendData, buildings_id: res.data.id})
 
             })
             .catch(err => {
                 toast.error("Ошибка")
             })
-
     }
     const getRooms = (id) => {
         getCameras(id)
         setSelectOffices(id)
-
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/room/" + id + "/all", CONFIG)
             .then(res => {
-                setRooms(res.data)
+                setRooms(res.data?.items)
+                setSendData({...sendData, room_id: res.data.id})
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
+    }
+    const getRoomsSearch = (val) => {
+        getCameras(selectOffices)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/room/" + selectOffices + "/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+            .then(res => {
+                setRooms(res.data?.items)
                 setSendData({...sendData, room_id: res.data.id})
             })
             .catch(err => {
@@ -64,7 +72,19 @@ const Live = () => {
 
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/smartcamera/all?building_id=" + id, CONFIG)
             .then(res => {
-                setCameras(res.data)
+                setCameras(res?.data?.items)
+
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
+        window.scrollTo(0, 0);
+
+    }
+    const getCamerasSearch = (val) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/smartcamera/all?building_id=" + selectRooms + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+            .then(res => {
+                setCameras(res?.data?.items)
 
             })
             .catch(err => {
@@ -81,10 +101,6 @@ const Live = () => {
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/visitor/" + id + "/captures", CONFIG)
             .then(res => {
                 setUsers(res.data)
-                console.log(res.data)
-                console.log(res.data)
-                console.log(res.data)
-                console.log(res.data)
             })
             .catch(err => {
                 toast.error("Ошибка")
@@ -126,7 +142,7 @@ const Live = () => {
 
 
     useEffect(() => {
-        // console.log(message)
+
 
     }, [message])
 
@@ -142,41 +158,69 @@ const Live = () => {
 
                         <div className="inputs-box mr-16" style={{width: "200px"}}>
                             <Select
+                                showSearch
+                                placeholder="Поиск, чтобы выбрать"
+                                optionFilterProp="children"
                                 className="w-100"
+                                onSearch={getBuilding}
                                 onChange={(e) => getRooms(e)}
-                            >
-                                {
-                                    offices?.map((item, index) => (
-                                        <option value={item?.id} key={index}>{item?.name}</option>
-                                    ))
+                                // onChange={(e) => setCountry(e)}
+                                filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                                filterSort={(optionA, optionB) =>
+                                    (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                                 }
-
-                            </Select>
+                                options={offices?.map((item) => {
+                                    return {
+                                        value: item.id,
+                                        label:
+                                        item?.name
+                                    };
+                                })}
+                            />
                         </div>
                         <div className="inputs-box mr-16" style={{width: "200px"}}>
                             <Select
+                                showSearch
+                                placeholder="Поиск, чтобы выбрать"
+                                optionFilterProp="children"
                                 className="w-100"
+                                onSearch={getRoomsSearch}
                                 onChange={(e) => getCameras(e)}
-                            >
-                                {
-                                    rooms?.map((item, index) => (
-                                        <option value={item?.id} key={index}>{item?.name}</option>
-                                    ))
+                                // onChange={(e) => setCountry(e)}
+                                filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                                filterSort={(optionA, optionB) =>
+                                    (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                                 }
-
-                            </Select>
+                                options={rooms?.map((item) => {
+                                    return {
+                                        value: item.id,
+                                        label:
+                                        item?.name
+                                    };
+                                })}
+                            />
                         </div>
                         <div className="inputs-box" style={{width: "200px"}}>
                             <Select
+                                showSearch
+                                placeholder="Поиск, чтобы выбрать"
+                                optionFilterProp="children"
                                 className="w-100"
+                                onSearch={getCamerasSearch}
                                 onChange={(e) => getAll(e)}
-                            >
-                                {
-                                    cameras?.map((item, index) => (
-                                        <option value={item?.id} key={index}>{item?.name}</option>
-                                    ))
+                                // onChange={(e) => setCountry(e)}
+                                filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                                filterSort={(optionA, optionB) =>
+                                    (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                                 }
-                            </Select>
+                                options={cameras?.map((item) => {
+                                    return {
+                                        value: item.id,
+                                        label:
+                                        item?.name
+                                    };
+                                })}
+                            />
                         </div>
                     </div>
                 </div>
@@ -201,7 +245,8 @@ const Live = () => {
                             {
                                 users?.slice(0, 6)?.map((item) => (
                                     <div className="img-box">
-                                        <img src={item?.image} alt=""/>
+                                        <img src={item?.image.slice(0, 8) === "https://" ? item?.image :( "https://" + item?.image)} alt=""/>
+
                                     </div>
 
                                 ))
@@ -216,11 +261,13 @@ const Live = () => {
                             <Table sx={{minWidth: 650}} aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell className="pl20 table-head" style={{width: "140px"}}>Screenshot</TableCell>
+                                        <TableCell className="pl20 table-head"
+                                                   style={{width: "140px"}}>Screenshot</TableCell>
                                         <TableCell className="table-head" align="left">Name</TableCell>
                                         <TableCell className="table-head" align="left">Time</TableCell>
                                         <TableCell className="table-head" align="left">Gender</TableCell>
                                         <TableCell className="table-head" align="left">Age</TableCell>
+                                        <TableCell className="table-head" align="left">Created at</TableCell>
                                         <TableCell className="pr20 table-head" align="right">Type</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -231,17 +278,20 @@ const Live = () => {
                                                 key={index}
                                                 sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                             >
-                                                <TableCell className="pl20"  style={{width: "140px"}} component="th" scope="row">
-                                                    <img src={item?.image} alt="img" className="mr-8"
+                                                <TableCell className="pl20" style={{width: "140px"}} component="th"
+                                                           scope="row">
+                                                    <img src={item?.image.slice(0, 8) === "https://" ? item?.image :( "https://" + item?.image)} alt="img" className="mr-8"
                                                          style={{width: "40px", borderRadius: "4px"}}/>
 
 
                                                 </TableCell>
 
                                                 <TableCell className="pr20 con-btns-all"
-                                                           align="left">   <span>{item?.first_name ? item?.first_name : "" }</span>
-                                                    <span style={{marginLeft: "5px"}}>{item?.last_name ? item?.last_name : ""}</span>
-                                                   <span>
+                                                           align="left">
+                                                    <span>{item?.first_name ? item?.first_name : ""}</span>
+                                                    <span
+                                                        style={{marginLeft: "5px"}}>{item?.last_name ? item?.last_name : ""}</span>
+                                                    <span>
                                                         {(item?.first_name?.length > 0 && item?.last_name?.length > 0) ? "" : "Visitor"}
                                                    </span>
                                                 </TableCell>
@@ -250,7 +300,9 @@ const Live = () => {
                                                 <TableCell className="pr20 con-btns-all"
                                                            align="left">{item?.gender}</TableCell>
                                                 <TableCell className="pr20 con-btns-all"
-                                                           align="left">{item?.age}</TableCell>
+                                                           align="left">{item?.capture_type ? item?.age_interval : item?.age}</TableCell>
+                                                <TableCell className="pr20 con-btns-all"
+                                                           align="left">{item?.created_at.slice(0, 10) + " / " + item?.created_at.slice(11, 16)}</TableCell>
                                                 <TableCell className="pr20 con-btns-all"
                                                            align="right">{item?.capture_type}</TableCell>
 

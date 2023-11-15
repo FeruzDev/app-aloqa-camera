@@ -4,8 +4,6 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import MyChart from "./MyChart";
-import Calendar from "./Calendar";
 import axios from "axios";
 import {API_PATH, CONFIG} from "../../components/const";
 import {toast} from "react-toastify";
@@ -41,6 +39,7 @@ function PieCenterLabel({children}) {
 const Home = () => {
     const [time, setTime] = useState(new Date());
     const [tabs, setTabs] = useState(1)
+    const [tabsTitle, setTabsTitle] = useState("on_time")
     const [age, setAge] = React.useState('');
     const [data2, setData2] = useState([])
     const [yesterday, setYesterday] = useState(getPreviousDay())
@@ -53,14 +52,16 @@ const Home = () => {
     const [building_id, setbuilding_id] = useState(1)
     const [departments, setDepartments] = useState([])
     const [department_id, setdepartment_id] = useState(1)
-
+    const [dateFilter, setDateFilter] = useState(Number(time.getFullYear()) + "-" + Number(time.getMonth()) + "-" + Number(time.getDate()))
+    const [dateBuFilter, setDateBuFilter] = useState("")
+    const [dateDeFilter, setDateDeFilter] = useState("")
 
     const [data, setData] = useState([]);
 
     const getAll = (e) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/attendance/all/?status=" + e + "&for_date=" + +time?.getFullYear() + "-" + Number(time?.getMonth() + 1) + "-" + Number(time?.getDate()), CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/attendance/all/?status=" + e + "&for_date=" + time?.getFullYear() + "-" + Number(time?.getMonth() + 1) + "-" + Number(time?.getDate()), CONFIG)
             .then(res => {
-                setData2(res.data)
+                setData2(res.data?.items)
             })
     }
 
@@ -72,10 +73,10 @@ const Home = () => {
         return previous;
     }
 
-    const getBuilding = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", CONFIG)
+    const getBuilding = (val) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
             .then(res => {
-                setOffices(res.data)
+                setOffices(res.data?.items)
             })
             .catch(err => {
                 toast.error("Ошибка")
@@ -113,10 +114,10 @@ const Home = () => {
     }
 
     function onChange(date, dateString) {
-        console.log(date)
+        console.log(dateString)
         console.log(dateString[0])
         console.log(dateString[1])
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/attendance/statistics/?from_date=" + dateString[0] + "&to_date=" + dateString[1]+ "&building_id=" + building_id + "&department_id=" + department_id + Number(time?.getDate()), CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/attendance/statistics/?from_date=" + dateString[0] + "&to_date=" + dateString[1] + "&building_id=" + building_id + "&department_id=" + department_id + Number(time?.getDate()), CONFIG)
             .then(res => {
                 // setData(res?.data)
                 setabsent_attendances_count(res?.data?.absent_attendances_count)
@@ -128,10 +129,45 @@ const Home = () => {
             })
     }
 
-    const getDeps = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all", CONFIG)
+    function onChangeDate(date, dateString) {
+        if (date !== null) {
+            setDateFilter(dateString)
+            axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/attendance/all/?status=" + tabsTitle + "&for_date=" + dateString + (dateBuFilter ? "&building_id=" + dateBuFilter : "") + (dateDeFilter ? +"&department_id=" + dateDeFilter : ""), CONFIG)
+                .then(res => {
+                    setData2(res.data?.items)
+                })
+        } else {
+            setDateFilter(Number(time.getFullYear()) + "-" + Number(time.getMonth()) + "-" + Number(time.getDate()))
+            axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/attendance/all/?status=" + tabsTitle + "&for_date=" + Number(time.getFullYear()) + "-" + Number(time.getMonth()) + "-" + Number(time.getDate()) + (dateBuFilter ? "&building_id=" + dateBuFilter : "") + (dateDeFilter ? +"&department_id=" + dateDeFilter : ""), CONFIG)
+                .then(res => {
+                    setData2(res.data?.items)
+                })
+        }
+
+        console.log(date)
+    }
+
+    function onChangeBuDate(building_e) {
+        console.log(dateFilter)
+        setDateBuFilter(building_e)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/attendance/all/?status=" + tabsTitle + "&for_date=" + dateFilter + "&building_id=" + building_e + (dateDeFilter ? +"&department_id=" + dateDeFilter : ""), CONFIG)
             .then(res => {
-                setDepartments(res.data)
+                setData2(res.data?.items)
+            })
+    }
+
+    function onChangeDeDate(department_e) {
+        setDateDeFilter(department_e)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/attendance/all/?status=" + tabsTitle + "&for_date=" + dateFilter + (dateBuFilter ? "&building_id=" + dateBuFilter : "") + "&department_id=" + department_id, CONFIG)
+            .then(res => {
+                setData2(res.data?.items)
+            })
+    }
+
+    const getDeps = (val) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+            .then(res => {
+                setDepartments(res.data?.items)
             })
             .catch(err => {
                 toast.error("Ошибка")
@@ -150,24 +186,31 @@ const Home = () => {
     return (
         <div className="home-style">
             <div className="home-left">
-                <h3 className="page-title-main font-family-medium">
-                    Обзор активности
-                </h3>
+                <div className="d-flex justify-content-between mb-3">
+                    <h3 className="page-title-main font-family-medium">
+                        Обзор активности
+                    </h3>
+                    <DatePicker placeholder="Фильтр даты" onChange={onChangeDate}/>
+
+                </div>
                 <div className="tabs-btns">
                     <button onClick={() => {
                         setTabs(1)
+                        setTabsTitle("on_time")
                         getAll('on_time')
                     }}
                             className={tabs === 1 ? "font-family-medium active" : "font-family-medium"}>Отсутствие
                     </button>
                     <button onClick={() => {
                         setTabs(2)
+                        setTabsTitle("late")
                         getAll('late')
                     }}
                             className={tabs === 2 ? "font-family-medium active" : "font-family-medium"}>Опоздание
                     </button>
                     <button onClick={() => {
                         setTabs(3)
+                        setTabsTitle("absent")
                         getAll('absent')
                     }}
                             className={tabs === 3 ? "font-family-medium active" : "font-family-medium"}>Вовремя
@@ -176,33 +219,81 @@ const Home = () => {
                 <div className="tabs-content">
                     <div className="tabs-content-filter">
                         <div className="left-sv">
-                            <label className="font-family-medium">Филиалы</label>
+                            <label className="font-family-medium mb-2">Филиалы</label>
+                            {/*<Select*/}
+                            {/*    className="w-100"*/}
+                            {/*    // value={building_id}*/}
+                            {/*    onChange={(building_e) => {*/}
+                            {/*        onChangeBuDate(building_e)*/}
+                            {/*    }}*/}
+                            {/*>*/}
+                            {/*    <option value="">Все</option>*/}
+                            {/*    {*/}
+                            {/*        offices?.map((item, index) => (*/}
+                            {/*            <option value={item?.id} key={index}>{item?.name}</option>*/}
+                            {/*        ))*/}
+                            {/*    }*/}
+                            {/*</Select>*/}
                             <Select
+                                showSearch
+                                placeholder="Поиск, чтобы выбрать"
+                                optionFilterProp="children"
                                 className="w-100"
-                                value={building_id}
-                                onChange={(e) => setbuilding_id(e)}
-                            >
-                                {
-                                    offices?.map((item, index) => (
-                                        <option value={item?.id} key={index}>{item?.name}</option>
-                                    ))
+                                onSearch={getBuilding}
+                                onChange={(building_e) => {
+                                    onChangeBuDate(building_e)
+                                }}
+                                filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                                filterSort={(optionA, optionB) =>
+                                    (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                                 }
-                            </Select>
+                                options={offices?.map((item) => {
+                                    return {
+                                        value: item.id,
+                                        label:
+                                        item?.name
+                                    };
+                                })}
+                            />
                         </div>
                         <div className="center-sv">
-                            <label className="font-family-medium">Отделы</label>
-                            <Select
-                                className="w-100"
-                                value={building_id}
-                                onChange={(e) => setdepartment_id(e)}
-                            >
-                                {
-                                    departments?.map((item, index) => (
-                                        <option value={item?.id} key={index}>{item?.department_title}</option>
-                                    ))
-                                }
-                            </Select>
+                            <label className="font-family-medium mb-2">Отделы</label>
+                            {/*<Select*/}
+                            {/*    className="w-100"*/}
+                            {/*    // value={department_id}*/}
+                            {/*    onChange={(department_e) => {*/}
+                            {/*        onChangeDeDate(department_e)*/}
+                            {/*    }}*/}
+                            {/*>*/}
+                            {/*    <option value="">Все</option>*/}
 
+                            {/*    {*/}
+                            {/*        departments?.map((item, index) => (*/}
+                            {/*            <option value={item?.id} key={index}>{item?.department_title}</option>*/}
+                            {/*        ))*/}
+                            {/*    }*/}
+                            {/*</Select>*/}
+                            <Select
+                                showSearch
+                                placeholder="Поиск, чтобы выбрать"
+                                optionFilterProp="children"
+                                className="w-100"
+                                onSearch={getDeps}
+                                onChange={(department_e) => {
+                                    onChangeDeDate(department_e)
+                                }}
+                                filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                                filterSort={(optionA, optionB) =>
+                                    (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                                }
+                                options={departments?.map((item) => {
+                                    return {
+                                        value: item.id,
+                                        label:
+                                        item?.department_title
+                                    };
+                                })}
+                            />
                         </div>
                     </div>
                     <div className="tabs-lists">
@@ -238,8 +329,6 @@ const Home = () => {
                     <div className="bigSmallText">
                         <p className="bigText font-family-extra-bold">
                             {
-
-
                                 topType === 1 ?
                                     late_attendances_count + on_time_attendances_count + absent_attendances_count
                                     : topType === 2 ?

@@ -10,44 +10,43 @@ const SmartCameraAddModal = (props) => {
     const [show, setShow] = useState(false)
     const [offices, setOffices] = useState([])
     const [rooms, setRooms] = useState([])
+    const [selectOffices, setSelectOffices] = useState(null)
     const [sendData, setSendData] = useState({
-        // name: "",
-        // device_id: "",
-        // device_mac: "",
-        // lib_platform_version: "",
-        // lib_ai_version: "",
-        // software_version: "",
-        // building_id: "",
-        // room_id: "",
-        // device_ip: "",
-        // time_stamp: "",
-        // device_name: "",
-        // device_lat: "",
-        // ddns_rtsp_url: "",
-        // device_long: "",
         distance: 0
     })
-    const getBuilding = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", CONFIG)
+    const getBuilding = (val) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
             .then(res => {
-                setOffices(res.data)
-                setSendData({...sendData, building_id: res.data.id})
+                setOffices(res?.data?.items)
+                setSendData({...sendData, buildings_id: res.data.id})
+
             })
             .catch(err => {
                 toast.error("Ошибка")
             })
-
+    }
+    const getRoomsSearch = (val) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/room/" + selectOffices + "/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+            .then(res => {
+                setRooms(res.data?.items)
+                setSendData({...sendData, room_id: res.data.id})
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
     }
     const getRooms = (id) => {
+        setSelectOffices(id)
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/room/" + id + "/all", CONFIG)
             .then(res => {
-                setRooms(res.data)
+                setRooms(res.data?.items)
                 // setSendData({...sendData, room_id: res.data.id})
             })
             .catch(err => {
                 toast.error("Ошибка")
             })
     }
+
     const sendAll = () => {
         axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/camera/smartcamera/create", sendData, CONFIG)
             .then(res => {
@@ -59,7 +58,6 @@ const SmartCameraAddModal = (props) => {
                 toast.error("Ошибка")
             })
     }
-    const inputRef = useMask({mask: "aa - bb - cc - dd - ee - ff", replacement: {_: /\d/}})
     useEffect(() => {
         getBuilding()
     }, [])
@@ -87,34 +85,52 @@ const SmartCameraAddModal = (props) => {
                     <div className="inputs-box w-100 mr-16">
                         <label className="font-family-medium">Выбрать здания </label>
                         <Select
+                            showSearch
+                            placeholder="Поиск, чтобы выбрать"
+                            optionFilterProp="children"
                             className="w-100"
+                            onSearch={getBuilding}
                             onChange={(e) => {
                                 setSendData({...sendData, building_id: e})
                                 getRooms(e)
                             }}
-                        >
-
-                            {
-                                offices?.map((item, index) => (
-                                    <option value={item?.id} key={index}>{item?.name}</option>
-                                ))
+                            filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                            filterSort={(optionA, optionB) =>
+                                (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                             }
+                            options={offices?.map((item) => {
+                                return {
+                                    value: item.id,
+                                    label:
+                                    item?.name
+                                };
+                            })}
+                        />
 
-                        </Select>
                     </div>
                     <div className="inputs-box w-100">
                         <label className="font-family-medium">Выбрать комнату </label>
                         <Select
+                            showSearch
+                            placeholder="Поиск, чтобы выбрать"
+                            optionFilterProp="children"
                             className="w-100"
+                            onSearch={getRoomsSearch}
                             onChange={(e) => setSendData({...sendData, room_id: e})}
-                        >
-                            {
-                                rooms?.map((item, index) => (
-                                    <option value={item?.id} key={index}>{item?.name}</option>
-                                ))
+                            // onChange={(e) => setCountry(e)}
+                            filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                            filterSort={(optionA, optionB) =>
+                                (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                             }
+                            options={rooms?.map((item) => {
+                                return {
+                                    value: item.id,
+                                    label:
+                                    item?.name
+                                };
+                            })}
+                        />
 
-                        </Select>
                     </div>
                 </div>
                 <div className="d-flex">
@@ -204,26 +220,27 @@ const SmartCameraAddModal = (props) => {
                                type="text"/>
                     </div>
                 </div>
-               <div className="d-flex">
-                   <div className="inputs-box w-100">
-                       <label className="font-family-medium">type </label>
-                       <Select
-                           className="w-100"
-                           onChange={(e) => setSendData({...sendData, camera_type: e})}
-                       >
-                           <option value="entry">entry</option>
-                           <option value="exit">exit</option>
-                       </Select>
-                   </div>
+                <div className="d-flex">
+                    <div className="inputs-box w-100">
+                        <label className="font-family-medium">type </label>
+                        <Select
+                            className="w-100"
+                            onChange={(e) => setSendData({...sendData, camera_type: e})}
+                        >
+                            <option value="entry">entry</option>
+                            <option value="exit">exit</option>
+                        </Select>
+                    </div>
 
-                   <div className="inputs-box w-100 ml-16">
-                       <label className="font-family-medium">ddns_rtsp_url <img src="/icon/star.svg" className="star-img"
-                                                                              alt=""/> </label>
-                       <input className="w-100"
-                              onChange={(e) => setSendData({...sendData, ddns_rtsp_url: e.target.value})}
-                              type="text"/>
-                   </div>
-               </div>
+                    <div className="inputs-box w-100 ml-16">
+                        <label className="font-family-medium">ddns_rtsp_url <img src="/icon/star.svg"
+                                                                                 className="star-img"
+                                                                                 alt=""/> </label>
+                        <input className="w-100"
+                               onChange={(e) => setSendData({...sendData, ddns_rtsp_url: e.target.value})}
+                               type="text"/>
+                    </div>
+                </div>
                 {/*<div className="d-flex">*/}
                 {/*    <div className="inputs-box w-100 mr-16">*/}
                 {/*        <label className="font-family-medium">User name<img src="/icon/star.svg" className="star-img"*/}

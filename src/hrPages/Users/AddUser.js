@@ -14,7 +14,7 @@ const AddUser = () => {
     const getUsers = () => {
         axios.get(API_PATH + "user/company/" + localStorage.getItem('id') + "/user/all", CONFIG)
             .then(res => {
-                setUsers(res.data)
+                setUsers(res.data?.items)
             })
             .catch(err => {
                 toast.error("Ошибка")
@@ -23,7 +23,7 @@ const AddUser = () => {
     const getDeps = () => {
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all", CONFIG)
             .then(res => {
-                setDepartments(res.data)
+                setDepartments(res.data?.items)
             })
             .catch(err => {
                 toast.error("Ошибка")

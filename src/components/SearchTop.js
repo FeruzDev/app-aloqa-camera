@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -9,8 +9,15 @@ import FormControl from "@mui/material/FormControl";
 import {FormLabel} from "@mui/material";
 import RadioGroup from "@mui/material/RadioGroup";
 import {Select} from "antd";
+import axios from "axios";
+import {API_PATH, CONFIG} from "./const";
+import {toast} from "react-toastify";
 const SearchTop = () => {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [building_id, setbuilding_id] = useState(1)
+    const [offices, setOffices] = useState([])
+    const [departments, setDepartments] = useState([])
+    const [department_id, setdepartment_id] = useState(1)
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -18,7 +25,19 @@ const SearchTop = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const getBuilding = () => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", CONFIG)
+            .then(res => {
+                setOffices(res.data)
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
+    }
 
+    useEffect(() => {
+        getBuilding()
+    }, []);
     return (
         <div className="search-top">
             <div className="d-flex align-items-center">
@@ -77,41 +96,38 @@ const SearchTop = () => {
                       </div>
                       <div className="left-fl-pair">
                           <div className="inputs-box">
-                              <label  className="font-family-medium">Отдел </label>
+                              <label className="font-family-medium">Отделы</label>
                               <Select
                                   className="w-100"
-                                  options={[
-                                      { value: 'jack', label: 'Jack' },
-                                      { value: '1', label: '1' },
-                                      { value: 'Yiminghe', label: 'yiminghe' },
-                                      { value: 'disabled', label: 'Disabled', disabled: true },
-                                  ]}
-                              />
+                                  value={department_id}
+                                  onChange={(e) => setdepartment_id(e)}
+                              >
+                                  {
+                                      departments?.map((item, index) => (
+                                          <option value={item?.id} key={index}>{item?.department_title}</option>
+                                      ))
+                                  }
+                              </Select>
+
                           </div>
                           <div className="inputs-box">
                               <label  className="font-family-medium">Должность </label>
-                              <Select
-                                  className="w-100"
-                                  options={[
-                                      { value: 'jack', label: 'Jack' },
-                                      { value: '1', label: '1' },
-                                      { value: 'Yiminghe', label: 'yiminghe' },
-                                      { value: 'disabled', label: 'Disabled', disabled: true },
-                                  ]}
-                              />
+                              <input type="text"/>
                           </div>
-                          <div className="inputs-box">
-                              <label  className="font-family-medium">Режим </label>
-                              <Select
-                                  className="w-100"
-                                  options={[
-                                      { value: 'jack', label: 'Jack' },
-                                      { value: '1', label: '1' },
-                                      { value: 'Yiminghe', label: 'yiminghe' },
-                                      { value: 'disabled', label: 'Disabled', disabled: true },
-                                  ]}
-                              />
-                          </div>
+                       <div className="inputs-box">
+                           <label className="font-family-medium">Филиалы</label>
+                           <Select
+                               className="w-100"
+                               value={building_id}
+                               onChange={(e) => setbuilding_id(e)}
+                           >
+                               {
+                                   offices?.map((item, index) => (
+                                       <option value={item?.id} key={index}>{item?.name}</option>
+                                   ))
+                               }
+                           </Select>
+                       </div>
                       </div>
                   </div>
                     <div className="con-btn">

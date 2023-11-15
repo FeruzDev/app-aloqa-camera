@@ -79,7 +79,7 @@ const PeakHours = () => {
 
             <div className="visitor-title">
                 <h1 ><span>
-                    Visitor
+                    Peak hours
                 </span>
 
                      <DatePicker onChange={onChange} />
