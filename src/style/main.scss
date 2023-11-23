@@ -2517,6 +2517,14 @@ canvas {
 .camera-get-dots-header-new {
   display: flex;
 
+  .default-canvas-style{
+    canvas{
+      width: 0;
+      height: 0;
+      border: none;
+    }
+
+  }
   .left-item {
     padding: 10px;
     border-right: 1px solid #E9E9EF;

@@ -43,7 +43,7 @@ import SmartCamera from "../pages/Camera/SmartCamera";
 import Live from "../pages/Live";
 import RoiEmployee from "../pages/RoiEmployee";
 import RoiEmployeeAdd from "../pages/RoiEmployee/RoiEmployeeAdd";
-
+import PrivateRoute from "../components/PrivateRoute"
 const MainLayoutVisitor = () => {
     return (
         <div className="main-layout-design">
@@ -54,49 +54,49 @@ const MainLayoutVisitor = () => {
             <div className="right-side">
                 <VisitorNavbar />
                 <Switch>
-                    <Route path="/main/live" exact component={Live} />
-                    <Route path="/main/roi-employee" exact component={RoiEmployee} />
-                    <Route path="/main/roi-employee/add" exact component={RoiEmployeeAdd} />
-                    <Route path="/main/building" exact component={Camera} />
-                    <Route path="/main/smart-camera" exact component={SmartCamera} />
-                    <Route path="/main/building/:room_id" exact component={Rooms} />
-                    <Route path="/main/building/:room_id/camera-list/:camera_id" exact component={CameraList} />
-                    <Route path="/main/visitor-home" exact component={VisitorAnalytics} />
-                    <Route path="/main/visitor-comparasion" exact component={VisitorComparasion} />
-                    <Route path="/main/my-modules" exact component={Servers} />-
-                    <Route path="/main/services" exact component={Services} />
-                    <Route path="/main/deployments" exact component={Deployments} />
-                    <Route path="/main/deployments/:id" exact component={DeploymentsDetail} />
-                    <Route path="/main/detect-camera/:id" exact component={DetectCamera2} />
-                    {/*<Route path="/visitor-home/detect-camera" exact component={DetectCamera} />*/}
-                    {/*<Route path="/" exact component={Home} />*/}
-                    <Route path="/main/hr-admin/home-page-hr" exact component={Home} />
-                    <Route path="/main/hr-admin/employees" exact component={Employees} />
-                    <Route path="/main/hr-admin/employees/profile" exact component={Profile} />
-                    <Route path="/main/hr-admin/employees/profile/edit/:id" exact component={ProfileEdit} />
-                    <Route path="/main/hr-admin/employees/profile/create" exact component={ProfileCreate} />
-                    <Route path="/main/hr-admin/statistika" exact component={Statistika} />
-                    <Route path="/main/hr-admin/statistika/detail" exact component={StatistikaDetail} />
-                    <Route path="/main/hr-admin/audit" exact component={Audit} />
-                    <Route path="/main/hr-admin/report" exact component={Reports} />
-                    <Route path="/main/hr-admin/users" exact component={Users} />
-                    <Route path="/main/hr-admin/users/edit" exact component={EditUser} />
-                    <Route path="/main/hr-admin/users/add-user" exact component={AddUser} />
-                    <Route path="/main/hr-admin/notification" exact component={Notification} />
-                    <Route path="/main/hr-admin/notification/notification-edit" exact component={NotificationEdit} />
-                    <Route path="/main/hr-admin/notification/notification-add" exact component={NotificationAdd} />
-                    <Route path="/main/hr-admin/departments" exact component={Departments} />
-                    <Route path="/main/hr-admin/departments/departments-edit/:id" exact component={DepartmentsEdit} />
-                    <Route path="/main/hr-admin/departments/departments-add" exact component={DepartmentsAdd} />
-                    <Route path="/main/hr-admin/modes" exact component={Modes} />
-                    <Route path="/main/hr-admin/modes/add" exact component={ModesAdd} />
-                    <Route path="/main/hr-admin/modes/edit/:id" exact component={ModesEdit} />
-                    <Route path="/main/hr-admin/positions" exact component={Positions} />
-                    <Route path="/main/hr-admin/positions/add" exact component={PositionAdd} />
-                    <Route path="/main/hr-admin/positions/edit" exact component={PositionEdit} />
-                    <Route path="/main/hr-admin/branches" exact component={Branches} />
-                    <Route path="/main/hr-admin/job-title" exact component={JobTitle} />
-                    <Route path="/main/hr-admin/logging" exact component={Logging} />
+                    <PrivateRoute path="/main/live" exact component={Live} />
+                    <PrivateRoute path="/main/roi-employee" exact component={RoiEmployee} />
+                    <PrivateRoute path="/main/roi-employee/add" exact component={RoiEmployeeAdd} />
+                    <PrivateRoute path="/main/building" exact component={Camera} />
+                    <PrivateRoute path="/main/smart-camera" exact component={SmartCamera} />
+                    <PrivateRoute path="/main/building/:room_id" exact component={Rooms} />
+                    <PrivateRoute path="/main/building/:room_id/camera-list/:camera_id" exact component={CameraList} />
+                    <PrivateRoute path="/main/visitor-home" exact component={VisitorAnalytics} />
+                    <PrivateRoute path="/main/visitor-comparasion" exact component={VisitorComparasion} />
+                    <PrivateRoute path="/main/my-modules" exact component={Servers} />-
+                    <PrivateRoute path="/main/services" exact component={Services} />
+                    <PrivateRoute path="/main/deployments" exact component={Deployments} />
+                    <PrivateRoute path="/main/deployments/:id" exact component={DeploymentsDetail} />
+                    <PrivateRoute path="/main/detect-camera/:id" exact component={DetectCamera2} />
+                    {/*<PrivateRoute path="/visitor-home/detect-camera" exact component={DetectCamera} />*/}
+                    {/*<PrivateRoute path="/" exact component={Home} />*/}
+                    <PrivateRoute path="/main/hr-admin/home-page-hr" exact component={Home} />
+                    <PrivateRoute path="/main/hr-admin/employees" exact component={Employees} />
+                    <PrivateRoute path="/main/hr-admin/employees/profile" exact component={Profile} />
+                    <PrivateRoute path="/main/hr-admin/employees/profile/edit/:id" exact component={ProfileEdit} />
+                    <PrivateRoute path="/main/hr-admin/employees/profile/create" exact component={ProfileCreate} />
+                    <PrivateRoute path="/main/hr-admin/statistika" exact component={Statistika} />
+                    <PrivateRoute path="/main/hr-admin/statistika/detail" exact component={StatistikaDetail} />
+                    <PrivateRoute path="/main/hr-admin/audit" exact component={Audit} />
+                    <PrivateRoute path="/main/hr-admin/report" exact component={Reports} />
+                    <PrivateRoute path="/main/hr-admin/users" exact component={Users} />
+                    <PrivateRoute path="/main/hr-admin/users/edit" exact component={EditUser} />
+                    <PrivateRoute path="/main/hr-admin/users/add-user" exact component={AddUser} />
+                    <PrivateRoute path="/main/hr-admin/notification" exact component={Notification} />
+                    <PrivateRoute path="/main/hr-admin/notification/notification-edit" exact component={NotificationEdit} />
+                    <PrivateRoute path="/main/hr-admin/notification/notification-add" exact component={NotificationAdd} />
+                    <PrivateRoute path="/main/hr-admin/departments" exact component={Departments} />
+                    <PrivateRoute path="/main/hr-admin/departments/departments-edit/:id" exact component={DepartmentsEdit} />
+                    <PrivateRoute path="/main/hr-admin/departments/departments-add" exact component={DepartmentsAdd} />
+                    <PrivateRoute path="/main/hr-admin/modes" exact component={Modes} />
+                    <PrivateRoute path="/main/hr-admin/modes/add" exact component={ModesAdd} />
+                    <PrivateRoute path="/main/hr-admin/modes/edit/:id" exact component={ModesEdit} />
+                    <PrivateRoute path="/main/hr-admin/positions" exact component={Positions} />
+                    <PrivateRoute path="/main/hr-admin/positions/add" exact component={PositionAdd} />
+                    <PrivateRoute path="/main/hr-admin/positions/edit" exact component={PositionEdit} />
+                    <PrivateRoute path="/main/hr-admin/branches" exact component={Branches} />
+                    <PrivateRoute path="/main/hr-admin/job-title" exact component={JobTitle} />
+                    <PrivateRoute path="/main/hr-admin/logging" exact component={Logging} />
                 </Switch>
             </div>
 
