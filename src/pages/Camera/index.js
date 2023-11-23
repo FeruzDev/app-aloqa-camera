@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import ModalOffice from "./ModalOffice";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import ModalRoom from "./ModalRoom";
 import {toast} from "react-toastify";
 import ModalCamera from "./ModalCamera";
@@ -22,7 +22,7 @@ const Camera = () => {
 
     const history = useHistory()
     const getBuilding = () => {
-        axios.get(API_PATH + "company/"+localStorage.getItem('id') + "/building/all", CONFIG)
+        axios.get(API_PATH + "company/"+localStorage.getItem('id') + "/building/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setOffices(res.data?.items)
             })
@@ -32,11 +32,11 @@ const Camera = () => {
     }
     const getRooms = (id) => {
         window.scrollTo(0, 0);
-        console.log(selectRooms);
+        // console.log(selectRooms);
         setSelectOffices(id)
         history.push("building/"+ id)
         // setSelectRooms(id)
-        axios.get(API_PATH + "company/"+localStorage.getItem('id') + "/room/" + id + "/all", CONFIG)
+        axios.get(API_PATH + "company/"+localStorage.getItem('id') + "/room/" + id + "/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setRooms(res.data?.items)
             })
@@ -46,7 +46,7 @@ const Camera = () => {
     }
     const getCameras = (id) => {
         setSelectRooms(id)
-        axios.get(API_PATH + "company/"+localStorage.getItem('id') + "/room/" + id + "/all", CONFIG)
+        axios.get(API_PATH + "company/"+localStorage.getItem('id') + "/room/" + id + "/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setCameras(res.data?.items)
             })

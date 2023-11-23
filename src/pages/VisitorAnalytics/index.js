@@ -11,7 +11,7 @@ const VisitorAnalytics = () => {
             <Visitor />
             <div className=" d-flex">
                 <PeakHours />
-                <AnaluzCustom />
+                {/*<AnaluzCustom />*/}
             </div>
             <DailyAnalytics />
         </div>

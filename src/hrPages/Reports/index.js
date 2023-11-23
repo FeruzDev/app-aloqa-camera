@@ -87,7 +87,7 @@ const Reports = () => {
                         <h6 className="font-family-medium">Аудит</h6>
                     </div>
                     <div className="right-head">
-                        <button className="upload-btn font-family-medium ml-16 mr-16"><img src="/icon/upload.svg"/> Экспорт в Excel</button>
+                        {/*<button className="upload-btn font-family-medium ml-16 mr-16"><img src="/icon/upload.svg"/> Экспорт в Excel</button>*/}
                     </div>
                 </div>
             </div>

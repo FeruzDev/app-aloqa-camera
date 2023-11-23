@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button, Modal, Select} from "antd";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 import {InputMask, useMask} from "@react-input/mask";
 
@@ -20,7 +20,7 @@ const AddModuleModal = (props) => {
         // fleet_id: 1
     })
     const sendAll = () => {
-        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/module/create", sendData, CONFIG)
+        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/module/create", sendData, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 toast.success("Добавлено успешно")
                 props.getData()

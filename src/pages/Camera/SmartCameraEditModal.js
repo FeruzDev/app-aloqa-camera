@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Modal, Select} from "antd";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 import {useMask} from "@react-input/mask";
 
@@ -10,7 +10,7 @@ const SmartCameraEditModal = (props) => {
     const [offices, setOffices] = useState([])
 
     const sendAll = () => {
-        // axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/module/create", props.sendData, CONFIG)
+        // axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/module/create", props.sendData, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
         //     .then(res => {
         //         toast.success("Добавлено успешно")
         //         props.getData()
@@ -19,8 +19,8 @@ const SmartCameraEditModal = (props) => {
         //     .catch(err => {
         //         toast.error("Ошибка")
         //     })
-        console.log(props.sendData)
-        axios.put(API_PATH + "company/" + localStorage.getItem('id') + "/camera/smartcamera/update/" + props.sendData?.id , props.sendData, CONFIG)
+        // console.log(props.sendData)
+        axios.put(API_PATH + "company/" + localStorage.getItem('id') + "/camera/smartcamera/update/" + props.sendData?.id , props.sendData, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 toast.success("Добавлено успешно")
                 props.getData()
@@ -32,7 +32,7 @@ const SmartCameraEditModal = (props) => {
             })
     }
     const getRoomsSearch = (val) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/room/" + selectOffices + "/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/room/" + selectOffices + "/all" + (val?.length > 0 ? "?search_str=" + val : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 props.setRooms(res.data?.items)
                 props.setSendData({...props.sendData, room_id: res.data.id})
@@ -43,7 +43,7 @@ const SmartCameraEditModal = (props) => {
     }
 
     const getBuilding = (val) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all" + (val?.length > 0 ? "?search_str=" + val : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setOffices(res?.data?.items)
                 props.setSendData({...props.sendData, buildings_id: res.data.id})

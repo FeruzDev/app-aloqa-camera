@@ -3,7 +3,7 @@ import {Select} from "antd";
 import {TimePicker} from 'antd';
 import dayjs from 'dayjs';
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 import {useHistory} from "react-router-dom";
 
@@ -23,7 +23,7 @@ const ModesAdd = () => {
     }
 
     const sendAll = (id) => {
-        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/hr/timerange/create",  sendData, CONFIG)
+        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/hr/timerange/create",  sendData, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 toast.success("Добавлено успешно")
                 history.push("/main/hr-admin/modes")
@@ -69,13 +69,13 @@ const ModesAdd = () => {
                                         className="w-100"
                                         onChange={(e) => setSendData({...sendData, from_week_day: e})}
                                         options={[
-                                            {value: 'Monday', label: 'Monday'},
-                                            {value: 'Tuesday', label: 'Tuesday'},
-                                            {value: 'Wednesday', label: 'Wednesday'},
-                                            {value: 'Thursday', label: 'Thursday'},
-                                            {value: 'Friday', label: 'Friday'},
-                                            {value: 'Saturday', label: 'Saturday'},
-                                            {value: 'Sunday ', label: 'Sunday'},
+                                            {value: 'Monday', label: 'Понедельник'},
+                                            {value: 'Tuesday', label: 'Вторник'},
+                                            {value: 'Wednesday', label: 'Среда'},
+                                            {value: 'Thursday', label: 'Четверг'},
+                                            {value: 'Friday', label: 'Пятница'},
+                                            {value: 'Saturday', label: 'Суббота'},
+                                            {value: 'Sunday ', label: 'Воскресенье'},
                                         ]}
                                     />
                                 </div>
@@ -84,23 +84,23 @@ const ModesAdd = () => {
                                         className="w-100"
                                         onChange={(e) => setSendData({...sendData, to_week_day: e})}
                                         options={[
-                                            {value: 'Monday', label: 'Monday'},
-                                            {value: 'Tuesday', label: 'Tuesday'},
-                                            {value: 'Wednesday', label: 'Wednesday'},
-                                            {value: 'Thursday', label: 'Thursday'},
-                                            {value: 'Friday', label: 'Friday'},
-                                            {value: 'Saturday', label: 'Saturday'},
-                                            {value: 'Sunday ', label: 'Sunday'},
+                                            {value: 'Monday', label: 'Понедельник'},
+                                            {value: 'Tuesday', label: 'Вторник'},
+                                            {value: 'Wednesday', label: 'Среда'},
+                                            {value: 'Thursday', label: 'Четверг'},
+                                            {value: 'Friday', label: 'Пятница'},
+                                            {value: 'Saturday', label: 'Суббота'},
+                                            {value: 'Sunday ', label: 'Воскресенье'},
                                         ]}
                                     />
                                 </div>
                             </div>
-                            <div className="inputs-box w-100   mt-3">
-                                <label className="font-family-medium">Интервал</label>
-                                <input className="w-100"
-                                       onChange={(e) => setSendData({...sendData, interval: e.target.value})}
-                                       type="text"/>
-                            </div>
+                            {/*<div className="inputs-box w-100   mt-3">*/}
+                            {/*    <label className="font-family-medium">Интервал</label>*/}
+                            {/*    <input className="w-100"*/}
+                            {/*           onChange={(e) => setSendData({...sendData, interval: e.target.value})}*/}
+                            {/*           type="text"/>*/}
+                            {/*</div>*/}
                         </div>
 
                     </div>

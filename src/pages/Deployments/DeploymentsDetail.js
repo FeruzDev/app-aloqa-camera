@@ -3,7 +3,7 @@ import AddServiceModal from "../Services/AddServiceModal";
 import AddDeployModal from "./AddDeployModal";
 import DeploymentsDetailModal from "./DeploymentsDetailModal";
 import DepMainModal from "./DepMainModal";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import axios from "axios";
 import {useParams} from "react-router-dom";
 import {toast} from "react-toastify";
@@ -21,7 +21,7 @@ const DeploymentsDetail = () => {
         const [data, setData] = useState([])
 
         // const getAll = () => {
-        //     axios.get(API_PATH + "camera/module/" + params.id + "/all", CONFIG)
+        //     axios.get(API_PATH + "camera/module/" + params.id + "/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
         //         .then(res => {
         //             setData(res?.data)
         //         })
@@ -31,11 +31,11 @@ const DeploymentsDetail = () => {
         // }
 
         const getDep = () => {
-            axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/deployment/" + params.id, CONFIG)
+            axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/deployment/" + params.id, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
                 .then(res => {
-                    console.log(res.data)
+                    // console.log(res.data)
 
-                    axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/module/" + res.data?.module?.id + "/all", CONFIG)
+                    axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/module/" + res.data?.module?.id + "/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
                         .then(res => {
                             setData(res?.data)
                         })
@@ -46,7 +46,7 @@ const DeploymentsDetail = () => {
         }
         const deploy = () => {
 
-            axios.post(API_PATH + API_PATH + "company/" + localStorage.getItem('id') + "/deploy/deploy_analytics_service", {deployment_id: params.id}, CONFIG)
+            axios.post(API_PATH + API_PATH + "company/" + localStorage.getItem('id') + "/deploy/deploy_analytics_service", {deployment_id: params.id}, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
                 .then(res => {
                     toast.success("SUCCESS")
                 })
@@ -60,7 +60,7 @@ const DeploymentsDetail = () => {
             setIsDeployDetailModal(true)
         }
         function getImg(imgId) {
-            axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/" + imgId, CONFIG)
+            axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/" + imgId, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
                 .then(res => {
                     img.src = res?.data?.screenshot;
                     img.onload = function () {
@@ -76,23 +76,23 @@ const DeploymentsDetail = () => {
         }
 
         const getConfig = (id) => {
-            axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/line_crossing_analytics/" + id + "/all", CONFIG)
+            axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/line_crossing_analytics/" + id + "/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
                 .then(res => {
                     setConfigs(res?.data)
                 })
         }
         const getConfigCam = (id) => {
-            axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/config/deployment/camera/" + params.id + "/" + id, CONFIG)
+            axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/config/deployment/camera/" + params.id + "/" + id, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
                 .then(res => {
                     // setConfigsCam(res?.data?.line_crossing_analytics?.map((item, index) => {
                     //     return item?.id
                     // }))
                     setIsDeployDetailModalId(res.data?.id)
 
-                    axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/line_crossing_analytics/" + id + "/all/" +  res.data?.id, CONFIG)
+                    axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/line_crossing_analytics/" + id + "/all/" +  res.data?.id, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
                         .then(res => {
                             setConfigs(res?.data)
-                            setConfigList(res?.data.filter(item => item.is_true).map(item => item.id))
+                            setConfigList(res?.data?.filter(item => item.is_true).map(item => item.id))
                         })
                 })
         }

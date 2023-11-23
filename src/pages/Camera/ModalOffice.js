@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Modal, Select} from "antd";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 import CountryModal from "../LocationModal/CountryModal";
 import RegionModal from "../LocationModal/RegionModal";
@@ -29,7 +29,7 @@ const ModalOffice = (props) => {
         longitude: 0
     })
     const sendAll = () => {
-        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/building/create", sendData, CONFIG)
+        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/building/create", sendData, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 toast.success("Добавлено успешно")
                 props.getBuilding()
@@ -40,7 +40,7 @@ const ModalOffice = (props) => {
             })
     }
     const getCountry = (val) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/country/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/country/all" + (val?.length > 0 ? "?search_str=" + val : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setCountries(res?.data.items)
             })
@@ -51,7 +51,7 @@ const ModalOffice = (props) => {
     const setCountry = (countryIde) => {
         setCountryId(countryIde)
         setSendData({...sendData, country_id: countryIde})
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/country/" + countryIde, CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/country/" + countryIde, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setCountryItem(res?.data?.name)
             })
@@ -63,7 +63,7 @@ const ModalOffice = (props) => {
     const setDistrict = (countryIde) => {
         setRegionId(countryIde)
         setSendData({...sendData, region_id: countryIde})
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/region/" + countryIde, CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/region/" + countryIde, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setRegionItem(res.data?.name)
             })
@@ -73,8 +73,8 @@ const ModalOffice = (props) => {
         getDistrict(countryIde)
     }
     const getRegion = (countryIde) => {
-        console.log(countryIde)
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/region/" + countryIde + "/all", CONFIG)
+        // console.log(countryIde)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/region/" + countryIde + "/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setRegions(res?.data?.items)
             })
@@ -83,8 +83,8 @@ const ModalOffice = (props) => {
             })
     }
     const getRegionSearch = (val) => {
-        console.log(val)
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/region/" + countryId + "/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+        // console.log(val)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/region/" + countryId + "/all" + (val?.length > 0 ? "?search_str=" + val : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setRegions(res?.data?.items)
             })
@@ -93,7 +93,7 @@ const ModalOffice = (props) => {
             })
     }
     const getDistrict = (countryIde) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/district/" + countryIde + "/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/district/" + countryIde + "/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setDistricts(res?.data?.items)
             })
@@ -102,7 +102,7 @@ const ModalOffice = (props) => {
             })
     }
     const getDistrictSearch = (val) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/district/" + regionId + "/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/district/" + regionId + "/all" + (val?.length > 0 ? "?search_str=" + val : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setDistricts(res?.data?.items)
             })
@@ -181,7 +181,7 @@ const ModalOffice = (props) => {
                                 };
                             })}
                         />
-                        <button className="add-btn-plus" onClick={() => setIsCityModal(true)}>
+                        <button className="add-btn-plus" disabled={countryId === null ? true : false } onClick={() => setIsCityModal(true)}>
                             <img src="/icon/plus.svg" alt="+"/>
                         </button>
                     </div>
@@ -208,7 +208,7 @@ const ModalOffice = (props) => {
                                 };
                             })}
                         />
-                        <button className="add-btn-plus" onClick={() => setIsDistrictModal(true)}>
+                        <button className="add-btn-plus" disabled={countryId === null &&  regionId === null ? true : false } onClick={() => setIsDistrictModal(true)}>
                             <img src="/icon/plus.svg" alt="+"/>
                         </button>
                     </div>

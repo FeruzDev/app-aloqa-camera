@@ -3,7 +3,7 @@ import {Button, Checkbox, Modal,} from "antd";
 import {Radio, Space} from 'antd';
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 
 const DeploymentsDetailModal = (props) => {
@@ -16,7 +16,7 @@ const DeploymentsDetailModal = (props) => {
             {
                 "config_id": props.isDeployDetailModalId,
                 "line_crossing_analytics_ids": props.configsList
-            }, CONFIG)
+            }, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 toast.success("Добавлено успешно")
                 // props.getBuilding()
@@ -56,7 +56,7 @@ const DeploymentsDetailModal = (props) => {
     let coords = document.querySelector('#coords');
 
     function mainFc(mainMock, id) {
-        console.log(mainMock)
+        // console.log(mainMock)
         document.getElementById("canvas").click()
 
         function drawLine(x1, y1, x2, y2) {
@@ -145,7 +145,7 @@ const DeploymentsDetailModal = (props) => {
                     drawLine(points[points.length - 1][0], points[points.length - 1][1], x, y);
 
                     if (points.length == 2 && drawMode == "line") {
-                        console.log("line");
+                        // console.log("line");
                         // draw arc around each point
                         ctx.beginPath();
                         ctx.strokeStyle = rgb_color;
@@ -170,7 +170,7 @@ const DeploymentsDetailModal = (props) => {
         });
         document.getElementById('canvas').addEventListener('dblclickw', function (e) {
             // if (e.key === 'Enter') {
-            console.log(points)
+            // console.log(points)
             canvas.style.cursor = 'default';
             drawLine(points[0][0], points[0][1], points[points?.length - 1][0], points[points?.length - 1][1]);
             // fill polygon with color
@@ -254,8 +254,8 @@ const DeploymentsDetailModal = (props) => {
 
         document.getElementById('canvas').addEventListener('click', function (e) {
             // masterPoints.push(mock);
-            console.log("2")
-            console.log(mainMock)
+            // console.log("2")
+            // console.log(mainMock)
             masterPoints.push(mainMock)
             canvas.style.cursor = 'crosshair';
             ctx.strokeStyle = rgb_color;
@@ -270,28 +270,28 @@ const DeploymentsDetailModal = (props) => {
     }
 
     const getConfigCam = (id) => {
-        axios.get(API_PATH + "config/deployment/camera/" + params.id + "/" + props.selectId, CONFIG)
+        axios.get(API_PATH + "config/deployment/camera/" + params.id + "/" + props.selectId, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 // console.log(res.data?.line_crossing_analytics)
                 setConfigsCam(res?.data?.line_crossing_analytics?.map((item, index) => {
                     return item?.id
                 }))
-                console.log(res?.data?.line_crossing_analytics)
+                // console.log(res?.data?.line_crossing_analytics)
                 setTimeout(()=>{
-                    console.log(configsCam)
+                    // console.log(configsCam)
                 }, 1000)
 
             })
     }
 
     const onChange = (e) => {
-        console.log(e)
+        // console.log(e)
         if (props.configsList.includes(e)){
             props.setConfigList(props.configsList.filter(item => item != e))
         } else {
             props.configsList.push(e)
         }
-        console.log(props.configsList)
+        // console.log(props.configsList)
     }
 
     useEffect(() => {

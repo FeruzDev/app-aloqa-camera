@@ -59,7 +59,7 @@ const DetectCamera = () => {
         rawImg.onload = () => {
             canvas.style.backgroundImage = "url(" + src + ")"
             zoomWindow.style.backgroundImage = "url(" + src + ")"
-            console.log(canvas.style.backgroundImage, zoomWindow.style.backgroundImage)
+            // console.log(canvas.style.backgroundImage, zoomWindow.style.backgroundImage)
             resize(rawImg.height, rawImg.width)
         };
     }

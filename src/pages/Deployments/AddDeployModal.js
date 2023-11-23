@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Modal, Select} from "antd";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 
 const AddDeployModal = (props) => {
@@ -18,20 +18,20 @@ const AddDeployModal = (props) => {
         module_id: null
     })
     const getService = () => {
-        axios.get(API_PATH + "service/all", CONFIG)
+        axios.get(API_PATH + "service/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res =>
                 setServiceData(res.data)
             )
     }
     const getModule= () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/module/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/module/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res =>
                 setModuleData(res.data)
             )
 
     }
     const sendAll = () => {
-        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/deployment/create", sendData, CONFIG)
+        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/deployment/create", sendData, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 toast.success("Добавлено успешно")
                 props.setIsDeployModal(false)

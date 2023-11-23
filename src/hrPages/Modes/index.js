@@ -11,15 +11,13 @@ import Pagination from "@mui/material/Pagination";
 import {Button, Modal} from 'antd';
 import {useHistory} from "react-router-dom";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 
 const Modes = () => {
     let history = useHistory()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalOpenItem, setIsModalOpenItem] = useState(null);
     const [data, setData] = useState([])
-
-
 
     const handleCancelDelete = () => {
         setIsModalOpen(false);
@@ -31,7 +29,7 @@ const Modes = () => {
         history.push("/main/hr-admin/modes/edit/" + id)
     }
     const getAll = (e) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/timerange/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/timerange/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setData(res.data)
             })
@@ -42,7 +40,7 @@ const Modes = () => {
 
     };
     const handleOkDelete = () => {
-        axios.delete(API_PATH + "company/" + localStorage.getItem('id') + "/hr/timerange/" + isModalOpenItem, CONFIG)
+        axios.delete(API_PATH + "company/" + localStorage.getItem('id') + "/hr/timerange/" + isModalOpenItem, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setIsModalOpen(false);
                 setIsModalOpenItem(null)
@@ -61,9 +59,9 @@ const Modes = () => {
                         <h6 className="font-family-medium">Режимы</h6>
                     </div>
                     <div className="right-head">
-                        <button className="upload-btn font-family-medium ml-16 mr-16"><img
-                            src="/icon/upload.svg"/> Экспорт в Excel
-                        </button>
+                        {/*<button className="upload-btn font-family-medium ml-16 mr-16"><img*/}
+                        {/*    src="/icon/upload.svg"/> Экспорт в Excel*/}
+                        {/*</button>*/}
                         <button className="add-btn font-family-medium" onClick={createPage}><img src="/icon/plus.svg"/> Добавить новое
                         </button>
                     </div>
@@ -77,7 +75,7 @@ const Modes = () => {
                                 <TableCell className="table-head">Название</TableCell>
                                 <TableCell className="table-head" >Рабочее время</TableCell>
                                 <TableCell className="table-head" >Рабочие дни</TableCell>
-                                <TableCell className="table-head" >Интервал</TableCell>
+                                {/*<TableCell className="table-head" >Интервал</TableCell>*/}
                                 <TableCell className="table-head" align="right">Действие</TableCell>
                             </TableRow>
                         </TableHead>
@@ -92,7 +90,7 @@ const Modes = () => {
                                     </TableCell>
                                     <TableCell className="twt" ><span className="font-family-medium">{item?.from_time?.slice(0, 5) + " : " + item?.to_time?.slice(0, 5)}</span></TableCell>
                                     <TableCell className="twt" ><span className="font-family-medium">{item?.from_week_day + " - " +item?.to_week_day}</span></TableCell>
-                                    <TableCell className="twt" ><span className="font-family-medium">{item?.interval}</span></TableCell>
+                                    {/*<TableCell className="twt" ><span className="font-family-medium">{item?.interval}</span></TableCell>*/}
                                     <TableCell className="twt" align="right">
                                         <div className="con-btns-all">
                                             <div className="con-btns-all">
@@ -125,11 +123,6 @@ const Modes = () => {
                 <p className="pt-2 pb-2">Вы уверены, что удалите этого режим? Это невозможно отменить</p>
             </Modal>
 
-            <div className="pag-bottom">
-                <Stack spacing={2}>
-                    <Pagination count={10} shape="rounded"/>
-                </Stack>
-            </div>
         </div>
     );
 };

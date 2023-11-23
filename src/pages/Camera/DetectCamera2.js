@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 import {useParams} from "react-router-dom";
 const DetectCamera2 = () => {
@@ -34,7 +34,7 @@ const DetectCamera2 = () => {
     useEffect(() => {
         var canvas = document.getElementById('canvas');
         var ctx = canvas.getContext('2d');
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/" + params.id, CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/" + params.id, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setMyItem(res.data)
 
@@ -201,7 +201,7 @@ const DetectCamera2 = () => {
                             drawLine(points[points.length - 1][0], points[points.length - 1][1], x, y);
 
                             if (points.length == 2 && drawMode == "line") {
-                                console.log("line");
+                                // console.log("line");
                                 // draw arc around each point
                                 ctx.beginPath();
                                 ctx.strokeStyle = rgb_color;
@@ -227,7 +227,7 @@ const DetectCamera2 = () => {
 
                 canvas.addEventListener('dblclick', function (e) {
                     // if (e.key === 'Enter') {
-                    console.log(points)
+                    // console.log(points)
                     canvas.style.cursor = 'default';
                     drawLine(points[0][0], points[0][1], points[points?.length - 1][0], points[points?.length - 1][1]);
                     // fill polygon with color
@@ -377,7 +377,7 @@ ${parentPoints.map(function (points) {
             //         return {...acc, ["x" + (index + 1)]: item[0], ["y" + (index + 1)]: item[1]}
             //     }, {})
             // })
-         console.log(myArr[0][0][0])
+         // console.log(myArr[0][0][0])
             axios.post(API_PATH + "line_crossing_analytics/create",
                 {
                     x1c: myArr[0][0][0],
@@ -394,7 +394,8 @@ ${parentPoints.map(function (points) {
                     y2d: myArr[1][1][1],
                     camera_id: Number(params.id),
                     name: myItem?.name},
-                CONFIG)
+                {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}}
+            )
                 .then(res => {
                     toast.success("SUCCEESS LINE")
                 })
@@ -414,7 +415,7 @@ ${parentPoints.map(function (points) {
             let arr1 = bigArr.reduce((acc, item, index) => {
                 return {...acc, ["x" + (index + 1)]: item[0], ["y" + (index + 1)]: item[1]}
             }, {})
-            axios.post(API_PATH + "roi_analytics/create", {...arr1, camera_id: params.id, name: myItem?.name}, CONFIG)
+            axios.post(API_PATH + "roi_analytics/create", {...arr1, camera_id: params.id, name: myItem?.name}, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
                 .then(res => {
                     toast.success("SUCCEESS")
                 })

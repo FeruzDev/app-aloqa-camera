@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {Button, Modal} from "antd";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 
 const SmartCameraDeleteModal = (props) => {
     const sendAll = (id) => {
-        axios.delete(API_PATH + "company/" + localStorage.getItem('id') + "/camera/smartcamera/delete/" + props.selectCam, CONFIG)
+        axios.delete(API_PATH + "company/" + localStorage.getItem('id') + "/camera/smartcamera/delete/" + props.selectCam, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 toast.success("Удален успешно")
                 props.getData()

@@ -111,6 +111,10 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
   margin-top: 20px;
 }
 
+.pl-40 {
+  padding-left: 40px !important;
+}
+
 .my-red-canc {
   background-color: #C53434 !important;
 }
@@ -230,7 +234,9 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
   position: fixed;
   width: 240px;
   height: 100%;
-
+  .css-1uwabd6{
+    //padding: 0px 16px !important;
+  }
   .arrow-up-down-size {
     width: 12px;
   }
@@ -267,8 +273,10 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
       height: 64px;
 
       .logo-company {
-        max-width: 150px;
+        //max-width: 150px;
         max-height: 50px;
+        width: 100%;
+        margin-right: 20px;
         object-fit: cover;
       }
 
@@ -279,12 +287,6 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
         margin: 0;
       }
 
-      button {
-        padding: 0;
-        border: none;
-        background: transparent;
-        margin-top: -3px;
-      }
 
     }
 
@@ -295,6 +297,10 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
       height: calc(100% - 64px);
       background: #FFFFFF;
 
+      .css-behmn9-MuiButtonBase-root-MuiListItemButton-root {
+
+      }
+
       .menu-list-item {
         display: block;
         background: #FFFFFF;
@@ -303,9 +309,9 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
 
         .link-item-style {
           border-radius: 6px;
-          padding: 10px 18px;
+          padding: 16px 18px;
           display: flex;
-          margin: 4px 2px;
+          //margin: 4px 2px;#
           text-decoration: none;
           align-items: center;
           width: 100%;
@@ -322,7 +328,7 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
         }
 
         .link-item-style-active {
-          background: rgba(16, 40, 72, 0.09);
+          background: rgba(16, 40, 72, 0.09) !important;
 
           span {
             font-weight: 600;
@@ -340,10 +346,21 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
         .left-img-center {
           display: flex;
           align-items: center;
+          flex-direction: row;
+          justify-content: space-between;
+          width: 100%;
+
+          button {
+            padding: 0;
+            border: none;
+            background: transparent;
+            margin-top: -3px;
+          }
 
           .left-img {
             img {
               border-radius: 50%;
+              margin-top: -6px;
               width: 32px;
               height: 32px;
             }
@@ -351,6 +368,8 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
 
           .center-content {
             margin-left: 12px;
+            display: flex;
+            align-items: center;
 
             h5 {
 
@@ -367,6 +386,7 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
               font-size: 12px;
             }
           }
+
         }
 
         .right-dot {
@@ -612,7 +632,7 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
   .home-right {
     border-radius: 6px;
     //background: #FBFCFD;
-    padding: 24px;
+    padding: 0 24px 0 24px;
     width: 100%;
 
     .page-title-main {
@@ -722,6 +742,12 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
 
 .employees-pair {
   padding-bottom: 60px;
+  //
+  //.css-apqrd9-MuiTableBody-root{
+  //  td{
+  //    display: flex;
+  //  }
+  //}
 
   .employees-header {
     padding: 16px 24px;
@@ -874,10 +900,29 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
   }
 }
 
+.add-btn-video-roi {
+  border-radius: 6px;
+  background: #1A99FF;
+  height: 40px;
+  font-weight: 450;
+  padding-left: 16px;
+  padding-right: 16px;
+  font-size: 14px;
+  box-shadow: 0 1px 2px 0 rgba(27, 36, 44, 0.12);
+  border: 1px solid #1A99FF;
+  color: #FFF;
+
+
+  img {
+    margin-right: 8px;
+  }
+}
+
 .cancel-btn {
   border-radius: 6px;
   border: 1px solid #CFD6DD;
   background: #FFF;
+  color: #4A545E;
   height: 40px;
   font-size: 14px;
   padding-left: 26px;
@@ -1037,11 +1082,12 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
     }
   }
 
-  a{
+  a {
     text-decoration: none;
     color: #3e4144;
 
   }
+
   span {
     color: #3e4144;
 
@@ -1255,6 +1301,7 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
           }
         }
       }
+
       .inputs-box-2 {
         margin-bottom: 16px;
 
@@ -1268,6 +1315,10 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
           &:focus {
             outline: none;
           }
+        }
+
+        .ant-select-single {
+          height: 40px;
         }
 
         label {
@@ -1314,7 +1365,7 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
       }
 
       .for-select {
-        margin-bottom: 6px;
+        margin-bottom: 3px;
       }
 
       .exit-btn {
@@ -1698,6 +1749,17 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
   margin-left: -2px;
 }
 
+.clear-filter{
+  border: 1px solid #EB5757;
+  margin-top: 40px;
+  background-color: #EB5757;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px 0 rgba(27, 36, 44, 0.12);
+  color: #FFF;
+  padding: 8px 10px;
+  font-size: 14px;
+  letter-spacing: 0;
+}
 .left-fl-big-audit {
   padding: 32px;
   border-radius: 6px;
@@ -1712,8 +1774,6 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
 
     .inputs-box {
       margin-bottom: 16px;
-
-
       input, select {
         font-size: 14px;
         border-radius: 6px;
@@ -1900,11 +1960,23 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
   }
 }
 
+.tabel-item{
+  display: flex;
+  align-items: center;
+}
 .con-btns-all {
   display: flex;
   flex-direction: row;
   justify-content: end;
+  .tabel-item-controls{
+    display: flex;
 
+    min-width: 200px;
+    justify-content: end;
+    flex-direction: row;
+
+
+  }
   button {
     padding: 4px 12px;
     border-radius: 6px;
@@ -2440,6 +2512,136 @@ canvas {
 }
 
 
+
+
+.camera-get-dots-header-new {
+  display: flex;
+
+  .left-item {
+    padding: 10px;
+    border-right: 1px solid #E9E9EF;
+
+    button {
+      border: none;
+      display: block;
+      //width: 250px;
+      //height: 50px;
+      background-color: #FFFFFF;
+      font-weight: 500;
+      border-radius: 6px;
+
+      &:nth-child(1) {
+        margin-bottom: 10px;
+      }
+    }
+
+    .active-type {
+      background: #1A99FF;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+  }
+
+  .center-item {
+    //width: 100%;
+    padding-left: 20px;
+
+    h4{
+      color: #272E35;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 32px; /* 177.778% */
+      letter-spacing: 0.1px;
+
+    }
+    .values-list {
+      //display: flex;
+      //align-items: center;
+      width: 330px;
+      overflow-x: auto;
+      padding-top: 0;
+      height: 500px;
+      overflow-y: auto;
+      //margin-top: auto;
+      border-radius: 12px;
+      border: 1px solid #E9ECEF;
+      background: #FBFCFD;
+      margin-bottom: auto;
+      .tit-main{
+        padding: 20px;
+      }
+      .for-scrol-point{
+        height: 80%;
+        overflow: auto;
+      }
+      .values {
+        border-bottom: 1px solid #D2D4DE;
+        padding: 10px 10px;
+        display: flex;
+        align-items: center;
+        padding-left: 20px;
+        padding-right: 20px;
+        justify-content: space-between;
+        p {
+          //min-width: 110px;
+          margin-bottom: 0;
+          display: flex;
+          align-items: center;
+          img{
+            margin-right: 10px;
+          }
+          span {
+            border-radius: 6px;
+            border: 1.5px solid #E9E9EF;
+            padding: 5px 10px;
+            background: #FFF;
+            width: 62px;
+            display: inline-block;
+          }
+
+          input {
+            width: 110px;
+          }
+        }
+      }
+    }
+    .widgetButton-clear{
+      border-radius: 6px;
+      border: 1px solid #CFD6DD ;
+      background:  #FFF ;
+      box-shadow: 0px 1px 2px 0px rgba(27, 36, 44, 0.12);
+      color: #4A545E ;
+      font-feature-settings: 'clig' off, 'liga' off;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 450;
+      line-height: 24px; /* 171.429% */
+      letter-spacing: 0.2px;
+      padding: 8px 16px;
+      display: block;
+    }
+  }
+
+  .right-item {
+    display: flex;
+    padding-right: 30px;
+    padding-left: 30px;
+    align-items: center;
+    border-left: 1px solid #E9E9EF;
+
+    justify-content: center;
+
+    button {
+      border-radius: 6px;
+      background: #1A99FF;
+      color: #FFFFFF;
+      font-size: 16px;
+      border: none;
+      padding: 10px 20px;
+    }
+  }
+}
 .visitor-box {
   padding: 12px 24px;
 
@@ -2536,7 +2738,7 @@ canvas {
   .employees-header {
     padding: 16px 24px;
     border: 1px solid #E9ECEF;
-    h6{
+    h6 {
       font-size: 18px;
       font-style: normal;
       font-weight: 500;
@@ -2544,26 +2746,66 @@ canvas {
       letter-spacing: 0.1px;
       margin: 0;
     }
-    p{
+
+    p {
       font-size: 14px;
       font-style: normal;
       font-weight: 450;
       line-height: 24px;
       letter-spacing: 0.2px;
-      color:  #555F6D ;
+      color: #555F6D;
 
     }
   }
-  .live-page-box-header{
-    margin-bottom: 40px;
-    .left-pair{
+  .inputs-box {
+    margin-bottom: 16px;
+    input, select {
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #CFD6DD;
+      background: #FFF;
+      width: 100%;
+      padding: 8px 16px;
 
+      &:focus {
+        outline: none;
+      }
     }
-    .right-pair{
+
+    .css-vqmohf-MuiButtonBase-root-MuiRadio-root {
+      .css-hyxlzm {
+        svg {
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+
+    .MuiFormControlLabel-label {
+      font-size: 14px;
+      margin-top: 3px;
+      font-weight: 500;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+  }
+  .live-page-box-header {
+    margin-bottom: 40px;
+
+    .left-pair-items {
+      width: calc(100% - 330px);
+    }
+
+    .right-pair {
       padding-top: 20px;
       display: flex;
       flex-direction: column;
-      img{
+
+      img {
         margin-left: 30px;
         width: 120px;
         height: 120px;
@@ -2573,28 +2815,143 @@ canvas {
         margin-bottom: 20px;
       }
     }
+    .right-pair-new-style{
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      border-radius: 12px;
+      border: 1px solid #E9ECEF;
+      background: #FBFCFD;
+      .Screenshots{
+        color:   #272E35;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 32px;
+        margin-bottom: 10px;
+        letter-spacing: 0.1px;
+      }
+      .img-box{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #E9ECEF;
+
+        .img-box-items{
+          padding: 10px;
+          display: flex;
+          .img-box-item {
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            border: 1px solid #E9ECEE;
+            object-fit: cover;
+          }
+          span{
+            display: flex;
+            color:   #272E35 ;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 24px;
+          }
+        }
+        .img-box-items-active{
+          span{
+            color: #1A99FF !important;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: 24px;
+          }
+        }
+
+
+      }
+
+    }
+
+    .right-pair-items {
+      padding-top: 20px;
+      width: 330px;
+      height: 330px;
+
+      .right-pair-items-headers {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        h4 {
+          margin-bottom: 0;
+          color: #272E35;
+          font-feature-settings: 'clig' off, 'liga' off;
+          font-size: 18px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: 32px;
+          letter-spacing: 0.1px;
+        }
+
+        button {
+          margin: 0;
+        }
+      }
+
+      .right-pair-items-list {
+        .right-pair-items-content-item {
+          border-bottom: 1px solid #D2D4DE;
+          padding-bottom: 16px;
+          padding-top: 16px;
+          display: flex;
+          justify-content: space-between;
+          div{
+            button{
+              border: none;
+              background: transparent;
+              margin-left: 5px;
+            }
+          }
+        }
+      }
+    }
   }
+
   .live-page-box {
     margin: 20px 24px;
     border-radius: 20px;
-    border: 1px solid #D2D4DE;
-    background: #FBFCFD;
+    //border: 1px solid #D2D4DE;
+    //background: #FBFCFD;
     padding: 24px;
   }
 }
 
-.css-1mk9mw3-MuiList-root{
-  .css-behmn9-MuiButtonBase-root-MuiListItemButton-root{
-    padding-left: 15px !important;
+.css-1mk9mw3-MuiList-root {
+  .css-behmn9-MuiButtonBase-root-MuiListItemButton-root {
+    //padding-left: 15px !important;
+    padding: 0 !important;
   }
-  .active{
-    background-color: #E9ECEF;
-    &:hover{
-      background-color: #E9ECEF !important;
 
+  .active {
+    background-color: #E9ECEF;
+
+    &:hover {
+      background-color: #E9ECEF !important;
     }
   }
 }
-.ant-select-dropdown{
+
+.ant-select-dropdown {
   z-index: 9999;
+}
+
+.css-1q1u3t4-MuiTableRow-root {
+  th {
+    font-weight: bold;
+  }
+}
+
+.ant-select-selection-search {
+  input {
+    padding-left: 0 !important;
+  }
 }

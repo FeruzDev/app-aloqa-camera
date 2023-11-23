@@ -11,7 +11,7 @@ import Pagination from "@mui/material/Pagination";
 import {Button, Modal} from 'antd';
 import {useHistory} from "react-router-dom";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 import ModalOffice from "../../pages/Camera/ModalOffice";
 import ModalOfficeEdit from "./ModalOfficeEdit";
@@ -55,7 +55,7 @@ const Branches = () => {
     const editPage = (id) => {
         setBuId(id)
         // history.push("/main/hr-admin/branches/edit/" + id)
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/" + id, CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/" + id, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 // setOffices(res.data?.items)
                 // setOfficesObj(res?.data)
@@ -67,7 +67,7 @@ const Branches = () => {
             })
     }
     const getBuilding = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all/?page=1", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all?page=1", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setOffices(res.data?.items)
                 setOfficesObj(res?.data)
@@ -77,7 +77,7 @@ const Branches = () => {
             })
     }
     const changePagination = (current, size) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all?page=" + size, CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all?page=" + size, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setOffices(res.data?.items)
                 setOfficesObj(res?.data)
@@ -91,7 +91,7 @@ const Branches = () => {
     };
     const handleOkDelete = () => {
 
-        axios.delete(API_PATH + "company/" + localStorage.getItem('id') + "/building/delete/" + deleteId, CONFIG)
+        axios.delete(API_PATH + "company/" + localStorage.getItem('id') + "/building/delete/" + deleteId, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 getBuilding()
                 setIsModalOpen(false);
@@ -112,9 +112,9 @@ const Branches = () => {
                         <h6 className="font-family-medium">Филиалы</h6>
                     </div>
                     <div className="right-head">
-                        <button className="upload-btn font-family-medium ml-16 mr-16"><img
-                            src="/icon/upload.svg"/> Экспорт в Excel
-                        </button>
+                        {/*<button className="upload-btn font-family-medium ml-16 mr-16"><img*/}
+                        {/*    src="/icon/upload.svg"/> Экспорт в Excel*/}
+                        {/*</button>*/}
                         <button className="add-btn font-family-medium" onClick={() => setIsModalOffice(true)}><img src="/icon/plus.svg"/> Добавить новое
                         </button>
                     </div>

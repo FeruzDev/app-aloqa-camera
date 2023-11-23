@@ -3,7 +3,7 @@ import {Select} from "antd";
 import {TimePicker} from 'antd';
 import dayjs from 'dayjs';
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 import {useHistory, useParams} from "react-router-dom";
 
@@ -24,7 +24,7 @@ const ModesEdit = () => {
     }
 
     const sendAll = (id) => {
-        axios.put(API_PATH + "company/" + localStorage.getItem('id') + "/hr/timerange/update/" + params.id,  sendData, CONFIG)
+        axios.put(API_PATH + "company/" + localStorage.getItem('id') + "/hr/timerange/update/" + params.id,  sendData, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 toast.success("Измененный успешно")
                 history.push("/main/hr-admin/modes")
@@ -35,7 +35,7 @@ const ModesEdit = () => {
     }
     const format = 'HH:mm';
     useEffect(() => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/timerange/detail/" + params.id, CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/timerange/detail/" + params.id, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setSendData( res.data )
             })
@@ -77,13 +77,13 @@ const ModesEdit = () => {
                                         value={sendData?.from_week_day}
                                         onChange={(e) => setSendData({...sendData, from_week_day: e})}
                                         options={[
-                                            {value: 'Monday', label: 'Monday'},
-                                            {value: 'Tuesday', label: 'Tuesday'},
-                                            {value: 'Wednesday', label: 'Wednesday'},
-                                            {value: 'Thursday', label: 'Thursday'},
-                                            {value: 'Friday', label: 'Friday'},
-                                            {value: 'Saturday', label: 'Saturday'},
-                                            {value: 'Sunday ', label: 'Sunday'},
+                                            {value: 'Monday', label: 'Понедельник'},
+                                            {value: 'Tuesday', label: 'Вторник'},
+                                            {value: 'Wednesday', label: 'Среда'},
+                                            {value: 'Thursday', label: 'Четверг'},
+                                            {value: 'Friday', label: 'Пятница'},
+                                            {value: 'Saturday', label: 'Суббота'},
+                                            {value: 'Sunday ', label: 'Воскресенье'},
                                         ]}
                                     />
                                 </div>
@@ -93,13 +93,13 @@ const ModesEdit = () => {
                                         value={sendData?.to_week_day}
                                         onChange={(e) => setSendData({...sendData, to_week_day: e})}
                                         options={[
-                                            {value: 'Monday', label: 'Monday'},
-                                            {value: 'Tuesday', label: 'Tuesday'},
-                                            {value: 'Wednesday', label: 'Wednesday'},
-                                            {value: 'Thursday', label: 'Thursday'},
-                                            {value: 'Friday', label: 'Friday'},
-                                            {value: 'Saturday', label: 'Saturday'},
-                                            {value: 'Sunday ', label: 'Sunday'},
+                                            {value: 'Monday', label: 'Понедельник'},
+                                            {value: 'Tuesday', label: 'Вторник'},
+                                            {value: 'Wednesday', label: 'Среда'},
+                                            {value: 'Thursday', label: 'Четверг'},
+                                            {value: 'Friday', label: 'Пятница'},
+                                            {value: 'Saturday', label: 'Суббота'},
+                                            {value: 'Sunday ', label: 'Воскресенье'},
                                         ]}
                                     />
                                 </div>

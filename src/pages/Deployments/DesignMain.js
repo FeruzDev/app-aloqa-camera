@@ -13,7 +13,7 @@ const DeploymentsDetailModal = (props) => {
         longitude: 0
     })
     const sendAll = () => {
-        // axios.post(API_PATH + "building/create", sendData, CONFIG)
+        // axios.post(API_PATH + "building/create", sendData, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
         //     .then(res => {
         //         toast.success("Добавлено успешно")
         //         props.getBuilding()

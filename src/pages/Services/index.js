@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import AddServiceModal from "./AddServiceModal";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 
 const Services = () => {
     const [isServiceModal, setIsServiceModal] = useState(false)
     const [serviceData, setServiceData] = useState([])
     const getData = () => {
-        axios.get(API_PATH + "service/all" , CONFIG)
+        axios.get(API_PATH + "service/all" , {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res =>{
                 setServiceData(res.data)
             })

@@ -60,9 +60,9 @@ const Positions = () => {
                         <h6 className="font-family-medium">Должности </h6>
                     </div>
                     <div className="right-head">
-                        <button className="upload-btn font-family-medium ml-16 mr-16"><img
-                            src="/icon/upload.svg"/> Экспорт в Excel
-                        </button>
+                        {/*<button className="upload-btn font-family-medium ml-16 mr-16"><img*/}
+                        {/*    src="/icon/upload.svg"/> Экспорт в Excel*/}
+                        {/*</button>*/}
                         <button className="add-btn font-family-medium" onClick={createPage}><img src="/icon/plus.svg"/> Добавить новое
                         </button>
                     </div>

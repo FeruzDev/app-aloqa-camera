@@ -6,7 +6,7 @@ const OurProducts = () => {
             <div className="container">
                 <h1 className="l-title">Our Products</h1>
                 <div className="row ">
-                    <div className="col-md-4 mt-40">
+                    <div className="col-md-4 ">
                         <div className="bg-back-box">
                             <div className="pot-img">
                                 <img src="/img/p11.png" alt="img"/>

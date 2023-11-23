@@ -16,8 +16,6 @@ const VideoTop = () => {
 
                {/*    </div>*/}
                {/*</div>*/}
-
-
                <div className="row">
                    <div className="col-md-5 l-title-top">
                        <h1 className="l-title-home">
@@ -53,7 +51,6 @@ const VideoTop = () => {
                    onCancel={() =>setVideoModal(false)}
                    width={1090}
                    footer={[
-
                        <Button key="submit" type="default" onClick={() => setVideoModal(false)}>
                            Cancel
                        </Button>

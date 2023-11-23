@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import AddDeployModal from "./AddDeployModal";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {useHistory} from "react-router-dom";
 
 const Deployments = () => {
@@ -9,9 +9,9 @@ const Deployments = () => {
     const [depData, setDepData] = useState([])
     let history = useHistory()
     const getDep = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/deployment/all" , CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/deployment/all" , {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res =>{
-                console.log(res.data)
+                // console.log(res.data)
                 setDepData(res.data)
             })
     }

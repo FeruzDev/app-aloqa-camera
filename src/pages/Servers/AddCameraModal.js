@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Modal, Select} from "antd";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 
 const AddCameraModal = (props) => {
@@ -20,7 +20,7 @@ const AddCameraModal = (props) => {
 
 
     const getBuilding = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setOffices(res.data?.items)
                 props.getData()
@@ -32,10 +32,10 @@ const AddCameraModal = (props) => {
 
     }
     const getRooms = (id) => {
-        console.log(selectRooms);
+        // console.log(selectRooms);
         setSelectOffices(id)
 
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/room/" + id + "/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/room/" + id + "/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setRooms(res.data?.items)
                 setSendData({...sendData, room_id: res.data.id})
@@ -47,7 +47,7 @@ const AddCameraModal = (props) => {
     const getCameras = (id) => {
 
         setSelectRooms(id)
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/by/room/" + id + "/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/by/room/" + id + "/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setCameras(res.data)
             })
@@ -59,7 +59,7 @@ const AddCameraModal = (props) => {
     }
 
     const sendAll = () => {
-        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/camera/attach_to_module", {cameras_id: sendData.cameras_id, module_id: props.isAddCameraModalId}, CONFIG)
+        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/camera/attach_to_module", {cameras_id: sendData.cameras_id, module_id: props.isAddCameraModalId}, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 toast.success("Добавлено успешно")
                 props.getData()

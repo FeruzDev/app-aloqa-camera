@@ -2,18 +2,18 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import {toast} from "react-toastify";
 import {useHistory} from "react-router-dom";
-import {API_PATH, CONFIG} from "../components/const";
+import {API_PATH} from "../components/const";
 
 const Login = () => {
-    const [userName, setUserName] = useState("ozodbek")
-    const [pass, setPass] = useState("ping!@#$")
+    const [userName, setUserName] = useState("")
+    const [pass, setPass] = useState("")
     let history = useHistory()
     const loginFc = () => {
         let newData = new FormData()
         newData.append('username', userName)
         newData.append('password', pass)
         newData.append('scope', "snapshot:read camera:write camera:read admin:read admin:write line_crossing_analytics:write module:read module:write fleet:read fleet:write config:read config:write line_crossing_analytics:read line_crossing_analytics:write analitiks:read")
-        axios.post(API_PATH + "token/", newData)
+        axios.post(API_PATH + "token", newData)
             .then(res => {
                 localStorage.setItem("token", res.data?.access_token)
                 localStorage.setItem("first_name", res.data?.user_info?.first_name)
@@ -24,18 +24,43 @@ const Login = () => {
 
                 if (res.data?.user_info?.companies?.length > 0){
                     localStorage.setItem("for_com", res.data?.user_info?.companies[0]?.id)
-
+                    axios.get(API_PATH + "company/" + res.data?.user_info?.companies[0]?.id, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
+                        .then(res2 => {
+                            // console.log(localStorage.getItem("token"))
+                            localStorage.setItem("name", res2?.data?.name)
+                            localStorage.setItem("description", res2?.data?.description)
+                            localStorage.setItem("phone", res2?.data?.phone)
+                            localStorage.setItem("email", res2?.data?.email)
+                            localStorage.setItem("id", res2?.data?.id)
+                            localStorage.setItem("owner_id", res2?.data?.owner_id)
+                            setTimeout(() =>{
+                                history.push("/main/visitor-home")
+                            }, 100)
+                        })
                 }
                 else if (res.data?.user_info?.companies?.length <= 0) {
                     localStorage.setItem("for_com", res.data?.user_info?.company)
-
+                    axios.get(API_PATH + "company/" + res.data?.user_info?.company, {headers: {"Authorization": "Bearer " + res.data?.access_token}})
+                        .then(res2 => {
+                            localStorage.setItem("name", res2?.data?.name)
+                            localStorage.setItem("description", res2?.data?.description)
+                            localStorage.setItem("phone", res2?.data?.phone)
+                            localStorage.setItem("email", res2?.data?.email)
+                            localStorage.setItem("id", res2?.data?.id)
+                            localStorage.setItem("owner_id", res2?.data?.owner_id)
+                            setTimeout(() =>{
+                                history.push("/main/visitor-home")
+                            }, 1000)
+                        })
                 }
-                // axios.get(API_PATH + "user/company/1/user/" + res?.data?.user_id   , CONFIG)
+                // axios.get(API_PATH + "user/company/1/user/" + res?.data?.user_id   , {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
                 //     .then(res =>{
                 //         console.log(res)
                 //     })
 
-                history.push("/main/visitor-home")
+
+
+
 
             })
             .catch(err => {

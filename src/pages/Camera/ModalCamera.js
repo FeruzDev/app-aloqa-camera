@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Modal} from "antd";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 import {useParams} from "react-router-dom";
 
@@ -29,7 +29,7 @@ const ModalCamera = (props) => {
                 camera_number: 0,
                 stream_quality: 0,
                 room_id: params.camera_id
-            } , CONFIG)
+            } , {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 toast.success("Добавлено успешно")
                 // props.getCameras(params.camera_id)

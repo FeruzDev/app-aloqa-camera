@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Select} from "antd";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {Link, useHistory, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
 
@@ -10,7 +10,7 @@ const DepartmentsEdit = () => {
     let history = useHistory()
     let params = useParams()
     const getItem = () => {
-      axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/" + params.id, CONFIG)
+      axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/" + params.id, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
           .then(res => {
               setSendData(res.data)
           })
@@ -19,7 +19,7 @@ const DepartmentsEdit = () => {
           })
     }
     const sendAll = () => {
-        axios.put(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/update/" + params.id, sendData, CONFIG)
+        axios.put(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/update/" + params.id, sendData, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 toast.success("Измененный успешно")
                 setSendData({...sendData, department_title: ""})

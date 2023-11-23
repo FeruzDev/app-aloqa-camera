@@ -41,6 +41,8 @@ import JobTitle from "../hrPages/JobTitle";
 import Logging from "../hrPages/Logging";
 import SmartCamera from "../pages/Camera/SmartCamera";
 import Live from "../pages/Live";
+import RoiEmployee from "../pages/RoiEmployee";
+import RoiEmployeeAdd from "../pages/RoiEmployee/RoiEmployeeAdd";
 
 const MainLayoutVisitor = () => {
     return (
@@ -53,13 +55,15 @@ const MainLayoutVisitor = () => {
                 <VisitorNavbar />
                 <Switch>
                     <Route path="/main/live" exact component={Live} />
+                    <Route path="/main/roi-employee" exact component={RoiEmployee} />
+                    <Route path="/main/roi-employee/add" exact component={RoiEmployeeAdd} />
                     <Route path="/main/building" exact component={Camera} />
                     <Route path="/main/smart-camera" exact component={SmartCamera} />
                     <Route path="/main/building/:room_id" exact component={Rooms} />
                     <Route path="/main/building/:room_id/camera-list/:camera_id" exact component={CameraList} />
                     <Route path="/main/visitor-home" exact component={VisitorAnalytics} />
                     <Route path="/main/visitor-comparasion" exact component={VisitorComparasion} />
-                    <Route path="/main/my-modules" exact component={Servers} />
+                    <Route path="/main/my-modules" exact component={Servers} />-
                     <Route path="/main/services" exact component={Services} />
                     <Route path="/main/deployments" exact component={Deployments} />
                     <Route path="/main/deployments/:id" exact component={DeploymentsDetail} />

@@ -68,7 +68,7 @@ const Profile = () => {
                         </h4></div>
                         <div className="left-top-title">
                             <Calendar />
-                            <button className="upload-btn font-family-medium ml-16 mr-16"><img src="/icon/upload.svg"/> Экспорт в Excel</button>
+                            {/*<button className="upload-btn font-family-medium ml-16 mr-16"><img src="/icon/upload.svg"/> Экспорт в Excel</button>*/}
                         </div>
                     </div>
 

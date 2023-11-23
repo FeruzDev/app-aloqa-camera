@@ -7,7 +7,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import {Select} from "antd";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 import {de} from "date-fns/locale";
 
@@ -16,7 +16,9 @@ const ProfileCreate = () => {
     // const [anchorEl, setAnchorEl] = React.useState(null);
     // const open = Boolean(anchorEl);
     let history = useHistory()
-    const [sendData, setSendData] = useState({})
+    const [sendData, setSendData] = useState({
+        phone: "+998751234567"
+    })
     const [pic, setPic] = useState(null);
     const [offices, setOffices] = useState([])
     const [departments, setDepartments] = useState([])
@@ -75,7 +77,7 @@ const ProfileCreate = () => {
 
         }
 
-        axios.post(API_PATH + "user/company/" + localStorage.getItem('id') + "/create/user", bigData, CONFIG)
+        axios.post(API_PATH + "user/company/" + localStorage.getItem('id') + "/create/user", bigData, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 // console.log(res)
                 toast.success("Добавлено успешно")
@@ -97,7 +99,7 @@ const ProfileCreate = () => {
             })
     }
     const getDeps = (val) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all" + (val?.length > 0 ? "?search_str=" + val : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setDepartments(res.data?.items)
             })
@@ -106,7 +108,7 @@ const ProfileCreate = () => {
             })
     }
     const getBuilding = (val) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all" + (val?.length > 0 ? "?search_str=" + val : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setOffices(res.data?.items)
             })
@@ -192,7 +194,9 @@ const ProfileCreate = () => {
                                     </div>
                                     <div className="inputs-box">
                                         <label className="font-family-medium">Номер телефона </label>
-                                        <input onChange={(e) => setSendData({...sendData, phone: e.target.value})}
+                                        <input
+                                        value={sendData?.phone}
+                                            onChange={(e) => setSendData({...sendData, phone: e.target.value})}
                                                type="text"/>
                                     </div>
 
@@ -204,7 +208,8 @@ const ProfileCreate = () => {
                                 <div className="col-md-6">
                                     <div className="inputs-box">
                                         <label className="font-family-medium">Email</label>
-                                        <input onChange={(e) => setSendData({...sendData, email: e.target.value})}
+                                        <input
+                                            onChange={(e) => setSendData({...sendData, email: e.target.value})}
                                                type="text"/>
                                     </div>
                                     <div className="inputs-box">
@@ -226,8 +231,8 @@ const ProfileCreate = () => {
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                                 name="row-radio-buttons-group"
                                             >
-                                                <FormControlLabel value="female" control={<Radio/>} label="Мужской"/>
-                                                <FormControlLabel value="male" control={<Radio/>} label="Женский"/>
+                                                <FormControlLabel value="male" control={<Radio/>} label="Мужской"/>
+                                                <FormControlLabel value="female" control={<Radio/>} label="Женский"/>
                                             </RadioGroup>
                                         </FormControl>
                                     </div>

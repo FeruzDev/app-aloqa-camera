@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Modal, Select} from "antd";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 import CountryModal from "../../pages/LocationModal/CountryModal";
 import RegionModal from "../../pages/LocationModal/RegionModal";
@@ -19,7 +19,7 @@ const ModalOfficeEdit = (props) => {
     const [regionItem, setRegionItem] = useState("")
     const [districts, setDistricts] = useState([])
     const sendAll = () => {
-        axios.put(API_PATH + "company/" + localStorage.getItem('id') + "/building/create", props.sendData, CONFIG)
+        axios.put(API_PATH + "company/" + localStorage.getItem('id') + "/building/create", props.sendData, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 toast.success("Добавлено успешно")
                 props.getBuilding()
@@ -30,7 +30,7 @@ const ModalOfficeEdit = (props) => {
             })
     }
     const getCountry = (val) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/country/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/country/all" + (val?.length > 0 ? "?search_str=" + val : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setCountries(res?.data.items)
             })
@@ -41,7 +41,7 @@ const ModalOfficeEdit = (props) => {
     const setCountry = (countryIde) => {
         setCountryId(countryIde)
         props.setSendData({...props.sendData, country_id: countryIde})
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/country/" + countryIde, CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/country/" + countryIde, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setCountryItem(res?.data?.name)
             })
@@ -53,7 +53,7 @@ const ModalOfficeEdit = (props) => {
     const setDistrict = (countryIde) => {
         setRegionId(countryIde)
         props.setSendData({...props.sendData, region_id: countryIde})
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/region/" + countryIde, CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/region/" + countryIde, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setRegionItem(res.data?.name)
             })
@@ -63,8 +63,8 @@ const ModalOfficeEdit = (props) => {
         getDistrict(countryIde)
     }
     const getRegion = (countryIde) => {
-        console.log(countryIde)
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/region/" + countryIde + "/all", CONFIG)
+        // console.log(countryIde)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/region/" + countryIde + "/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setRegions(res?.data?.items)
             })
@@ -73,8 +73,8 @@ const ModalOfficeEdit = (props) => {
             })
     }
     const getRegionSearch = (val) => {
-        console.log(val)
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/region/" + countryId + "/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+        // console.log(val)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/region/" + countryId + "/all" + (val?.length > 0 ? "?search_str=" + val : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setRegions(res?.data?.items)
             })
@@ -83,7 +83,7 @@ const ModalOfficeEdit = (props) => {
             })
     }
     const getDistrict = (countryIde) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/district/" + countryIde + "/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/district/" + countryIde + "/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setDistricts(res?.data?.items)
             })
@@ -92,7 +92,7 @@ const ModalOfficeEdit = (props) => {
             })
     }
     const getDistrictSearch = (val) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/district/" + regionId + "/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/location/district/" + regionId + "/all" + (val?.length > 0 ? "?search_str=" + val : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setDistricts(res?.data?.items)
             })
@@ -178,7 +178,7 @@ const ModalOfficeEdit = (props) => {
                                 };
                             })}
                         />
-                        <button className="add-btn-plus" onClick={() => setIsCityModal(true)}>
+                        <button className="add-btn-plus" disabled={countryId === null ? true : false } onClick={() => setIsCityModal(true)}>
                             <img src="/icon/plus.svg" alt="+"/>
                         </button>
                     </div>
@@ -206,7 +206,7 @@ const ModalOfficeEdit = (props) => {
                                 };
                             })}
                         />
-                        <button className="add-btn-plus" onClick={() => setIsDistrictModal(true)}>
+                        <button className="add-btn-plus" disabled={countryId === null &&  regionId === null ? true : false }  onClick={() => setIsDistrictModal(true)}>
                             <img src="/icon/plus.svg" alt="+"/>
                         </button>
                     </div>

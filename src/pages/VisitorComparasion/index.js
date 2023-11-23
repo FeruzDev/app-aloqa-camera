@@ -8,8 +8,8 @@ const VisitorComparasion = () => {
     return (
         <div className="visitor-comparasion">
             <VisitorsComparasion />
-            {/*<PeakHoursComparasion />*/}
-            <AnaluzCustomComparasion />
+            <PeakHoursComparasion />
+            {/*<AnaluzCustomComparasion />*/}
             <DailyAnalyticsComparasion />
 
         </div>

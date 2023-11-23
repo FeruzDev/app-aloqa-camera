@@ -10,7 +10,7 @@ import {FormLabel} from "@mui/material";
 import RadioGroup from "@mui/material/RadioGroup";
 import {Select} from "antd";
 import axios from "axios";
-import {API_PATH, CONFIG} from "./const";
+import {API_PATH} from "./const";
 import {toast} from "react-toastify";
 const SearchTop = () => {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -26,7 +26,7 @@ const SearchTop = () => {
         setAnchorEl(null);
     };
     const getBuilding = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setOffices(res.data)
             })
@@ -88,8 +88,8 @@ const SearchTop = () => {
                                       aria-labelledby="demo-row-radio-buttons-group-label"
                                       name="row-radio-buttons-group"
                                   >
-                                      <FormControlLabel value="female" control={<Radio />} label="Мужской" />
-                                      <FormControlLabel value="male" control={<Radio />} label="Женский" />
+                                      <FormControlLabel value="male" control={<Radio />} label="Мужской" />
+                                      <FormControlLabel value="female" control={<Radio />} label="Женский" />
                                   </RadioGroup>
                               </FormControl>
                           </div>

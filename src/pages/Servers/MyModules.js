@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import AddModuleModal from "./AddModuleModal";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import AddCameraModal from "./AddCameraModal";
 
 const MyModules = () => {
@@ -12,7 +12,7 @@ const MyModules = () => {
 
 
     const getData = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/module/all" , CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/module/all" , {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res =>{
                 setModuleData(res.data)
             })

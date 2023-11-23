@@ -9,7 +9,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import {Select} from "antd";
 import axios from "axios";
 import {toast} from "react-toastify";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 
 const EmployeFilter = (props) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -28,7 +28,7 @@ const EmployeFilter = (props) => {
         setAnchorEl(null);
     };
     const getDeps = (val) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all" + (val?.length > 0 ? "?search_str=" + val : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setDepartments(res?.data?.items)
             })
@@ -37,7 +37,7 @@ const EmployeFilter = (props) => {
             })
     }
     const getBuilding = (val) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all" + (val?.length > 0 ? "?search_str=" + val : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setOffices(res?.data?.items)
             })
@@ -45,9 +45,16 @@ const EmployeFilter = (props) => {
                 toast.error("Ошибка")
             })
     }
-
+    const addFilterClear = () => {
+        setbuilding_id("")
+        setdepartment_id("")
+        setAge("")
+        setPosition("")
+        setGender("")
+        props.getUsers()
+    }
     const addFilter = () => {
-        axios.get(API_PATH + "user/company/" + localStorage.getItem('id') + "/user/all" + (building_id ? "?building_id=" + building_id + "&" : "?") + (department_id ? "department_id=" + department_id : "") + (gender ? "&gender=" + gender  : "") + (position ? "&position=" + position : "") + (age ? "&dob=" + age  : ""), CONFIG)
+        axios.get(API_PATH + "user/company/" + localStorage.getItem('id') + "/user/all" + (building_id ? "?building_id=" + building_id + "&" : "?") + (department_id ? "department_id=" + department_id : "") + (gender ? "&gender=" + gender  : "") + (position ? "&position=" + position : "") + (age ? "&dob=" + age  : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 props.setUsers(res.data?.items)
                 setAnchorEl(null);
@@ -57,7 +64,7 @@ const EmployeFilter = (props) => {
             })
     }
     const searchEmploye = (e) => {
-        axios.get(API_PATH + "user/company/" + localStorage.getItem('id') + "/user/all" + (e?.length > 0 ? "?search_str=" + e : ""), CONFIG)
+        axios.get(API_PATH + "user/company/" + localStorage.getItem('id') + "/user/all" + (e?.length > 0 ? "?search_str=" + e : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 props.setUsers(res.data?.items)
 
@@ -105,17 +112,22 @@ const EmployeFilter = (props) => {
                         <div className="left-fl-pair">
                             <div className="inputs-box">
                                 <label className="font-family-medium">Дата рождения </label>
-                                <input type="date" onChange={(e) => setAge(e.target.value)}/>
+                                <input
+                                    value={age}
+                                    type="date" onChange={(e) => setAge(e.target.value)}/>
                             </div>
                             <div className="inputs-box">
                                 <label className="font-family-medium">Должность </label>
-                                <input type="text" onChange={(e) => setPosition(e.target.value)}/>
+                                <input type="text"
+                                       value={position}
+                                       onChange={(e) => setPosition(e.target.value)}/>
                             </div>
                             <div className="inputs-box">
                                 <label className="font-family-medium">Пол </label>
                                 <FormControl>
                                     <RadioGroup
                                         row
+                                        value={gender}
                                         onChange={(e) => setGender(e.target.value)}
                                         aria-labelledby="demo-row-radio-buttons-group-label"
                                         name="row-radio-buttons-group"
@@ -146,6 +158,7 @@ const EmployeFilter = (props) => {
                                     optionFilterProp="children"
                                     className="w-100"
                                     onSearch={getDeps}
+                                    value={department_id}
                                     onChange={(e) => setdepartment_id(e)}
                                     filterOption={(input, option) => (option?.label ?? '').includes(input)}
                                     filterSort={(optionA, optionB) =>
@@ -170,6 +183,7 @@ const EmployeFilter = (props) => {
                                     optionFilterProp="children"
                                     className="w-100"
                                     onSearch={getBuilding}
+                                    value={building_id}
                                     onChange={(e) => setbuilding_id(e)}
                                     filterOption={(input, option) => (option?.label ?? '').includes(input)}
                                     filterSort={(optionA, optionB) =>
@@ -188,11 +202,17 @@ const EmployeFilter = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div className="con-btn">
-                        <button className="font-family-medium" onClick={addFilter}>
-                            <img src="/icon/bird.svg" className="mr-8"/><span>Применить фильтры</span>
+                    <div className="d-flex">
+                        <button className="font-family-medium clear-filter" onClick={addFilterClear}>
+                           <span>Очистить</span>
                         </button>
-                        <button className="font-family-medium ml-8" onClick={handleClose}>Отменить</button>
+                        <div className="con-btn">
+
+                            <button className="font-family-medium" onClick={addFilter}>
+                                <img src="/icon/bird.svg" className="mr-8"/><span>Применить фильтры</span>
+                            </button>
+                            <button className="font-family-medium ml-8" onClick={handleClose}>Отменить</button>
+                        </div>
                     </div>
                 </div>
             </Menu>

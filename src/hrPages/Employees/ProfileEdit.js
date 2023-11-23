@@ -7,7 +7,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import {Select} from "antd";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 import {de} from "date-fns/locale";
 
@@ -26,7 +26,7 @@ const ProfileEdit = () => {
 
 
     const getDeps = (val) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all" + (val?.length > 0 ? "?search_str=" + val : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setDepartments(res.data?.items)
             })
@@ -35,7 +35,7 @@ const ProfileEdit = () => {
             })
     }
     const getBuilding = (val) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all" + (val?.length > 0 ? "?search_str=" + val : ""), CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all" + (val?.length > 0 ? "?search_str=" + val : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setOffices(res.data?.items)
             })
@@ -44,10 +44,11 @@ const ProfileEdit = () => {
             })
     }
     const getItem = () => {
-        axios.get(API_PATH + "user/company/" + localStorage.getItem('id') + "/user/" + params.id, CONFIG)
+        axios.get(API_PATH + "user/company/" + localStorage.getItem('id') + "/user/" + params.id, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setSendData(res.data)
-                console.log(typeof res.data.gender)
+                getDeps(res.data?.department?.department_title)
+
                 // setSendData({...sendData, building_id: res.data.building_id})
             })
             .catch(err => {
@@ -71,7 +72,7 @@ const ProfileEdit = () => {
         bigData.append("building_id", sendData?.building_id)
         bigData.append("department_id", sendData?.department_id)
 
-        axios.put(API_PATH + "user/company/" + localStorage.getItem('id') + "/update/user/" + params.id, bigData, CONFIG)
+        axios.put(API_PATH + "user/company/" + localStorage.getItem('id') + "/update/user/" + params.id, bigData, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 // console.log(res)
                 toast.success("Изменить сотрудника")
@@ -88,7 +89,7 @@ const ProfileEdit = () => {
 
     useEffect(() => {
         getBuilding(1)
-        getDeps(1)
+        // getDeps(1)
         getItem()
     }, []);
 

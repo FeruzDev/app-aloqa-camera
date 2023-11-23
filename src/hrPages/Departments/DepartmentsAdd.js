@@ -2,14 +2,14 @@ import React, {useState} from 'react';
 import {Select} from "antd";
 import {toast} from "react-toastify";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {Link, useHistory} from "react-router-dom";
 
 const DepartmentsAdd = () => {
     const [sendData, setSendData] = useState({})
     let history = useHistory()
     const sendAll = () => {
-        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/create", sendData, CONFIG)
+        axios.post(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/create", sendData, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 toast.success("Добавлено успешно")
                 setSendData({...sendData, department_title: ""})

@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import {API_PATH, CONFIG} from "./const";
+import {API_PATH} from "./const";
 import axios from "axios";
 const VisitorNavbar = () => {
     const [time, setTime] = useState(new Date());
@@ -13,7 +13,7 @@ const VisitorNavbar = () => {
 
 
     useEffect(() => {
-        console.log(time.toLocaleDateString().slice(3, 5))
+        // console.log(time.toLocaleDateString().slice(3, 5))
         setInterval(( () =>
         setTime(new Date())
         ), 1000  )

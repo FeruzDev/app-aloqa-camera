@@ -7,7 +7,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 import axios from "axios";
-import {API_PATH, CONFIG} from "./const";
+import {API_PATH} from "./const";
 
 const VisitorSideBar = () => {
     const [open, setOpen] = React.useState(false);
@@ -17,7 +17,7 @@ const VisitorSideBar = () => {
     const [open5, setOpen5] = React.useState(false);
     const [company, setCompany] = useState({})
     const pathname = window.location.pathname;
-    console.log(pathname);
+    // console.log(pathname);
     let history = useHistory()
     const handleClick = () => {
         setOpen(!open);
@@ -55,16 +55,18 @@ const VisitorSideBar = () => {
     };
 
     const getCompany = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem("for_com"), CONFIG)
-            .then(res => {
-                setCompany(res.data)
-                localStorage.setItem("name", res?.data?.name)
-                localStorage.setItem("description", res?.data?.description)
-                localStorage.setItem("phone", res?.data?.phone)
-                localStorage.setItem("email", res?.data?.email)
-                localStorage.setItem("id", res?.data?.id)
-                localStorage.setItem("owner_id", res?.data?.owner_id)
-            })
+        if (localStorage.getItem("for_com")){
+            axios.get(API_PATH + "company/" + localStorage.getItem("for_com"), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
+                .then(res => {
+                    setCompany(res.data)
+                    localStorage.setItem("name", res?.data?.name)
+                    localStorage.setItem("description", res?.data?.description)
+                    localStorage.setItem("phone", res?.data?.phone)
+                    localStorage.setItem("email", res?.data?.email)
+                    localStorage.setItem("id", res?.data?.id)
+                    localStorage.setItem("owner_id", res?.data?.owner_id)
+                })
+        }
     }
     const logout = () => {
         history.push("/login")
@@ -80,14 +82,13 @@ const VisitorSideBar = () => {
                     <Link to="/main/visitor-home">
                         {
                             company ?
-                                <img src={company?.logo} alt="..." className="logo-company"/>
+                                <img src={company?.logo?.slice(0, 8) === "https://" ? company?.logo :( "https://" + company?.logo)} alt="..." className="logo-company"/>
                                 :
                                 <img src="/img/visitorLogo.png" className="logo-company" alt="..."/>
                         }
                     </Link>
 
-                    <button onClick={logout}><img src="/icon/logout.svg" alt="logout"/></button>
-                </div>
+                    </div>
                 <div className="menu-list">
                     <div className="menu-list-item">
                         <List
@@ -105,14 +106,14 @@ const VisitorSideBar = () => {
                             </ListItemButton>
                             <Collapse in={open} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/visitor-home" ? "active" : ""}>
+                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/visitor-home" ? "link-item-style-active" : ""}>
                                         <Link to="/main/visitor-home" className="link-item-style ">
                                             <img src="/icon/datareport.png" alt=""/>
                                             <span>Аналитика</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/visitor-comparasion" ? "active" : ""}>
-                                        <Link to="/main/visitor-comparasion" className="link-item-style ">
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/visitor-comparasion" ? "link-item-style-active" : ""}>
+                                        <Link to="/main/visitor-comparasion" className="link-item-style  ">
                                             <img src="/icon/donutchart.png" alt=""/>
                                             <span>Сравнение по филиалом</span>
                                         </Link>
@@ -137,45 +138,45 @@ const VisitorSideBar = () => {
                             </ListItemButton>
                             <Collapse in={open3} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/hr-admin/home-page-hr" ? "active" : ""}>
-                                        <Link to="/main/hr-admin/home-page-hr" className="link-item-style">
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/hr-admin/home-page-hr" ? "link-item-style-active" : ""}>
+                                        <Link to="/main/hr-admin/home-page-hr" className="link-item-style ">
                                             <img src="/icon/Icon1.svg" alt=""/>
                                             <span>HR аналитика</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/hr-admin/departments" ? "active" : ""}>
-                                        <Link to="/main/hr-admin/departments" className="link-item-style">
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/hr-admin/departments" ? "link-item-style-active" : ""}>
+                                        <Link to="/main/hr-admin/departments" className="link-item-style ">
                                             <img src="/icon/Icon10.svg" alt=""/>
                                             <span>Отделы</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/hr-admin/employees" ? "active" : ""}>
-                                        <Link to="/main/hr-admin/employees" className="link-item-style">
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/hr-admin/employees" ? "link-item-style-active" : ""}>
+                                        <Link to="/main/hr-admin/employees" className="link-item-style ">
                                             <img src="/icon/Icon2.svg" alt=""/>
                                             <span>Cотрудники</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/hr-admin/modes" ? "active" : ""}>
-                                        <Link to="/main/hr-admin/modes" className="link-item-style">
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/hr-admin/modes" ? "link-item-style-active" : ""}>
+                                        <Link to="/main/hr-admin/modes" className="link-item-style ">
                                             <img src="/icon/Icon11.svg" alt=""/>
                                             <span>Режимы</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/hr-admin/audit" ? "active" : ""}>
-                                        <Link to="/main/hr-admin/audit" className="link-item-style">
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/hr-admin/audit" ? "link-item-style-active" : ""}>
+                                        <Link to="/main/hr-admin/audit" className="link-item-style ">
                                             <img src="/icon/Icon6.svg" alt=""/>
                                             <span>Аудит</span>
                                         </Link>
                                     </ListItemButton>
                                     {/*<ListItemButton sx={{ pl: 2 }}>*/}
-                                    {/*    <Link to="/main/hr-admin/logging" className="link-item-style">*/}
+                                    {/*    <Link to="/main/hr-admin/logging" className="link-item-style ">*/}
                                     {/*        <img src="/icon/Icon6.svg" alt=""/>*/}
                                     {/*        <span>Логирование</span>*/}
                                     {/*    </Link>*/}
                                     {/*</ListItemButton>*/}
 
                                     {/*<ListItemButton sx={{ pl: 2 }}>*/}
-                                    {/*    <Link to="/main/hr-admin/notification" className="link-item-style">*/}
+                                    {/*    <Link to="/main/hr-admin/notification" className="link-item-style ">*/}
                                     {/*        <img src="/icon/Icon8.svg" alt=""/>*/}
                                     {/*        <span>Уведомления</span>*/}
                                     {/*    </Link>*/}
@@ -198,30 +199,32 @@ const VisitorSideBar = () => {
                             </ListItemButton>
                             <Collapse in={open4} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/live" ? "active" : ""}>
-                                        <Link to="/main/live" className="link-item-style">
-                                            <img src="/icon/live.svg" alt=""/>
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/live" ? "link-item-style-active" : ""}>
+                                        <Link to="/main/live" className="link-item-style ">
+                                            <img src="/icon/Live.svg" alt=""/>
                                             <span>Live</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/smart-camera" ? "active" : ""}>
-                                        <Link to="/main/smart-camera" className="link-item-style ">
-                                            <img src="/icon/camera2.svg" alt=""/>
-                                            <span>Smart Camera</span>
-                                        </Link>
-                                    </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/roi-employee" ? "active" : ""}>
-                                        <Link to="/main/roi-employee" className="link-item-style">
-                                            <img src="/icon/roi_employee.svg" alt=""/>
-                                            <span>ROI Employee</span>
-                                        </Link>
-                                    </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/roi-employee" ? "active" : ""}>
-                                        <Link to="/main/roi-employee" className="link-item-style">
-                                            <img src="/icon/roi_visitor.svg" alt=""/>
-                                            <span>ROI Visitor</span>
-                                        </Link>
-                                    </ListItemButton>
+                                    {
+                                        localStorage.getItem("name") !== "Aloqa Bank"
+                                        ?
+                                            <>
+                                                <ListItemButton sx={{pl: 2}} className={pathname === "/main/roi-employee" ? "link-item-style-active" : ""}>
+                                                    <Link to="/main/roi-employee" className="link-item-style ">
+                                                        <img src="/icon/roi_employee.svg" alt=""/>
+                                                        <span>ROI Employee</span>
+                                                    </Link>
+                                                </ListItemButton>
+                                                <ListItemButton sx={{pl: 2}} className={pathname === "/main/roi-visitor" ? "link-item-style-active" : ""}>
+                                                    <Link to="/main/roi-employee" className="link-item-style ">
+                                                        <img src="/icon/roi_visitor.svg" alt=""/>
+                                                        <span>ROI Visitor</span>
+                                                    </Link>
+                                                </ListItemButton>
+                                            </>
+                                            :
+                                            ""
+                                    }
                                 </List>
                             </Collapse>
                         </List>
@@ -240,38 +243,44 @@ const VisitorSideBar = () => {
                             </ListItemButton>
                             <Collapse in={open5} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/hr-admin/users" ? "active" : ""}>
-                                        <Link to="/main/hr-admin/users" className="link-item-style">
+                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/hr-admin/users" ? "link-item-style-active" : ""}>
+                                        <Link to="/main/hr-admin/users" className="link-item-style ">
                                             <img src="/icon/Icon7.svg" alt=""/>
                                             <span>Пользователи</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/hr-admin/branches" ? "active" : ""}>
-                                        <Link to="/main/hr-admin/branches" className="link-item-style">
+                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/hr-admin/branches" ? "link-item-style-active" : ""}>
+                                        <Link to="/main/hr-admin/branches" className="link-item-style ">
                                             <img src="/icon/Icon9.svg" alt=""/>
                                             <span>Филиалы</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/building" ? "active" : ""}>
-                                        <Link to="/main/building" className="link-item-style ">
+                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/building" ? "link-item-style-active" : ""}>
+                                        <Link to="/main/building" className="link-item-style  ">
                                             <img src="/icon/camera2.svg" alt=""/>
                                             <span>Cameras</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/my-modules" ? "active" : ""}>
-                                        <Link to="/main/my-modules" className="link-item-style ">
+                                    <ListItemButton sx={{pl: 2}} className={pathname === "/main/smart-camera" ? "link-item-style-active" : ""}>
+                                        <Link to="/main/smart-camera" className="link-item-style  ">
+                                            <img src="/icon/camera2.svg" alt=""/>
+                                            <span>Smart Camera</span>
+                                        </Link>
+                                    </ListItemButton>
+                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/my-modules" ? "link-item-style-active" : ""}>
+                                        <Link to="/main/my-modules" className="link-item-style  ">
                                             <img src="/icon/server.svg" alt=""/>
                                             <span>Servers</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/services" ? "active" : ""}>
-                                        <Link to="/main/services" className="link-item-style ">
+                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/services" ? "link-item-style-active" : ""}>
+                                        <Link to="/main/services" className="link-item-style  ">
                                             <img src="/icon/services.svg" alt=""/>
                                             <span>Services</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/deployments" ? "active" : ""}>
-                                        <Link to="/main/deployments" className="link-item-style ">
+                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/deployments" ? "link-item-style-active" : ""}>
+                                        <Link to="/main/deployments" className="link-item-style     ">
                                             <img src="/icon/deployment.svg" alt=""/>
                                             <span>Deployment</span>
                                         </Link>
@@ -282,28 +291,35 @@ const VisitorSideBar = () => {
                     </div>
                     <div className="menu-list-bottom">
                         <div className="left-img-center">
-                            <Link to="/home/job-title" className="left-img">
-                                {
-                                    localStorage.getItem("image") === "null" ?
-                                        <img src="/icon/profileUser.png"/>
-                                        :
-                                        <img src={localStorage.getItem("image")} alt="Avatar"/>
-                                }
-                            </Link>
-                            <div className="center-content">
-                                <h5 className="font-family-medium"><Link to="/home/job-title">  {
-                                    localStorage.getItem("first_name") === "null" ?
-                                        "User"
-                                        :
-                                        localStorage.getItem("first_name") + " " + localStorage.getItem("last_name")?.slice(0, 1) + "."
-                                }</Link></h5>
-                                <h6>{
-                                    localStorage.getItem("phone_user") === "null" ?
-                                        ""
-                                        :
-                                        localStorage.getItem("phone_user")
-                                }</h6>
-                            </div>
+                           <div className="d-flex align-items-center">
+                               <Link to="/home/job-title" className="left-img">
+                                   {
+                                       localStorage.getItem("image") === "null" ?
+                                           <img src="/icon/profileUser.png"/>
+                                           :
+                                           <img src={localStorage.getItem("image")} alt="Avatar"/>
+                                   }
+                               </Link>
+                               <div className="center-content">
+                                   <h5 className="font-family-medium"><Link to="/home/job-title">  {
+                                       localStorage.getItem("first_name") === "null" ?
+                                           "User"
+                                           :
+                                           localStorage.getItem("first_name") + " " + localStorage.getItem("last_name")?.slice(0, 1) + "."
+                                   }</Link></h5>
+                                   <h6>
+                                       {
+                                           localStorage.getItem("phone_user") === "null" ?
+                                               ""
+                                               :
+                                               localStorage.getItem("phone_user")
+                                       }
+                                   </h6>
+
+                               </div>
+                           </div>
+                            <button onClick={logout}><img src="/icon/logout.svg" alt="logout"/></button>
+
                         </div>
                         {/*<div className="right-dot">*/}
                         {/*    <button type="submit"><img src="/icon/verdot.svg" alt="..."/></button>*/}

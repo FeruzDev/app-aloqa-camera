@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button, Modal, Select} from "antd";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 
 const AddServiceModal = (props) => {
@@ -14,7 +14,7 @@ const AddServiceModal = (props) => {
     })
 
     const sendAll = () => {
-        axios.post(API_PATH + "service/create", sendData, CONFIG)
+        axios.post(API_PATH + "service/create", sendData, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 toast.success("Добавлено успешно")
                 props.getData()

@@ -10,9 +10,9 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import {useHistory} from "react-router-dom";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
-import {Button, Modal} from "antd";
+import {Button, Modal, Popover} from "antd";
 import EmployeFilter from "./EmployeFilter";
 
 const Employees = () => {
@@ -36,9 +36,10 @@ const Employees = () => {
       history.push("/main/hr-admin/employees/profile/edit/" + id)
     }
     const getUsers = () => {
-        axios.get(API_PATH + "user/company/" + localStorage.getItem('id') + "/user/all", CONFIG)
+        axios.get(API_PATH + "user/company/" + localStorage.getItem('id') + "/user/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setUsers(res.data?.items)
+                setUsersObj(res.data)
             })
             .catch(err => {
                 toast.error("Ошибка")
@@ -46,7 +47,7 @@ const Employees = () => {
     }
 
     const handleOkDelete = (e) => {
-        axios.delete(API_PATH + "user/company/" + localStorage.getItem('id') + "/delete/user/" + selectUser, CONFIG)
+        axios.delete(API_PATH + "user/company/" + localStorage.getItem('id') + "/delete/user/" + selectUser, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setIsModalOpen(false);
                 toast.success("Успех удален")
@@ -56,7 +57,7 @@ const Employees = () => {
 
     const changePagination = (current, size) => {
 
-        axios.get(API_PATH + "user/company/" + localStorage.getItem('id') + "/user/all?page=" + size, CONFIG)
+        axios.get(API_PATH + "user/company/" + localStorage.getItem('id') + "/user/all?page=" + size, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setUsers(res.data?.items)
                 setUsersObj(res.data)
@@ -75,17 +76,18 @@ const Employees = () => {
             <div className="employees-header">
                 <div className="d-flex justify-content-between align-items-center">
                     <div className="left-head">
-                        <h6>Cотрудники <div>5</div></h6>
+                        <h6>Cотрудники</h6>
                         <p>Управление сотрудниками</p>
                     </div>
                     <div className="right-head">
-                        <button className="upload-btn font-family-medium ml-16 mr-16"><img src="/icon/upload.svg"/> Экспорт в Excel</button>
+                        {/*<button className="upload-btn font-family-medium ml-16 mr-16"><img src="/icon/upload.svg"/> Экспорт в Excel</button>*/}
                         <button className="add-btn font-family-medium" onClick={createPage}><img src="/icon/plus.svg"/> Добавить новое</button>
                     </div>
                 </div>
             </div>
             <EmployeFilter
                 setUsers={setUsers}
+                getUsers={getUsers}
             />
             <div className="emp-table">
                 <TableContainer component={Paper}>
@@ -93,11 +95,11 @@ const Employees = () => {
                         <TableHead>
                             <TableRow>
                                 <TableCell className="pl20 table-head" >Имя и фамилия</TableCell>
-                                <TableCell className="table-head"  align="right">Логин</TableCell>
-                                <TableCell className="table-head"  align="right">Дата рождения</TableCell>
-                                <TableCell className="table-head"  align="right">Отдел</TableCell>
-                                <TableCell className="table-head"  align="right">Должность</TableCell>
-                                <TableCell  className="pr20 table-head"  align="right">Эффективность</TableCell>
+                                <TableCell className="table-head"  align="left">Логин</TableCell>
+                                <TableCell className="table-head"  align="left">Дата рождения</TableCell>
+                                <TableCell className="table-head"  align="left">Отдел</TableCell>
+                                <TableCell className="table-head"  align="left">Должность</TableCell>
+                                <TableCell  className="pr20 table-head"  align="right">Действие</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -106,20 +108,44 @@ const Employees = () => {
                                     key={item.name}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
-                                    <TableCell   className="pl20" component="th" scope="row">
-                                        <img src={item?.image} alt="img" className="mr-8" style={{width: "40px", height: "40px", objectFit: "cover", borderRadius: "50%"}}/>
-                                        {item.first_name + " " + item.last_name}
+                                    <TableCell   className="pl20"  scope="row">
+                                     <div className="tabel-item">
+                                         <img src={item?.image} alt="img" className="mr-8" style={{width: "40px", height: "40px", objectFit: "cover", borderRadius: "50%"}}/>
+                                         {/*{item.first_name + " " + item.last_name}*/}
+                                         <Popover content={item.first_name + " " + item.last_name} >
+                                             {/*<Button type="primary">Hover me</Button>*/}
+                                             {item.last_name + " " + item.first_name.slice(0, 1)}
+                                         </Popover>
+                                     </div>
+
                                     </TableCell>
-                                    <TableCell align="right">{item.username}</TableCell>
-                                    <TableCell align="right">{item.date_of_birth}</TableCell>
-                                    <TableCell align="right">{item?.department_id}</TableCell>
-                                    <TableCell align="right">{item.position}</TableCell>
-                                    <TableCell className="pr20 con-btns-all" align="right">
+                                    <TableCell align="left">
+                                     <div className="tabel-item">
+                                        {item.username}
+                                     </div>
+                                    </TableCell>
+                                    <TableCell align="left">
+                                     <div className="tabel-item">
+                                        {item.date_of_birth}
+                                     </div>
+                                    </TableCell>
+                                    <TableCell align="left">
+                                     <div className="tabel-item">
+                                        {item?.department?.department_title}
+                                     </div>
+                                    </TableCell>
+                                    <TableCell align="left">
+                                     <div className="tabel-item">
+                                        {item.position}
+                                     </div>
+                                    </TableCell>
+                                    <TableCell className="  con-btns-all" align="right">
+                                     <div className="tabel-item tabel-item-controls">
                                         <button className="t-delete-btn font-family-medium"
                                                 onClick={ () => showModalDelete(item?.id)}>Удалить
                                         </button>
                                         <button className="t-edit-btn font-family-medium" onClick={() => editPage(item?.id)}>Изменить</button>
-
+                                     </div>
                                     </TableCell>
                                 </TableRow>
                             ))}

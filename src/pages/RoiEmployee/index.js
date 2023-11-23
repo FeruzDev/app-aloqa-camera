@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import {Select} from "antd";
+import ReactPlayer from "react-player";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -9,12 +11,12 @@ import TableBody from "@mui/material/TableBody";
 import axios from "axios";
 import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
-import {Select} from "antd";
-import ReactPlayer from "react-player";
+import {useHistory} from "react-router-dom";
 
-const Live = () => {
+const RoiEmployee = () => {
     const [users, setUsers] = useState([])
     const [offices, setOffices] = useState([])
+    const [isAddModal, setIsAddModal] = useState([])
     const [rooms, setRooms] = useState([])
     const [cameras, setCameras] = useState([])
     const [selectOffices, setSelectOffices] = useState(null)
@@ -22,6 +24,7 @@ const Live = () => {
     const [selectCameras, setSelectCameras] = useState("")
     const [sendData, setSendData] = useState(null)
     const [message, setMessage] = useState({});
+
     const getUsers = () => {
         axios.get(API_PATH + "user/company/" + localStorage.getItem('id') + "/user/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
@@ -31,11 +34,14 @@ const Live = () => {
                 toast.error("Ошибка")
             })
     }
+    let history = useHistory()
+
     const getBuilding = (val) => {
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/building/all" + (val?.length > 0 ? "?search_str=" + val : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setOffices(res?.data?.items)
                 setSendData({...sendData, buildings_id: res.data.id})
+
             })
             .catch(err => {
                 toast.error("Ошибка")
@@ -66,19 +72,23 @@ const Live = () => {
     }
     const getCameras = (id) => {
         setSelectRooms(id)
+
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/smartcamera/all?building_id=" + id, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setCameras(res?.data?.items)
+
             })
             .catch(err => {
                 toast.error("Ошибка")
             })
         window.scrollTo(0, 0);
+
     }
     const getCamerasSearch = (val) => {
         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/camera/smartcamera/all?building_id=" + selectRooms + (val?.length > 0 ? "?search_str=" + val : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setCameras(res?.data?.items)
+
             })
             .catch(err => {
                 toast.error("Ошибка")
@@ -97,11 +107,13 @@ const Live = () => {
             .catch(err => {
                 toast.error("Ошибка")
             })
+
         const socket = new WebSocket('wss://socket.cradle-vision.com/ws/' + id);
         socket.onmessage = (event) => {
             setMessage(JSON.parse(event?.data?.replace(/'/g, '"')));
             setUsers(prevUsers => [JSON.parse(event?.data?.replace(/'/g, '"')), ...prevUsers]);
         };
+
         return () => {
             socket.close();
         };
@@ -122,11 +134,10 @@ const Live = () => {
             <div className="employees-header">
                 <div className="d-flex justify-content-between align-items-center">
                     <div className="left-head">
-                        <h6>Smart Camera </h6>
-                        <p>Camera List</p>
+                        <h6>ROI Visitor </h6>
+                        <p>ROI reviewing</p>
                     </div>
                     <div className="right-head d-flex">
-
                         <div className="inputs-box mr-16" style={{width: "200px"}}>
                             <Select
                                 showSearch
@@ -196,13 +207,11 @@ const Live = () => {
                     </div>
                 </div>
             </div>
-
             <div className="live-page-box">
                 <div className="live-page-box-header">
                     <div className="d-flex justify-content-between  ">
-                        <div className="left-pair w-100">
+                        <div className="left-pair-items">
                             {/*<video src="http://43.202.168.206:8080/stream/camera1/index.m3u8" autoPlay controls></video>*/}
-
                             {
                                 selectCameras ? <ReactPlayer url={selectCameras}
                                                              className="w-100 h-100 " style={{borderRadius: "8px"}}
@@ -211,38 +220,56 @@ const Live = () => {
                                     ""
                             }
                         </div>
-                        {
-                            users?.length > 0 ?
-                                <div className="right-pair-new-style">
-
-
-                                    <span className="Screenshots">Screenshots</span>
-                                    {
-                                        users?.slice(0, 4)?.map((item) => (
-                                            <div className="img-box">
-                                                <div className="img-box-items">
-                                                    <img
-                                                        src={item?.image?.slice(0, 8) === "https://" ? item?.image : ("https://" + item?.image)}
-                                                        className="img-box-item" alt=""/>
-                                                </div>
-                                                <div className="img-box-items">
-                                                    <span>{item?.capture_type ? item?.capture_type : "Visitor"}</span>
-                                                </div>
-                                                <div className="img-box-items img-box-items-active">
-                                                    <span>0038</span>
-                                                </div>
-                                                <div className="img-box-items">
-                                                    <img src="/icon/timecha.svg" alt="clock"/>
-                                                    <span>{item?.created_at?.slice(11, 16)}</span>
-                                                </div>
-                                            </div>
-
-                                        ))
-                                    }
+                        <div className="right-pair-items">
+                            <div className="right-pair-items-headers">
+                                <h4>ROI List</h4>
+                                <button className="add-btn mt-20 font-family-medium" onClick={() =>history.push("/main/roi-employee/add")}><img
+                                    src="/icon/plus.svg"/> Добавить
+                                </button>
+                            </div>
+                            <div className="right-pair-items-list">
+                                <div className="right-pair-items-content-item">
+                                    <div>
+                                        <span>ROI 001</span>
+                                    </div>
+                                    <div>
+                                        <button><img src="/icon/eyefill.svg" alt=""/></button>
+                                        <button><img src="/icon/editfill.svg" alt=""/></button>
+                                        <button><img src="/icon/deletefill.svg" alt=""/></button>
+                                    </div>
                                 </div>
-                                :
-                                ""
-                        }
+                                <div className="right-pair-items-content-item">
+                                    <div>
+                                        <span>ROI 001</span>
+                                    </div>
+                                    <div>
+                                        <button><img src="/icon/eyefill.svg" alt=""/></button>
+                                        <button><img src="/icon/editfill.svg" alt=""/></button>
+                                        <button><img src="/icon/deletefill.svg" alt=""/></button>
+                                    </div>
+                                </div>
+                                <div className="right-pair-items-content-item">
+                                    <div>
+                                        <span>ROI 001</span>
+                                    </div>
+                                    <div>
+                                        <button><img src="/icon/eyefill.svg" alt=""/></button>
+                                        <button><img src="/icon/editfill.svg" alt=""/></button>
+                                        <button><img src="/icon/deletefill.svg" alt=""/></button>
+                                    </div>
+                                </div>
+                                <div className="right-pair-items-content-item">
+                                    <div>
+                                        <span>ROI 001</span>
+                                    </div>
+                                    <div>
+                                        <button><img src="/icon/eyefill.svg" alt=""/></button>
+                                        <button><img src="/icon/editfill.svg" alt=""/></button>
+                                        <button><img src="/icon/deletefill.svg" alt=""/></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 {
@@ -253,13 +280,13 @@ const Live = () => {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell className="pl20 table-head"
-                                                   style={{width: "140px"}}>Screenshot</TableCell>
-                                        <TableCell className="table-head" align="left">Name</TableCell>
-                                        {/*<TableCell className="table-head" align="left">Time</TableCell>*/}
+                                                   style={{width: "140px"}}>Employee</TableCell>
+                                        <TableCell className="table-head" align="left">ID visitor</TableCell>
+                                        <TableCell className="table-head" align="left">Kassa</TableCell>
                                         {/*<TableCell className="table-head" align="left">Gender</TableCell>*/}
-                                        <TableCell className="table-head" align="left">Age</TableCell>
-                                        <TableCell className="table-head" align="left">Created at</TableCell>
-                                        <TableCell className="pr20 table-head" align="right">Type</TableCell>
+                                        <TableCell className="table-head" align="left">Service time</TableCell>
+                                        <TableCell className="table-head" align="left">Service type</TableCell>
+                                        <TableCell className="pr20 table-head" align="right">Duration</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -271,10 +298,8 @@ const Live = () => {
                                             >
                                                 <TableCell className="pl20" style={{width: "140px"}} component="th"
                                                            scope="row">
-                                                    <img
-                                                        src={item?.image?.slice(0, 8) === "https://" ? item?.image : ("https://" + item?.image)}
-                                                        alt="img" className="mr-8"
-                                                        style={{width: "40px", borderRadius: "4px"}}/>
+                                                    <img src={item?.image?.slice(0, 8) === "https://" ? item?.image :( "https://" + item?.image)} alt="img" className="mr-8"
+                                                         style={{width: "40px", borderRadius: "4px"}}/>
 
 
                                                 </TableCell>
@@ -288,8 +313,8 @@ const Live = () => {
                                                         {(item?.first_name?.length > 0 && item?.last_name?.length > 0) ? "" : "Visitor"}
                                                    </span>
                                                 </TableCell>
-                                                {/*<TableCell className="pr20 con-btns-all"*/}
-                                                {/*           align="left">{item?.id}</TableCell>*/}
+                                                <TableCell className="pr20 con-btns-all"
+                                                           align="left">{item?.id}</TableCell>
                                                 {/*<TableCell className="pr20 con-btns-all"*/}
                                                 {/*           align="left">{item?.gender}</TableCell>*/}
                                                 <TableCell className="pr20 con-btns-all"
@@ -312,4 +337,5 @@ const Live = () => {
         </div>
     );
 };
-export default Live;
+
+export default RoiEmployee;

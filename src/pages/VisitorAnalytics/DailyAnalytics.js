@@ -3,7 +3,7 @@ import {DatePicker} from "antd";
 
 import {Column} from "@ant-design/plots";
 
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 
 const {RangePicker} = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
@@ -14,15 +14,15 @@ const DailyAnalytics = () => {
     const [data, setData] = useState([]);
 
     function onChange(date, dateString) {
-        console.log(date)
-        console.log(dateString[0])
-        console.log(dateString[1])
+        // console.log(date)
+        // console.log(dateString[0])
+        // console.log(dateString[1])
         if (dateString.length > 0) {
-            fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/age?start_date_str=" + dateString[0] + "&end_date_str=" + dateString[1], CONFIG)
+            fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/age?start_date_str=" + dateString[0] + "&end_date_str=" + dateString[1], {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
                 .then((response) => response.json())
                 .then((json) => setData(json))
                 .catch((error) => {
-                    console.log('fetch data failed', error);
+                    // console.log('fetch data failed', error);
                 });
         } else (
             asyncFetch()
@@ -31,11 +31,11 @@ const DailyAnalytics = () => {
     const moment = require('moment')
     const asyncFetch = () => {
         console.log()
-        fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/age?start_date_str=" + time?.getFullYear() + "-" + Number(time?.getMonth() + 1) + "-" + 1 + "&end_date_str=" + moment().endOf('month').format('YYYY-MM-DD') , CONFIG)
+        fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/age?start_date_str=" + time?.getFullYear() + "-" + Number(time?.getMonth() + 1) + "-" + 1 + "&end_date_str=" + moment().endOf('month').format('YYYY-MM-DD') , {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then((response) => response.json())
             .then((json) => setData(json))
             .catch((error) => {
-                console.log('fetch data failed', error);
+                // console.log('fetch data failed', error);
             });
     };
     const config = {

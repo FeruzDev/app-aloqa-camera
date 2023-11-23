@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {Button, Modal, Select} from "antd";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 
 const DistrictModal = (props) => {
     const [sendData, setSendData] = useState("")
     const sendAll = () => {
-        axios.post(API_PATH  + "company/"+localStorage.getItem('id') + "/location/district/create", {name: sendData, region_id: props.regionId},  CONFIG)
+        axios.post(API_PATH  + "company/"+localStorage.getItem('id') + "/location/district/create", {name: sendData, region_id: props.regionId},  {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res =>{
                 props.setIsLocModal(false)
                 props.getDistrict(props.regionId)

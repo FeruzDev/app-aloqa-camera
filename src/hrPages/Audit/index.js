@@ -11,12 +11,12 @@ import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
 import AuditSearchTop from "./AuditSearchTop";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 
 const Audit = () => {
     const [data, setData] = useState([])
     const getList = () => {
-         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/audit/all", CONFIG)
+         axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/audit/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res =>{
                 setData(res.data)
             })
@@ -32,7 +32,7 @@ const Audit = () => {
                         <h6 className="font-family-medium">Аудит</h6>
                     </div>
                     <div className="right-head">
-                        <button className="upload-btn font-family-medium ml-16 mr-16"><img src="/icon/upload.svg"/> Экспорт в Excel</button>
+                        {/*<button className="upload-btn font-family-medium ml-16 mr-16"><img src="/icon/upload.svg"/> Экспорт в Excel</button>*/}
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {DatePicker} from "antd";
 import {Line} from "@ant-design/plots";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 
 const VisitorsComparasion = () => {
     const [time, setTime] = useState(new Date());
@@ -11,11 +11,11 @@ const VisitorsComparasion = () => {
 
     function onChange(date, dateString) {
         if (dateString.length > 0){
-            fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/gender/" + dateString.slice(0, 4) + "/" + Number( dateString.slice(5, 7)), CONFIG)
+            fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/gender/" + dateString.slice(0, 4) + "/" + Number( dateString.slice(5, 7)), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
                 .then((response) => response.json())
                 .then((json) => setData(json))
                 .catch((error) => {
-                    console.log('fetch data failed', error);
+                    // console.log('fetch data failed', error);
                 });
         }
         else (
@@ -23,7 +23,7 @@ const VisitorsComparasion = () => {
         )
     }
     const asyncFetch = () => {
-        fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/counting/by/offices/" + year + "/" + Number(month+1), CONFIG)
+        fetch(API_PATH + "company/" + localStorage.getItem('id') + "/analitics/counting/by/offices/" + year + "/" + Number(month+1), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then((response) => response.json())
             .then((json) => {
                     setData(json)
@@ -31,7 +31,7 @@ const VisitorsComparasion = () => {
                 }
             )
             .catch((error) => {
-                console.log('fetch data failed', error);
+                // console.log('fetch data failed', error);
             });
     };
 

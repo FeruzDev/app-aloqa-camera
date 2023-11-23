@@ -8,11 +8,17 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
-import {Button, Modal} from 'antd';
+import {Button, Modal, Select} from 'antd';
 import {useHistory} from "react-router-dom";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
+import Menu from "@mui/material/Menu";
+import Fade from "@mui/material/Fade";
+import FormControl from "@mui/material/FormControl";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
 
 const Departments = () => {
     let history = useHistory()
@@ -45,7 +51,7 @@ const Departments = () => {
         setIsModalOpen2(false);
     };
     const getDeps = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setDepartments(res.data?.items)
                 setDepartmentsObj(res?.data)
@@ -55,7 +61,7 @@ const Departments = () => {
             })
     }
     const handleOkDelete = () => {
-        axios.delete(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/" + selectDepartments, CONFIG)
+        axios.delete(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/" + selectDepartments, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 getDeps()
                 setIsModalOpen(false);
@@ -65,7 +71,18 @@ const Departments = () => {
             })
     };
     const changePagination = (current, size) => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all?page=" + size, CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all?page=" + size, {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
+            .then(res => {
+                setDepartments(res.data?.items)
+                setDepartmentsObj(res?.data)
+            })
+            .catch(err => {
+                toast.error("Ошибка")
+            })
+    }
+
+    const searchEmploye = (e) => {
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all" + (e?.length > 0 ? "?search_str=" + e : ""), {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setDepartments(res.data?.items)
                 setDepartmentsObj(res?.data)
@@ -85,15 +102,26 @@ const Departments = () => {
                         <h6 className="font-family-medium">Отделы</h6>
                     </div>
                     <div className="right-head">
-                        <button className="upload-btn font-family-medium ml-16 mr-16"><img
-                            src="/icon/upload.svg"/> Экспорт в Excel
-                        </button>
+                        {/*<button className="upload-btn font-family-medium ml-16 mr-16"><img*/}
+                        {/*    src="/icon/upload.svg"/> Экспорт в Excel*/}
+                        {/*</button>*/}
                         <button className="add-btn font-family-medium" onClick={createPage}><img src="/icon/plus.svg"/> Добавить новое
                         </button>
                     </div>
                 </div>
             </div>
-            <div className="emp-table">
+            <div className="search-top">
+                <div className="d-flex align-items-center">
+                    <div className="search-item w-100">
+                        <label htmlFor="searchItem"><img src="/icon/Icon6.svg" alt="loupe"/></label>
+                        <input type="text" placeholder="Искать в админке" onChange={(e) => searchEmploye(e.target.value)}
+                               id="searchItem"/>
+                    </div>
+
+                </div>
+
+            </div>
+            <div className="emp-table mt-0">
                 <TableContainer component={Paper}>
                     <Table sx={{minWidth: 650}} aria-label="simple table">
                         <TableHead>

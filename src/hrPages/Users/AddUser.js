@@ -4,7 +4,7 @@ import {FormGroup} from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {Select} from "antd";
 import axios from "axios";
-import {API_PATH, CONFIG} from "../../components/const";
+import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
 
 const AddUser = () => {
@@ -12,7 +12,7 @@ const AddUser = () => {
     const [departments, setDepartments] = useState([])
 
     const getUsers = () => {
-        axios.get(API_PATH + "user/company/" + localStorage.getItem('id') + "/user/all", CONFIG)
+        axios.get(API_PATH + "user/company/" + localStorage.getItem('id') + "/user/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setUsers(res.data?.items)
             })
@@ -21,7 +21,7 @@ const AddUser = () => {
             })
     }
     const getDeps = () => {
-        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all", CONFIG)
+        axios.get(API_PATH + "company/" + localStorage.getItem('id') + "/hr/department/all", {headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 setDepartments(res.data?.items)
             })
