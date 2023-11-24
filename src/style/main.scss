@@ -1366,6 +1366,12 @@ a, h1, h2, h3, h4, h5, h6, p, span, button, label {
 
       .for-select {
         margin-bottom: 3px;
+        .css-dev-only-do-not-override-amq5gd  {
+          align-items: center;
+          span{
+            font-size: 16px;
+          }
+        }
       }
 
       .exit-btn {
@@ -2843,6 +2849,7 @@ canvas {
         display: flex;
         flex-direction: row;
         align-items: center;
+        justify-content: space-between;
         margin-bottom: 20px;
         border-bottom: 1px solid #E9ECEF;
 

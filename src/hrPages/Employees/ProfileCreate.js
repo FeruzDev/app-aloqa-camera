@@ -326,7 +326,7 @@ const ProfileCreate = () => {
                             <div className="con-btn">
                                 <button className="font-family-medium" onClick={sendAll}><span>Подтверждать</span>
                                 </button>
-                                <button className="font-family-medium ml-8  ">Отменить</button>
+                                <button className="font-family-medium ml-8" onClick={() => history.goBack()}>Отменить</button>
                             </div>
                         </div>
                     </div>

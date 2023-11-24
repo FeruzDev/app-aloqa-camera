@@ -206,7 +206,7 @@ const VisitorSideBar = () => {
                                         </Link>
                                     </ListItemButton>
                                     {
-                                        localStorage.getItem("name") !== "Aloqa Bank"
+                                        localStorage.getItem("name") !== "Aloqa Bank" &&    localStorage.getItem("name") !== "Eman Materials"
                                         ?
                                             <>
                                                 <ListItemButton sx={{pl: 2}} className={pathname === "/main/roi-employee" ? "link-item-style-active" : ""}>
@@ -243,48 +243,72 @@ const VisitorSideBar = () => {
                             </ListItemButton>
                             <Collapse in={open5} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/hr-admin/users" ? "link-item-style-active" : ""}>
-                                        <Link to="/main/hr-admin/users" className="link-item-style ">
-                                            <img src="/icon/Icon7.svg" alt=""/>
-                                            <span>Пользователи</span>
-                                        </Link>
-                                    </ListItemButton>
+
+                                    {
+                                        localStorage.getItem("name") !== "Eman Materials"
+                                            ?
+                                            <ListItemButton sx={{pl: 2}}  className={pathname === "/main/hr-admin/users" ? "link-item-style-active" : ""}>
+                                                <Link to="/main/hr-admin/users" className="link-item-style ">
+                                                    <img src="/icon/Icon7.svg" alt=""/>
+                                                    <span>Пользователи</span>
+                                                </Link>
+                                            </ListItemButton>
+                                            :
+                                            ""
+                                    }
                                     <ListItemButton sx={{pl: 2}}  className={pathname === "/main/hr-admin/branches" ? "link-item-style-active" : ""}>
                                         <Link to="/main/hr-admin/branches" className="link-item-style ">
                                             <img src="/icon/Icon9.svg" alt=""/>
                                             <span>Филиалы</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/building" ? "link-item-style-active" : ""}>
-                                        <Link to="/main/building" className="link-item-style  ">
-                                            <img src="/icon/camera2.svg" alt=""/>
-                                            <span>Cameras</span>
-                                        </Link>
-                                    </ListItemButton>
+
+                                    {
+                                        localStorage.getItem("name") !== "Eman Materials"
+                                            ?
+                                            <ListItemButton sx={{pl: 2}}  className={pathname === "/main/building" ? "link-item-style-active" : ""}>
+                                                <Link to="/main/building" className="link-item-style  ">
+                                                    <img src="/icon/camera2.svg" alt=""/>
+                                                    <span>Cameras</span>
+                                                </Link>
+                                            </ListItemButton>
+                                            :
+                                            ""
+                                    }
                                     <ListItemButton sx={{pl: 2}} className={pathname === "/main/smart-camera" ? "link-item-style-active" : ""}>
                                         <Link to="/main/smart-camera" className="link-item-style  ">
                                             <img src="/icon/camera2.svg" alt=""/>
                                             <span>Smart Camera</span>
                                         </Link>
                                     </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/my-modules" ? "link-item-style-active" : ""}>
-                                        <Link to="/main/my-modules" className="link-item-style  ">
-                                            <img src="/icon/server.svg" alt=""/>
-                                            <span>Servers</span>
-                                        </Link>
-                                    </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/services" ? "link-item-style-active" : ""}>
-                                        <Link to="/main/services" className="link-item-style  ">
-                                            <img src="/icon/services.svg" alt=""/>
-                                            <span>Services</span>
-                                        </Link>
-                                    </ListItemButton>
-                                    <ListItemButton sx={{pl: 2}}  className={pathname === "/main/deployments" ? "link-item-style-active" : ""}>
-                                        <Link to="/main/deployments" className="link-item-style     ">
-                                            <img src="/icon/deployment.svg" alt=""/>
-                                            <span>Deployment</span>
-                                        </Link>
-                                    </ListItemButton>
+
+                                    {
+                                        localStorage.getItem("name") !== "Eman Materials"
+                                            ?
+                                            <>
+                                                <ListItemButton sx={{pl: 2}}  className={pathname === "/main/my-modules" ? "link-item-style-active" : ""}>
+                                                    <Link to="/main/my-modules" className="link-item-style  ">
+                                                        <img src="/icon/server.svg" alt=""/>
+                                                        <span>Servers</span>
+                                                    </Link>
+                                                </ListItemButton>
+                                                <ListItemButton sx={{pl: 2}}  className={pathname === "/main/services" ? "link-item-style-active" : ""}>
+                                                    <Link to="/main/services" className="link-item-style  ">
+                                                        <img src="/icon/services.svg" alt=""/>
+                                                        <span>Services</span>
+                                                    </Link>
+                                                </ListItemButton>
+                                                <ListItemButton sx={{pl: 2}}  className={pathname === "/main/deployments" ? "link-item-style-active" : ""}>
+                                                    <Link to="/main/deployments" className="link-item-style     ">
+                                                        <img src="/icon/deployment.svg" alt=""/>
+                                                        <span>Deployment</span>
+                                                    </Link>
+                                                </ListItemButton>
+                                            </>
+                                            :
+                                            ""
+                                    }
+
                                 </List>
                             </Collapse>
                         </List>

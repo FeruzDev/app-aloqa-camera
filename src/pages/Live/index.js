@@ -229,7 +229,7 @@ const Live = () => {
                                                     <span>{item?.capture_type ? item?.capture_type : "Visitor"}</span>
                                                 </div>
                                                 <div className="img-box-items img-box-items-active">
-                                                    <span>0038</span>
+                                                    <span>{item?.gender}</span>
                                                 </div>
                                                 <div className="img-box-items">
                                                     <img src="/icon/timecha.svg" alt="clock"/>
@@ -293,7 +293,7 @@ const Live = () => {
                                                 {/*<TableCell className="pr20 con-btns-all"*/}
                                                 {/*           align="left">{item?.gender}</TableCell>*/}
                                                 <TableCell className="pr20 con-btns-all"
-                                                           align="left">{item?.capture_type ? item?.age_interval : item?.age}</TableCell>
+                                                           align="left">{item?.capture_type === "visitor" ? item?.age_interval : ""}</TableCell>
                                                 <TableCell className="pr20 con-btns-all"
                                                            align="left">{item?.created_at?.slice(0, 10) + " / " + item?.created_at?.slice(11, 16)}</TableCell>
                                                 <TableCell className="pr20 con-btns-all"

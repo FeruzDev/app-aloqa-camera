@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useHistory, useParams} from "react-router-dom";
-import Calendar from "../Home/Calendar";
-import FormControl from "@mui/material/FormControl";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
-import {Select} from "antd";
+// import Calendar from "../Home/Calendar";
+// import FormControl from "@mui/material/FormControl";
+// import RadioGroup from "@mui/material/RadioGroup";
+// import FormControlLabel from "@mui/material/FormControlLabel";
+// import Radio from "@mui/material/Radio";
+import {Select, Space, Radio} from "antd";
 import axios from "axios";
 import {API_PATH} from "../../components/const";
 import {toast} from "react-toastify";
@@ -207,24 +207,22 @@ const ProfileEdit = () => {
                                                })}
                                         />
                                     </div>
-                                    <div className="inputs-box for-select">
+                                    <div className="inputs-box for-select  ">
                                         <label className="font-family-medium">Пол </label>
-                                        <FormControl>
+                                        <Radio.Group
+                                            value={sendData?.gender}
+                                            onChange={(e) => setSendData({...sendData, gender: e.target.value})}
+                                        >
+                                            <Space direction="horizontal">
+                                                <Radio  value="male" >
+                                                    <span className="font-family-medium">Мужской</span>
+                                                </Radio>
+                                                <Radio  value="female" >
+                                                    <span className="font-family-medium">Женский</span>
+                                                </Radio>
+                                            </Space>
+                                        </Radio.Group>
 
-                                            <RadioGroup
-                                                row
-                                                defaultValue={sendData?.gender}
-
-                                                onChange={(e) => setSendData({...sendData, gender: e.target.value})}
-                                                aria-labelledby="demo-row-radio-buttons-group-label"
-                                                name="row-radio-buttons-group"
-                                            >
-                                                <FormControlLabel value="male" control={
-                                                    <Radio/>} label="Мужской"/>
-                                                <FormControlLabel value="female" control={
-                                                    <Radio/>} label="Женский"/>
-                                            </RadioGroup>
-                                        </FormControl>
                                     </div>
                                     <div className="inputs-box-2">
                                         <label className="font-family-medium">Филиал <button
@@ -295,7 +293,7 @@ const ProfileEdit = () => {
                             <div className="con-btn">
                                 <button className="font-family-medium" onClick={sendAll}><span>Изменить</span>
                                 </button>
-                                <button className="font-family-medium ml-8  ">Отменить</button>
+                                <button className="font-family-medium ml-8" onClick={() => history.goBack()}>Назад</button>
                             </div>
                         </div>
                     </div>
