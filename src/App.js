@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Landing from "./pages/Landing";
 import PrivateRoute from "./components/PrivateRoute";
 function App() {
-
+ 
   return (
       <>
 
